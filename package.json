@@ -1,0 +1,28 @@
+{
+  "name": "chromaticity",
+  "version": "0.0.1",
+  "description": "color picking tool",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/connorgr/chromaticity.git"
+  },
+  "keywords": [
+    "electron",
+    "color"
+  ],
+  "author": "Connor Gramazio",
+  "license": "BSD-3-Clause",
+  "bugs": {
+    "url": "https://github.com/connorgr/chromaticity/issues"
+  },
+  "homepage": "https://github.com/connorgr/chromaticity",
+  "dependencies": {
+    "electron": "^1.4.15",
+    "electron-positioner": "^3.0.0",
+    "extend": "^2.0.1"
+  },
+  "devDependencies": {
+    "standard": "^5.4.1"
+  }
+}
