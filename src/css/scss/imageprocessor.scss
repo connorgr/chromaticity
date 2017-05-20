@@ -1,0 +1,25 @@
+.imageProcessor .invisible {
+  display: none;
+  visibility: hidden;
+}
+
+.imageProcessor canvas {
+  height: 100px;
+  width: 100px;
+}
+
+.imageProcessor .uniqueColors {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.imageProcessor .uniqueColors li {
+  border: 1px solid #eee;
+  border-radius: 50%;
+  cursor: pointer;
+  display: inline-block;
+  height: 20px;
+  margin-right: 2px;
+  width: 20px;
+}

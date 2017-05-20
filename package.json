@@ -1,0 +1,46 @@
+{
+  "name": "chromaticity",
+  "productName": "Chromaticity",
+  "version": "0.0.0",
+  "description": "",
+  "license": "BSD-3-Clause",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/connorgr/chromaticity.git"
+  },
+  "author": {
+    "name": "Connor Gramazio",
+    "url": "https://gramaz.io"
+  },
+  "scripts": {
+    "test": "xo",
+    "start": "electron .",
+    "build": "electron-packager . --out=dist --asar --overwrite --all",
+    "css": "sass src/css/main.scss src/css/main.css"
+  },
+  "files": [
+    "index.js",
+    "src/*"
+  ],
+  "keywords": [
+    "electron-app",
+    "electron",
+    "color"
+  ],
+  "dependencies": {
+    "electron-debug": "^1.0.0"
+  },
+  "devDependencies": {
+    "devtron": "^1.1.0",
+    "electron-packager": "^8.0.0",
+    "electron": "^1.0.1",
+    "xo": "^0.16.0"
+  },
+  "xo": {
+    "esnext": true,
+    "envs": [
+      "node",
+      "browser"
+    ]
+  }
+}

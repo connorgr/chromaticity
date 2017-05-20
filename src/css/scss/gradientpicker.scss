@@ -1,0 +1,42 @@
+.gradientPicker canvas {
+  height: 20px;
+  margin-right: 5px;
+  width: 200px;
+}
+.gradientPicker .sequential {
+  image-rendering: pixelated;
+}
+
+.gradientList {
+  font-family: "Hack";
+  font-size: 12px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.gradientList li { line-height: 20px; height: 20px; margin: 0 0 5px 0; }
+.gradientList li canvas { border: 1px solid #333; display: inline; vertical-align: bottom; }
+.gradientList li input { font-size: 10px; height: 18px; }
+
+.gradientPickerMenu .startColor, .gradientPickerMenu .stopColor {
+  background: #eee;
+  border-radius: 5px;
+  display: inline-block;
+  margin-bottom: 5px;
+  padding: 5px;
+  width: 200px;
+}
+
+.gradientPickerMenu .swatchList {
+  list-style: none;
+  margin: 0;
+  min-height: 20px;
+  padding: 0;
+}
+.gradientPickerMenu .swatchList li {
+  border: 1px solid #333;
+  display: inline-block;
+  margin: 2px;
+  width: 20px;
+  height: 20px;
+}

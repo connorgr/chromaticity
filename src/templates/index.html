@@ -1,0 +1,148 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Chromaticity</title>
+    <link rel="stylesheet" href="../css/main.css">
+  </head>
+  <body>
+    <nav>
+      <p class="logo">Chromaticity</p>
+    </nav>
+
+
+    <div class="container">
+      <div class="colorpicker content_container">
+        <div id="colorpicker_squareContainer">
+          <canvas id="colorpicker_square" width="255" height="255"></canvas><!--
+          --><ul id="colorspaceSwitcherMenu">
+            <li data-space="lab" class="active">Lab</li>
+            <li data-space="hcl">LCh</li>
+            <li data-space="jab">Jab</li>
+            <li data-space="rgb">RGB</li>
+          </ul>
+        </div>
+        <canvas id="colorpicker_bar" width="25" height="255"></canvas><!--
+        --><svg id="colorpicker_slider">
+          <g class="thumb" transform="translate(0,0)">
+            <polygon points="0,5 5,0 20,0 20,10 5,10 "/>
+          </g>
+        </svg>
+
+        <div id="colorpicker_channels">
+          <ul>
+            <li>L <input type="number" value="" class="colorChannelInput" data-colorType="lab" data-channel="l"><input type="number" value="" class="colorChannelInputHover" data-colorType="lab" data-channel="l" disabled></li>
+            <li>a <input type="number" value="" class="colorChannelInput" data-colorType="lab" data-channel="a"><input type="number" value="" class="colorChannelInputHover" data-colorType="lab" data-channel="a" disabled></li>
+            <li>b <input type="number" value="" class="colorChannelInput" data-colorType="lab" data-channel="b"><input type="number" value="" class="colorChannelInputHover" data-colorType="lab" data-channel="b" disabled></li>
+
+            <li>L <input type="number" value="" class="colorChannelInput" data-colorType="hcl" data-channel="l"><input type="number" value="" class="colorChannelInputHover" data-colorType="hcl" data-channel="l" disabled></li>
+            <li>C <input type="number" value="" class="colorChannelInput" data-colorType="hcl" data-channel="c"><input type="number" value="" class="colorChannelInputHover" data-colorType="hcl" data-channel="c" disabled></li>
+            <li>h <input type="number" value="" class="colorChannelInput" data-colorType="hcl" data-channel="h"><input type="number" value="" class="colorChannelInputHover" data-colorType="hcl" data-channel="h" disabled></li>
+
+            <li>J <input type="number" value="" class="colorChannelInput" data-colorType="jab" data-channel="J"><input type="number" value="" class="colorChannelInputHover" data-colorType="jab" data-channel="J" disabled></li>
+            <li>a <input type="number" value="" class="colorChannelInput" data-colorType="jab" data-channel="a"><input type="number" value="" class="colorChannelInputHover" data-colorType="jab" data-channel="a" disabled></li>
+            <li>b <input type="number" value="" class="colorChannelInput" data-colorType="jab" data-channel="b"><input type="number" value="" class="colorChannelInputHover" data-colorType="jab" data-channel="b" disabled></li>
+
+            <li>R <input type="number" value="" class="colorChannelInput" data-colorType="rgb" data-channel="r"><input type="number" value="" class="colorChannelInputHover" data-colorType="rgb" data-channel="r" disabled></li>
+            <li>G <input type="number" value="" class="colorChannelInput" data-colorType="rgb" data-channel="g"><input type="number" value="" class="colorChannelInputHover" data-colorType="rgb" data-channel="g" disabled></li>
+            <li>B <input type="number" value="" class="colorChannelInput" data-colorType="rgb" data-channel="b"><input type="number" value="" class="colorChannelInputHover" data-colorType="rgb" data-channel="b" disabled></li>
+
+            <li class="emptyRight"># <input type="text" value="" class="colorChannelInput" data-colorType="hex"></li>
+            <li class="emptyRight"><input type="color" value="#777777" class="colorChannelInput" data-colorType="hex"></li>
+          </ul>
+          <input type="text" class="freetextColorInput" placeholder="enter valid css color">
+        </div>
+        <div class="previewColor">
+          <div class="hoverColor"></div>
+          <div class="selectedColor"></div>
+          <button id="addColorToPaletteBtn">+</button>
+        </div>
+
+      </div>
+
+      <div class="content_container">
+        <div class="imageProcessor">
+          <p>Drag image here.</p>
+          <img class="dropImg invisible">
+          <canvas class="invisible" width="100" height="100"></canvas>
+          <ul class="uniqueColors"></ul>
+        </div>
+      </div>
+
+      <div class="content_container">
+        <table class="paletteTable">
+          <thead>
+            <tr>
+              <td></td>
+              <td></td>
+              <td>Swatch</td>
+              <td>Hex</td>
+              <td>RGB</td>
+              <td>Jab</td>
+              <td>Lab</td>
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+          <tfoot>
+            <tr>
+              <td colspan="7">Copyable image: <canvas class="palettePreview" height="1"></canvas></td>
+            </tr>
+            <tr>
+              <td colspan="7">Copy/Paste JSON array of css colors: <input class="paletteInputField" type="text"></td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+
+      <div class="gradientPicker content_container">
+        <div class="gradientPickerMenu">
+          <div class="startColor">
+            <strong>Start color</strong>
+            <ul class="swatchList"></ul>
+            Other: <input class="gradientStartColor gradientPickerInput" type="text"  placeholder="valid css color" value="black">
+          </div>
+          <div class="stopColor">
+            <strong>Stop color</strong>
+            <ul class="swatchList"></ul>
+            Other: <input class="gradientStopColor gradientPickerInput" type="text" placeholder="valid css color" value="white">
+          </div>
+        </div>
+        <strong>Number of steps:</strong> <input class="gradientStepCount" type="number" value="10" min="2" max="100">
+
+        <ul class="gradientList">
+          <li>Jab <canvas height="1" width="200" data-colorType="jab"></canvas><input data-colorType="jab" type="text" class="gradientOutputText" disabled></li>
+          <li>Lab <canvas height="1" width="200" data-colorType="lab"></canvas><input data-colorType="lab" type="text" class="gradientOutputText" disabled></li>
+          <li>RGB <canvas height="1" width="200" data-colorType="rgb"></canvas><input data-colorType="rgb" type="text" class="gradientOutputText" disabled></li>
+
+          <li>Jab <canvas class="sequential" height="1" width="10" data-colorType="jab"></canvas><input type="text" data-colorType="jab" class="gradientOutputText sequential" disabled></li>
+          <li>Lab <canvas class="sequential" height="1" width="10" data-colorType="lab"></canvas><input type="text" data-colorType="lab" class="gradientOutputText sequential" disabled></li>
+          <li>RGB <canvas class="sequential" height="1" width="10" data-colorType="rgb"></canvas><input type="text" data-colorType="rgb" class="gradientOutputText sequential" disabled></li>
+        </ul>
+      </div>
+
+      <div class="content_container">
+        <table class="jndTable">
+          <tr class="palette"><td></td></tr>
+        </table>
+      </div>
+    </div>
+    <script src="../js/d3.js"></script>
+    <script src="../js/d3-cam02.js"></script>
+    <script src="../js/d3-jnd.js"></script>
+    <script src="../js/dispatch.js"></script>
+    <script src="../js/colorpicker/util.js"></script>
+    <script src="../js/colorpicker/colorStore.js"></script>
+    <script src="../js/colorpicker/colorpicker.js"></script>
+    <script src="../js/imageprocessor/imageprocessor.js"></script>
+    <script src="../js/colorpicker/colorPalette.js"></script>
+    <script src="../js/gradientpicker/gradientpicker.js"></script>
+    <script src="../js/jndtable/jndtable.js"></script>
+    <script src="../js/main.js"></script>
+
+    <p>Colorpicker on left and then the other menus can be on the right in a
+          scrollable container...? Or maybe colorpicker + palettes on left and
+          then the right can be the rest (e.g, gradients, jnd table, etc.).
+          use flexbox.</p>
+  </body>
+</html>

@@ -1,0 +1,16 @@
+$hoverColor: #ddd;
+.jndTable tr:nth-child(n+2):hover {
+  background-color: $hoverColor;
+}
+
+.jndTable td {
+  height: 20px;
+  line-height: 20px;
+  text-align: center;
+  width: 20px;
+}
+
+.jndTable .notDifferent {
+  background-color: rgba(255,0,0,0.25);
+  color: rgb(255,0,0);
+}

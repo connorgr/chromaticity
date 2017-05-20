@@ -1,0 +1,136 @@
+// .colorpicker {
+//   float: left;
+// }
+#colorpicker_squareContainer {
+  float: left;
+}
+$colorpickerSquare_width: 255px;
+#colorpicker_square {
+  border: 1px solid #ccc;
+  height: 255px;
+  margin: 5px 0 0 0;
+  width: $colorpickerSquare_width;
+}
+
+#colorpicker_bar {
+  border: 1px solid #ccc;
+  margin: 5px 0;
+}
+
+#colorpicker_slider {
+  height: 265px;
+  margin: 0px;
+  width: 10px;
+  vertical-align: top;
+}
+
+#colorpicker_slider .thumb {
+  fill: #666;
+}
+#colorpicker_slider .thumb:hover {
+  cursor: -webkit-grab;
+  fill: steelblue;
+}
+
+#colorpicker_channels {
+  background: rgba(255,255,255,0.05);
+  display: inline-block;
+  vertical-align: top;
+}
+#colorpicker_channels ul {
+  list-style: none;
+  padding: 0;
+}
+#colorpicker_channels ul li {
+  background: #eee;
+  font-family: "Hack";
+  font-size: 12px;
+  list-style: none;
+  margin: 0;
+  padding: 0 0 0 2px;
+  text-align: right;
+}
+#colorpicker_channels ul li:nth-child(3n-2) {
+  border-top-left-radius: 3px;
+}
+#colorpicker_channels ul li:nth-child(3n), #colorpicker_channels ul li:last-child {
+  border-bottom-left-radius: 3px;
+}
+
+#colorspaceSwitcherMenu {
+  list-style: none;
+  margin: -3px 0 0 0;
+  padding: 0;
+  text-align: center;
+}
+
+$colorspaceSwitcherMenu_li_padding: 5px;
+$num_colorspaceSwitcherMenu_li: 4px;
+$colorspaceSwitcherMenu_li_width: $colorpickerSquare_width/$num_colorspaceSwitcherMenu_li - $colorspaceSwitcherMenu_li_padding*2 - 1;
+#colorspaceSwitcherMenu .active, #colorspaceSwitcherMenu li:hover {
+  box-shadow: inset 0 0 5px rgba(0,0,0,0.25);
+  cursor: pointer;
+}
+
+#colorspaceSwitcherMenu li {
+  background: #eee;
+  border: 1px solid #ccc;
+  border-left: none;
+  display: block;
+  float: left;
+  font-size: 12px;
+  padding: 5px;
+  text-align: center;
+  width: $colorspaceSwitcherMenu_li_width;
+}
+#colorspaceSwitcherMenu li:first-child {
+  border-bottom-left-radius: 5px;
+  border-left: 1px solid #ccc;
+  width: $colorspaceSwitcherMenu_li_width;
+}
+#colorspaceSwitcherMenu li:last-child {
+  border-bottom-right-radius: 5px;
+}
+
+$colorpicker_channels_inputWidth: 50px;
+#colorpicker_channels ul .emptyRight {
+  margin-right: $colorpicker_channels_inputWidth + 4px;
+}
+#colorpicker_channels ul li:nth-child(3n) {
+  margin-bottom: 10px;
+}
+#colorpicker_channels ul li input {
+  width: $colorpicker_channels_inputWidth;
+}
+
+.previewColor { border: 1px solid #ccc; display: inline-block; vertical-align:top; width: 60px; }
+.previewColor button { width: 100%; }
+.hoverColor, .selectedColor { height: 40px; width: 100%; }
+
+
+.paletteTable { border-collapse: collapse; font-family: "Hack"; }
+.paletteTable thead { background: #ddd; }
+.paletteTable tbody tr { border-bottom: 1px solid #ddd; }
+.paletteTable tbody td, .paletteTable tfoot td { font-size: 12px; }
+.paletteTable tfoot .palettePreview {
+  height: 20px;
+  image-rendering: pixelated;
+  vertical-align: bottom;
+  width: 200px;
+}
+.paletteTable td { padding: 0 5px; text-align: center; width: 20px;}
+.paletteTable td:nth-child(3), .paletteTable td:nth-child(4) { width: 60px; }
+.paletteTable td:nth-child(n+5) { text-align: left; width: 135px; }
+.deletePaletteTableColor {
+  background: #eee;
+  border-radius: 50%;
+  cursor: pointer;
+  display: block;
+  font-size: 15px;
+  height: 15px;
+  line-height: 15px;
+  width: 15px;
+}
+.deletePaletteTableColor:hover { background: #ccc; }
+
+.paletteTable .paletteInputField { width: 200px; }
