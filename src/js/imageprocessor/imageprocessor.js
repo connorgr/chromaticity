@@ -2,13 +2,21 @@ var imageprocessor = function(container) {
   var canvas = container.select("canvas").node(),
       context = canvas.getContext("2d"),
       colorList = container.select(".uniqueColors"),
-      dropArea = container.select("p"),
-      dropImg = container.select(".dropImg");
+      dropArea = container.select(".dragArea"),
+      dropImg = container.select(".dropImg"),
+      uploadBtn = container.select(".uploadBtn");
 
   dropArea.on('dragover', dragOverArea);
   dropArea.on('drop', selectFile);
-
   dropImg.on("load", buildCanvas);
+  uploadBtn.on("click", function() {
+    var localFile = container.select('.uploadForm input[type="file"]');
+    if(localFile.property("files").length > 0) {
+      var reader = new FileReader();
+      reader.onload = function(e) { dropImg.node().src=e.target.result; };
+      reader.readAsDataURL(localFile.property("files")[0]);
+    }
+  })
 
   function buildCanvas() {
     context.clearRect(0, 0, canvas.width, canvas.height);
@@ -77,18 +85,5 @@ var imageprocessor = function(container) {
 
     // Read in the image file as a data URL.
     reader.readAsDataURL(file);
-
-    // var fileDataUrl = FileReader.readAsDataURL(files[0]);
-    //
-    // // files is a FileList of File objects. List some properties.
-    // var output = [];
-    // for (var i = 0, f; f = files[i]; i++) {
-    //   output.push('<li><strong>', escape(f.name), '</strong> (', f.type || 'n/a', ') - ',
-    //               f.size, ' bytes, last modified: ',
-    //               f.lastModifiedDate ? f.lastModifiedDate.toLocaleDateString() : 'n/a',
-    //               '</li>');
-    // }
-
-    // console.log(output);
   }
 };

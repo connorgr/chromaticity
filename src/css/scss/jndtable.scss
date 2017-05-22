@@ -3,14 +3,24 @@ $hoverColor: #ddd;
   background-color: $hoverColor;
 }
 
-.jndTable td {
+.jndTable td, .cvdTable td {
   height: 20px;
   line-height: 20px;
   text-align: center;
-  width: 20px;
+  min-width: 20px;
+  text-align: center;
+}
+.cvdTable tr td:first-child { text-align: right; }
+
+.jndTable tr:first-child td:nth-child(n+2),
+.jndTable tr:nth-child(n+2) td:first-child,
+.cvdTable tr td:nth-child(n+2) {
+  border: 1px solid #333;
 }
 
+.jndTable .notDifferent, .cvdTable .notDifferent {
+  color: rgba(0,0,0, 0.5);
+}
 .jndTable .notDifferent {
   background-color: rgba(255,0,0,0.25);
-  color: rgb(255,0,0);
 }

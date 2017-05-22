@@ -302,6 +302,16 @@ nav .logo {
   height: 100px;
   width: 100px; }
 
+.imageProcessor .dragArea {
+  background: #ccc;
+  border-radius: 10px;
+  height: 100px;
+  width: 200px; }
+
+.imageProcessor .dragArea p {
+  line-height: 100px;
+  text-align: center; }
+
 .imageProcessor .uniqueColors {
   list-style: none;
   margin: 0;
@@ -319,14 +329,25 @@ nav .logo {
 .jndTable tr:nth-child(n+2):hover {
   background-color: #ddd; }
 
-.jndTable td {
+.jndTable td, .cvdTable td {
   height: 20px;
   line-height: 20px;
   text-align: center;
-  width: 20px; }
+  min-width: 20px;
+  text-align: center; }
+
+.cvdTable tr td:first-child {
+  text-align: right; }
+
+.jndTable tr:first-child td:nth-child(n+2),
+.jndTable tr:nth-child(n+2) td:first-child,
+.cvdTable tr td:nth-child(n+2) {
+  border: 1px solid #333; }
+
+.jndTable .notDifferent, .cvdTable .notDifferent {
+  color: rgba(0, 0, 0, 0.5); }
 
 .jndTable .notDifferent {
-  background-color: rgba(255, 0, 0, 0.25);
-  color: red; }
+  background-color: rgba(255, 0, 0, 0.25); }
 
 /*# sourceMappingURL=main.css.map */

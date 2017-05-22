@@ -19,8 +19,7 @@ var jndtable = function(table) {
       });
 
       var newRow = table.select("tbody").append("tr").classed("ndRow", true);
-      newRow.append("td")
-          .style("background-color", rgbstr)
+      newRow.append("td").style("background-color", rgbstr);
 
       curPalette.forEach(function(c) {
         var td = newRow.append("td");
@@ -43,11 +42,29 @@ var jndtable = function(table) {
         colorCells = table.selectAll(".palette td").filter((d,i) => i > 0),
         rows = table.selectAll(".ndRow");
 
+    curPalette.splice(cIdx, 1);
+
+    colorCells.filter((d,i) => i === cIdx).remove();
+
     colorCells.each(function(d,i) { if(i === cIdx) d3.select(this).remove(); });
+
     rows.each(function(d,i) {
-      if(i === cIdx) d3.select(this).remove();
-      else d3.select(this).selectAll("td").filter((d,i) => i > 0)
-          .each(function(c,j) { if(j === cIdx) d3.select(this).remove(); });
+      var row = d3.select(this);
+      if(i === cIdx) { row.remove(); return; }
+
+      var rowColor = row.style("background-color");
+
+      var cmps = row.selectAll("td").filter((d,i) => i > 0);
+      cmps.filter((d,i) => i === cIdx).remove();
+
+      cmps.each(function(d,j) {
+        var td = d3.select(this),
+            bg = td.style("background-color");
+        if(bg === rowColor) return;
+
+        var notDiff = !d3.noticeablyDifferent(bg, rowColor);
+        td.classed("notDifferent", notDiff).text(notDiff ? "⚠" : "");
+      });
     });
   });
 

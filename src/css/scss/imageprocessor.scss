@@ -8,6 +8,18 @@
   width: 100px;
 }
 
+.imageProcessor .dragArea {
+  background: #ccc;
+  border-radius: 10px;
+  height: 100px;
+  width: 200px;
+}
+
+.imageProcessor .dragArea p {
+  line-height: 100px;
+  text-align: center;
+}
+
 .imageProcessor .uniqueColors {
   list-style: none;
   margin: 0;

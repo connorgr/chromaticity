@@ -62,7 +62,13 @@
 
       <div class="content_container">
         <div class="imageProcessor">
-          <p>Drag image here.</p>
+          <div class="uploadForm">
+            Upload <input type="file"> <button class="uploadBtn">Upload</button>
+          </div>
+
+          <div class="dragArea">
+            <p>OR drag image here.</p>
+          </div>
           <img class="dropImg invisible">
           <canvas class="invisible" width="100" height="100"></canvas>
           <ul class="uniqueColors"></ul>
@@ -95,41 +101,71 @@
         </table>
       </div>
 
-      <div class="gradientPicker content_container">
-        <div class="gradientPickerMenu">
-          <div class="startColor">
-            <strong>Start color</strong>
-            <ul class="swatchList"></ul>
-            Other: <input class="gradientStartColor gradientPickerInput" type="text"  placeholder="valid css color" value="black">
+      <div class="content_container">
+        <div class="gradientPicker content_container">
+          <div class="gradientPickerMenu">
+            <div class="startColor">
+              <strong>Start color</strong>
+              <ul class="swatchList"></ul>
+              Other: <input class="gradientStartColor gradientPickerInput" type="text"  placeholder="valid css color" value="black">
+            </div>
+            <div class="stopColor">
+              <strong>Stop color</strong>
+              <ul class="swatchList"></ul>
+              Other: <input class="gradientStopColor gradientPickerInput" type="text" placeholder="valid css color" value="white">
+            </div>
           </div>
-          <div class="stopColor">
-            <strong>Stop color</strong>
-            <ul class="swatchList"></ul>
-            Other: <input class="gradientStopColor gradientPickerInput" type="text" placeholder="valid css color" value="white">
-          </div>
+          <strong>Number of steps:</strong> <input class="gradientStepCount" type="number" value="10" min="2" max="100">
+
+          <ul class="gradientList">
+            <li>Jab <canvas height="1" width="200" data-colorType="jab"></canvas><input data-colorType="jab" type="text" class="gradientOutputText" disabled></li>
+            <li>Lab <canvas height="1" width="200" data-colorType="lab"></canvas><input data-colorType="lab" type="text" class="gradientOutputText" disabled></li>
+            <li>RGB <canvas height="1" width="200" data-colorType="rgb"></canvas><input data-colorType="rgb" type="text" class="gradientOutputText" disabled></li>
+
+            <li>Jab <canvas class="sequential" height="1" width="10" data-colorType="jab"></canvas><input type="text" data-colorType="jab" class="gradientOutputText sequential" disabled></li>
+            <li>Lab <canvas class="sequential" height="1" width="10" data-colorType="lab"></canvas><input type="text" data-colorType="lab" class="gradientOutputText sequential" disabled></li>
+            <li>RGB <canvas class="sequential" height="1" width="10" data-colorType="rgb"></canvas><input type="text" data-colorType="rgb" class="gradientOutputText sequential" disabled></li>
+          </ul>
         </div>
-        <strong>Number of steps:</strong> <input class="gradientStepCount" type="number" value="10" min="2" max="100">
 
-        <ul class="gradientList">
-          <li>Jab <canvas height="1" width="200" data-colorType="jab"></canvas><input data-colorType="jab" type="text" class="gradientOutputText" disabled></li>
-          <li>Lab <canvas height="1" width="200" data-colorType="lab"></canvas><input data-colorType="lab" type="text" class="gradientOutputText" disabled></li>
-          <li>RGB <canvas height="1" width="200" data-colorType="rgb"></canvas><input data-colorType="rgb" type="text" class="gradientOutputText" disabled></li>
-
-          <li>Jab <canvas class="sequential" height="1" width="10" data-colorType="jab"></canvas><input type="text" data-colorType="jab" class="gradientOutputText sequential" disabled></li>
-          <li>Lab <canvas class="sequential" height="1" width="10" data-colorType="lab"></canvas><input type="text" data-colorType="lab" class="gradientOutputText sequential" disabled></li>
-          <li>RGB <canvas class="sequential" height="1" width="10" data-colorType="rgb"></canvas><input type="text" data-colorType="rgb" class="gradientOutputText sequential" disabled></li>
-        </ul>
+        <div class="cvdGradientPicker">
+          <ul class="cvdGradientList" data-colorType="jab">
+            <li class="protanomaly">protanomaly <canvas height="1" width="200"></canvas></li>
+            <li class="protanopia">protanopia <canvas height="1" width="200"></canvas></li>
+            <li class="deuteranomaly">deuteranomaly <canvas height="1" width="200"></canvas></li>
+            <li class="deuteranopia">deuteranopia <canvas height="1" width="200"></canvas></li>
+            <li class="tritanomaly">tritanomaly <canvas height="1" width="200"></canvas></li>
+            <li class="tritanopia">tritanopia <canvas height="1" width="200"></canvas></li>
+            <li class="achromatomaly">achromatomaly <canvas height="1" width="200"></canvas></li>
+            <li class="achromatopsia">achromatopsia <canvas height="1" width="200"></canvas></li>
+          </ul>
+        </div>
       </div>
 
       <div class="content_container">
         <table class="jndTable">
           <tr class="palette"><td></td></tr>
         </table>
+
+        <table class="cvdTable">
+          <tr class="palette"><td>palette</td></tr>
+          <tr class="protanomaly"><td>protanomaly</td></tr>
+          <tr class="protanopia"><td>protanopia</td></tr>
+          <tr class="deuteranomaly"><td>deuteranomaly</td></tr>
+          <tr class="deuteranopia"><td>deuteranopia</td></tr>
+          <tr class="tritanomaly"><td>tritanomaly</td></tr>
+          <tr class="tritanopia"><td>tritanopia</td></tr>
+          <tr class="achromatomaly"><td>achromatomaly</td></tr>
+          <tr class="achromatopsia"><td>achromatopsia</td></tr>
+        </table>
+
+
       </div>
     </div>
     <script src="../js/d3.js"></script>
     <script src="../js/d3-cam02.js"></script>
     <script src="../js/d3-jnd.js"></script>
+    <script src="../js/cvd.js"></script>
     <script src="../js/dispatch.js"></script>
     <script src="../js/colorpicker/util.js"></script>
     <script src="../js/colorpicker/colorStore.js"></script>
@@ -138,6 +174,7 @@
     <script src="../js/colorpicker/colorPalette.js"></script>
     <script src="../js/gradientpicker/gradientpicker.js"></script>
     <script src="../js/jndtable/jndtable.js"></script>
+    <script src="../js/jndtable/cvdtable.js"></script>
     <script src="../js/main.js"></script>
 
     <p>Colorpicker on left and then the other menus can be on the right in a
