@@ -13,7 +13,8 @@ $nav-height: 35px;
 
 html,
 body {
-  background: #DDD;
+  // background: #DDD;
+  background-color: #232F35;
   padding: 0;
   margin: 0;
 }
@@ -70,7 +71,9 @@ nav .logo {
 
 .content_container {
   background: white;
+  box-shadow: 0 0 0px 10px #49555C;
   border-radius: 5px;
+  display: inline-block;
   margin: 10px;
   padding: 10px;
 }

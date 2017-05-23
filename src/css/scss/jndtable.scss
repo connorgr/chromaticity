@@ -1,4 +1,26 @@
 $hoverColor: #ddd;
+
+.jndParameters {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.jndParameters .value {
+  background: #ddd;
+  border-radius: 5px;
+  display: inline-block;
+  font-family: 'Hack', monospace;
+  font-size: 12px;
+  min-width: 50px;
+  padding: 3px;
+  text-align: center;
+}
+
+.jndTable table {
+  border: 1px solid #ddd;
+}
+
 .jndTable tr:nth-child(n+2):hover {
   background-color: $hoverColor;
 }

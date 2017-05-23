@@ -8,7 +8,7 @@
   font-weight: normal; }
 html,
 body {
-  background: #DDD;
+  background-color: #232F35;
   padding: 0;
   margin: 0; }
 
@@ -56,7 +56,9 @@ nav .logo {
 
 .content_container {
   background: white;
+  box-shadow: 0 0 0px 10px #49555C;
   border-radius: 5px;
+  display: inline-block;
   margin: 10px;
   padding: 10px; }
 
@@ -335,6 +337,24 @@ nav .logo {
   height: 20px;
   margin-right: 2px;
   width: 20px; }
+
+.jndParameters {
+  list-style: none;
+  margin: 0;
+  padding: 0; }
+
+.jndParameters .value {
+  background: #ddd;
+  border-radius: 5px;
+  display: inline-block;
+  font-family: 'Hack', monospace;
+  font-size: 12px;
+  min-width: 50px;
+  padding: 3px;
+  text-align: center; }
+
+.jndTable table {
+  border: 1px solid #ddd; }
 
 .jndTable tr:nth-child(n+2):hover {
   background-color: #ddd; }

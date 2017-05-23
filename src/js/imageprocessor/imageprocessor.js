@@ -40,7 +40,7 @@ var imageprocessor = function(container) {
 
               var i = 0, isND;
               for(var i = 0; i<acc.length; i++) {
-                isND = d3.noticeablyDifferent(acc[i], d);
+                isND = d3.noticeablyDifferent(acc[i], d, 1.0, 0.5);
                 if(isND === false) return acc;
               }
               acc.push(d);
