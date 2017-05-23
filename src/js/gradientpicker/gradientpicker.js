@@ -65,6 +65,9 @@ var gradientpicker = function(container) {
       return;
     }
 
+    dispatch.call("updateGradientColors",
+        {startColor: startColor, stopColor: stopColor});
+
     container.selectAll("canvas").each(function () {
       renderSingleGradient(d3.select(this), startColor, stopColor);
     });

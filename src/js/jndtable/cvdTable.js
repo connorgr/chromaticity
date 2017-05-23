@@ -42,6 +42,12 @@ var cvdtable = function(table) {
     updateJNDs();
   });
 
+  dispatch.on("updateJNDParameters.cvdTable", function() {
+    JND_PERCENT = this.percent;
+    JND_SIZE = this.size;
+    updateJNDs();
+  });
+
 
   function getCurrentColors() {
     var colors = [];
@@ -75,10 +81,10 @@ var cvdtable = function(table) {
 
         td.classed("notDifferent", isND === false)
             .text(isND === false ? "⚠" : "");
+        if(d3.lab(tdBG).l < 30) td.style("color", "rgba(255,255,255,0.25)")
       });
     });
   }
-
 
   return obj;
 }

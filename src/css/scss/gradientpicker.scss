@@ -40,3 +40,10 @@
   width: 20px;
   height: 20px;
 }
+
+.cvdGradientPicker { font-size: 12px; }
+.cvdGradientPicker canvas {
+  height: 15px;
+  width: 100px;
+}
+.cvdGradientPicker tr td:first-child { text-align: right; }

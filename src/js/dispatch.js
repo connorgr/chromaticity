@@ -1,1 +1,1 @@
-var dispatch = d3.dispatch("addSelectedColor", "deletePaletteColor", "updateSelectedColor");
+var dispatch = d3.dispatch("addSelectedColor", "deletePaletteColor", "updateGradientColors", "updateJNDParameters", "updateSelectedColor");

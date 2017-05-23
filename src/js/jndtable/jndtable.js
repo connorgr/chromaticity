@@ -1,35 +1,53 @@
 var jndtable = function(table) {
-  var obj = {
-    addColorToTable: function(newColor) {
-      var c = d3.rgb(newColor),
-          rgbstr = c.toString(),
-          curPalette = getCurrentColors(),
-          palette = table.select(".palette");
+  var JND_PERCENT = 0.5,
+      JND_SIZE = 0.1;
+  var obj = {},
+      paramMenu = table.select(".jndParameters");
 
-      if(curPalette.indexOf(rgbstr) > -1) return;
+  obj.addColorToTable = function(newColor) {
+    var c = d3.rgb(newColor),
+        rgbstr = c.toString(),
+        curPalette = getCurrentColors(),
+        palette = table.select(".palette");
 
-      palette.append("td").style("background-color", rgbstr);
-      table.selectAll(".ndRow").each(function(d,i) {
-        var rowColor = curPalette[i],
-            td = d3.select(this).append("td");
+    if(curPalette.indexOf(rgbstr) > -1) return;
 
-        if(d3.noticeablyDifferent(rgbstr, rowColor) === false) {
-          td.classed("notDifferent", true).text("⚠");
-        }
+    palette.append("td").style("background-color", rgbstr);
+    table.selectAll(".ndRow").each(function(d,i) {
+      var rowColor = curPalette[i],
+          td = d3.select(this).append("td");
+
+      if(d3.noticeablyDifferent(rgbstr, rowColor, JND_SIZE, JND_PERCENT) === false) {
+        td.classed("notDifferent", true).text("⚠");
+      }
+    });
+
+    var newRow = table.select("tbody").append("tr").classed("ndRow", true);
+    newRow.append("td").style("background-color", rgbstr);
+
+    curPalette.forEach(function(c) {
+      var td = newRow.append("td");
+
+      if(d3.noticeablyDifferent(rgbstr, c, JND_SIZE, JND_PERCENT) === false) {
+        td.classed("notDifferent", true).text("⚠");
+      }
+    });
+    newRow.append("td"); // self-row should be blank;
+  };
+
+  obj.updateColorTable = function() {
+    var curPalette = getCurrentColors();
+    table.selectAll(".ndRow").each(function(d,i) {
+      var rowColor = curPalette[i],
+          tr = d3.select(this);
+      tr.selectAll("td").filter((d,i) => i > 0).each(function(td,j) {
+        var c = curPalette[j];
+        if(c === rowColor) return;
+        var isND = d3.noticeablyDifferent(c, rowColor, JND_SIZE, JND_PERCENT);
+        d3.select(this).classed("notDifferent", !isND)
+            .text(isND ? "" : "⚠");
       });
-
-      var newRow = table.select("tbody").append("tr").classed("ndRow", true);
-      newRow.append("td").style("background-color", rgbstr);
-
-      curPalette.forEach(function(c) {
-        var td = newRow.append("td");
-
-        if(d3.noticeablyDifferent(rgbstr, c) === false) {
-          td.classed("notDifferent", true).text("⚠");
-        }
-      });
-      newRow.append("td"); // self-row should be blank;
-    }
+    });
   };
 
   dispatch.on("addSelectedColor.jndtable", function() {
@@ -65,6 +83,29 @@ var jndtable = function(table) {
         var notDiff = !d3.noticeablyDifferent(bg, rowColor);
         td.classed("notDifferent", notDiff).text(notDiff ? "⚠" : "");
       });
+    });
+  });
+
+
+  paramMenu.selectAll("li").each(function() {
+    var li = d3.select(this),
+        parameter = li.attr("data-parameter"),
+        valText = li.select(".value");
+
+    li.select("input").on("input", function() {
+      var val = +d3.select(this).property("value");
+      if(parameter === "percent") {
+        JND_PERCENT = val;
+        // HACK TODO remove Javascript imprecision rounding.
+        val = val.toFixed(2).replace("0.","").replace(".","") + "%";
+      } else if(parameter === "size") {
+        JND_SIZE = val;
+        val = val.toFixed(2);
+      }
+      valText.text(val);
+
+      obj.updateColorTable();
+      dispatch.call("updateJNDParameters", {percent: JND_PERCENT, size: JND_SIZE});
     });
   });
 
