@@ -320,6 +320,10 @@ nav .logo {
   height: 100px;
   width: 200px; }
 
+.imageProcessor .dropImg {
+  max-height: 200px;
+  max-width: 200px; }
+
 .imageProcessor .dragArea p {
   line-height: 100px;
   text-align: center; }
