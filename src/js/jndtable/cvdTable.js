@@ -57,6 +57,7 @@ var cvdtable = function(table) {
     return colors;
   }
 
+
   function updateJNDs() {
     table.selectAll("tbody tr").each(function() {
       var tr = d3.select(this),
