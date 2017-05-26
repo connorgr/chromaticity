@@ -28,7 +28,7 @@ var imageprocessor = function(container) {
     // quickly iterate over all pixels
     var i = -1;
     for(var x = 0; x < canvas.width*canvas.height; ++x) {
-      pxs[x] = d3.rgb(image.data[++i], image.data[++i], image.data[++i]).toString();
+      pxs[x] = d3.hcl(d3.rgb(image.data[++i], image.data[++i], image.data[++i]).toString());
       ++i;
     }
 
@@ -45,7 +45,13 @@ var imageprocessor = function(container) {
               }
               acc.push(d);
               return acc;
-            }, []);
+            }, []).sort(function(a,b) {
+              var hDiff = a.h - b.h;
+              if(Math.abs(hDiff) > 15) return hDiff;
+              var lDiff = a.l - b.l;
+              if(Math.abs(lDiff) > 5) return lDiff;
+              else return a.c - b.c;
+            });
 
     colorList.selectAll("li").remove();
     colorList.selectAll("li")
@@ -54,7 +60,7 @@ var imageprocessor = function(container) {
         .append("li")
             .style("background-color", d => d)
             .on("click", function(d) {
-              dispatch.call("addSelectedColor",{selectedColor: d});
+              dispatch.call("addSelectedColor",{selectedColor: d.toString() });
             });
   }
 

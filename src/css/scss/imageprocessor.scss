@@ -11,8 +11,8 @@
 .imageProcessor .dragArea {
   background: #ccc;
   border-radius: 10px;
-  height: 100px;
-  width: 200px;
+  height: 200px;
+  width: 195px;
 }
 
 .imageProcessor .dropImg {
@@ -21,14 +21,18 @@
 }
 
 .imageProcessor .dragArea p {
-  line-height: 100px;
+  line-height: 200px;
   text-align: center;
 }
+
+.imageProcessor .imgContainer { width: 400px; }
+.imageProcessor .imgContainer * { display: inline-block; vertical-align: top; }
 
 .imageProcessor .uniqueColors {
   list-style: none;
   margin: 0;
   padding: 0;
+  max-width: 400px;
 }
 
 .imageProcessor .uniqueColors li {

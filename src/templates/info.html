@@ -1,0 +1,117 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Chromaticity</title>
+    <link rel="stylesheet" href="../css/main.css">
+  </head>
+  <body>
+    <nav>
+      <p class="logo"><a href="index.html">Chromaticity</a></p>
+      <a href="info.html">Info</a>
+    </nav>
+
+
+    <div class="container">
+      <section>
+        <h1>About Chromaticity</h1>
+        <p>Chromaticity is a color palette creation tool that focuses on
+          design problems that require the use of <em>perceptual color
+          spaces</em>.
+        </p>
+
+        <h2>Chromaticity in a nutshell</h2>
+        <p>The aim of Chromaticity is to fill the current void of manual color
+          palette design tools that are geared towards perceptual design.
+          Tools like Adobe Color are fantastic for general design, but don't
+          provide support for Lab or Jab.
+          Other tools like paletton do a fantastic job at porting Adobe Color's
+          idea to model color vision deficiencies, but do not provide a
+          comprehensive platform for selecting colors for visualization
+          applications.
+          In contrast, Chromaticity affords many of the design capabilities of
+          both tools, while also providing more robust support for many common
+          tasks when choosing colors for visualization design. For instance,
+          looking at whether colors are noticeably different or creating
+          perceptually grounded sequential palettes.
+        </p>
+
+        <h2>Perceptual color space</h2>
+        <p>Perceptual color spaces are different than digital color spaces like
+          RGB or CYM, which model digital or print delivery of color.
+          RGB is an additive color space that is modeled after how
+          monitors and many other electronics emit or record color: by differing
+          amounts of red, green, and blue lights. CYM is a subtractive color
+          space that is modeled after how many printing methods use mixtures of
+          cyan, yellow, and magenta pigments to create color.
+        </p>
+
+        <p>In contrast, perceptual color spaces model how the human brain
+          perceives color. Chromaticity provides two similar models. One, CIELAB
+          is the current common standard for design in perceptual color spaces.
+          CIELAB is more commonly refered to as just "Lab" in practice.
+          The other is a color space called Jab, which is part of the
+          CIECAM02-UCS color appearance model (more on that later).
+        </p>
+
+        <p>Both Lab and Jab are modeled after opponent processing theory, and
+          define color based on lightness (<em>L*</em> or <em>J*</em>),
+          redness-to-greenness (<em>a*</em>), and blueness-to-yellowness
+          (<em>b*</em>). Another key part of both color spaces is that they both
+          approximate <em>perceptual uniformity</em>. In other words, the
+          distance between any two colors actually carries meaning: it
+          approximates how easily the human brain can differentiate them.
+          The main difference between Lab and Jab is that Jab is an updated
+          model that provides better approximations, and this also means its
+          layout is a bit different, which you can see in the color picker.
+          Perceptual uniformity also highlights why Lab and Jab are different
+          from RGB and CYM, as distance doesn't relate to perceptual similarity
+          in RGB and CYM. This is a critical difference if you are selecting
+          colors for a design project where color distance encodes meaning, or
+          if colors need to be legibly different.
+        </p>
+
+        <p>Wait, but if Jab is an updated version of Lab, why should we even
+          bother using Lab? The biggest reason is that it is still unclear
+          whether using CIECAM02-UCS has any practical benefit over CIELAB.
+          CIECAM02-UCS was made to be more precise, but if you make online
+          content that will be viewed across hundreds of different kinds of
+          devices and viewing conditions compared to a controlled perception
+          laboratory, CIECAM02-UCS's increased precision may not be
+          of practical value.
+          Another reason is that providing both color spaces gives more
+          flexibility to designers.
+          Because the two color spaces position colors differently, it gives
+          designers more options for color appearences since, for example,
+          creating sequential scales in both between the same two colors can
+          look very different.
+        </p>
+
+        <p>If you want to learn more about CIECAM02-UCS or use it in your own
+          projects, check out the d3-cam02 D3 module or the colorspacious
+          Python library.
+        </p>
+      </section>
+
+      <section>
+        <h1>The Color Picker</h1>
+
+        <p>Chromaticity's color picker supports color selection in four color
+          spaces: Lab (CIELAB), LCh (CIELCh), Jab (CIECAM02-UCS), and RGB.
+        </p>
+        <dl>
+          <dt>Lab</dt>
+          <dd>Placeholder</dd>
+          <dt>LCh</dt>
+          <dd>Placeholder</dd>
+          <dt>Jab</dt>
+          <dd>Placeholder</dd>
+          <dt>RGB</dt>
+          <dd>Placeholder</dd>
+        </dl>
+
+        <p>You can save a selected palette by clicking the "+" button.</p>
+      </section>
+    </div>
+  </body>
+</html>

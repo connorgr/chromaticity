@@ -108,19 +108,20 @@ $colorpicker_channels_inputWidth: 50px;
 .hoverColor, .selectedColor { height: 40px; width: 100%; }
 
 
-.paletteTable { border-collapse: collapse; font-family: "Hack"; }
+.paletteTable { border-collapse: collapse; font-family: "Hack"; font-size: 12px; }
 .paletteTable thead { background: #ddd; }
 .paletteTable tbody tr { border-bottom: 1px solid #ddd; }
-.paletteTable tbody td, .paletteTable tfoot td { font-size: 12px; }
+// .paletteTable tbody td, .paletteTable tfoot td { font-size: 12px; }
 .paletteTable tfoot .palettePreview {
   height: 20px;
   image-rendering: pixelated;
   vertical-align: bottom;
   width: 200px;
 }
-.paletteTable td { padding: 0 5px; text-align: center; width: 20px;}
-.paletteTable td:nth-child(3), .paletteTable td:nth-child(4) { width: 60px; }
-.paletteTable td:nth-child(n+5) { text-align: left; width: 135px; }
+.paletteTable td { padding: 0 2px; text-align: center; width: 15px;}
+.paletteTable td:nth-child(3) { width: 15px; }
+.paletteTable td:nth-child(4) { width: 50px; }
+.paletteTable td:nth-child(n+5) { text-align: left; width: 120px; }
 .deletePaletteTableColor {
   background: #eee;
   border-radius: 50%;

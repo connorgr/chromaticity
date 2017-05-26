@@ -69,13 +69,18 @@ nav .logo {
   padding: 0;
 }
 
+.container {
+  padding: 15px;
+}
+
 .content_container {
   background: white;
   box-shadow: 0 0 0px 10px #49555C;
   border-radius: 5px;
   display: inline-block;
-  margin: 10px;
+  margin: 15px;
   padding: 10px;
+  vertical-align: top;
 }
 
 

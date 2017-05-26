@@ -54,13 +54,17 @@ nav .logo {
   margin: 0;
   padding: 0; }
 
+.container {
+  padding: 15px; }
+
 .content_container {
   background: white;
   box-shadow: 0 0 0px 10px #49555C;
   border-radius: 5px;
   display: inline-block;
-  margin: 10px;
-  padding: 10px; }
+  margin: 15px;
+  padding: 10px;
+  vertical-align: top; }
 
 .subnav {
   background: #5499fb;
@@ -201,16 +205,14 @@ nav .logo {
 
 .paletteTable {
   border-collapse: collapse;
-  font-family: "Hack"; }
+  font-family: "Hack";
+  font-size: 12px; }
 
 .paletteTable thead {
   background: #ddd; }
 
 .paletteTable tbody tr {
   border-bottom: 1px solid #ddd; }
-
-.paletteTable tbody td, .paletteTable tfoot td {
-  font-size: 12px; }
 
 .paletteTable tfoot .palettePreview {
   height: 20px;
@@ -219,16 +221,19 @@ nav .logo {
   width: 200px; }
 
 .paletteTable td {
-  padding: 0 5px;
+  padding: 0 2px;
   text-align: center;
-  width: 20px; }
+  width: 15px; }
 
-.paletteTable td:nth-child(3), .paletteTable td:nth-child(4) {
-  width: 60px; }
+.paletteTable td:nth-child(3) {
+  width: 15px; }
+
+.paletteTable td:nth-child(4) {
+  width: 50px; }
 
 .paletteTable td:nth-child(n+5) {
   text-align: left;
-  width: 135px; }
+  width: 120px; }
 
 .deletePaletteTableColor {
   background: #eee;
@@ -281,7 +286,7 @@ nav .logo {
   display: inline-block;
   margin-bottom: 5px;
   padding: 5px;
-  width: 200px; }
+  width: 175px; }
 
 .gradientPickerMenu .swatchList {
   list-style: none;
@@ -301,7 +306,7 @@ nav .logo {
 
 .cvdGradientPicker canvas {
   height: 15px;
-  width: 100px; }
+  width: 90px; }
 
 .cvdGradientPicker tr td:first-child {
   text-align: right; }
@@ -317,21 +322,29 @@ nav .logo {
 .imageProcessor .dragArea {
   background: #ccc;
   border-radius: 10px;
-  height: 100px;
-  width: 200px; }
+  height: 200px;
+  width: 195px; }
 
 .imageProcessor .dropImg {
   max-height: 200px;
   max-width: 200px; }
 
 .imageProcessor .dragArea p {
-  line-height: 100px;
+  line-height: 200px;
   text-align: center; }
+
+.imageProcessor .imgContainer {
+  width: 400px; }
+
+.imageProcessor .imgContainer * {
+  display: inline-block;
+  vertical-align: top; }
 
 .imageProcessor .uniqueColors {
   list-style: none;
   margin: 0;
-  padding: 0; }
+  padding: 0;
+  max-width: 400px; }
 
 .imageProcessor .uniqueColors li {
   border: 1px solid #eee;
