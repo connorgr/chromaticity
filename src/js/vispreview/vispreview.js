@@ -29,21 +29,9 @@ var vispreview = function(container) {
   }
 
   function drawScatter() {
-    var margin = { top: 15, right: 15, bottom: 20, left: 15 },
-        width = +scatterSvg.attr("width") - margin.left - margin.right,
-        height = +scatterSvg.attr("height") - margin.top - margin.bottom;
-
-    var svg = scatterSvg.append("g")
-            .attr("transform", "translate("+margin.left+","+margin.top+")");
-
-    var x = d3.scaleLinear().domain([0,1]).range([0, width]),
-        y = d3.scaleLinear().domain([0,1]).range([height, 0]);
-
-    svg.append("g")
-      .attr("transform", "translate(0," + height + ")")
-      .call(d3.axisBottom(x).ticks(0));
-    svg.append("g")
-      .call(d3.axisLeft(y).ticks(0));
+    var outline = generateChartBasics(scatterSvg, true),
+        margin = outline.margin, width = outline.width, height = outline.height,
+        svg = outline.svg, x = outline.x, y = outline.y;
 
     var circles = svg.append("g").classed("circles", true);
     for(var i = 0; i < 100; i++) {
@@ -52,5 +40,29 @@ var vispreview = function(container) {
           .attr("cy", y(Math.random()))
           .attr("r", 5);
     }
+  }
+
+  function generateChartBasics(svgObj, makeAxis) {
+    var margin = { top: 15, right: 15, bottom: 20, left: 15 },
+        width = +svgObj.attr("width") - margin.left - margin.right,
+        height = +svgObj.attr("height") - margin.top - margin.bottom;
+
+    var svg = svgObj.append("g")
+            .attr("transform", "translate("+margin.left+","+margin.top+")");
+
+    var x = d3.scaleLinear().domain([0,1]).range([0, width]),
+        y = d3.scaleLinear().domain([0,1]).range([height, 0]);
+
+    if(makeAxis) {
+      svg.append("g")
+        .attr("transform", "translate(0," + height + ")")
+        .call(d3.axisBottom(x).ticks(0));
+      svg.append("g")
+        .call(d3.axisLeft(y).ticks(0));
+    }
+
+    return {
+      height: height, margin: margin, svg: svg, width: width, x: x, y: y
+    };
   }
 };
