@@ -108,7 +108,13 @@ $colorpicker_channels_inputWidth: 50px;
 .hoverColor, .selectedColor { height: 40px; width: 100%; }
 
 
-.paletteTable { border-collapse: collapse; font-family: "Hack"; font-size: 12px; }
+.paletteTable {
+  border-collapse: collapse;
+  font-family: "Hack";
+  font-size: 12px;
+  margin: 0 auto;
+  width: 500px;
+}
 .paletteTable thead { background: #ddd; }
 .paletteTable tbody tr { border-bottom: 1px solid #ddd; }
 // .paletteTable tbody td, .paletteTable tfoot td { font-size: 12px; }

@@ -6,14 +6,22 @@
     <link rel="stylesheet" href="src/css/main.css">
   </head>
   <body>
-    <nav>
+    <!-- <nav>
       <p class="logo"><a href="index.html">Chromaticity</a></p>
       <a href="info.html">Info</a>
-    </nav>
+    </nav> -->
 
+    <section class="banner">
+      <img src="src/img/logo_raw3.svg" height="60px"/>
+      <p>In Chromaticity you can make palettes in the color spaces you prefer
+         and easily see the accessibility of your design.</p>
+    </section>
 
-    <div class="container">
-      <div class="colorpicker content_container">
+    <div class="container border_bottom">
+      <h1>Select colors...</h1>
+
+      <div class="colorpicker content_container border_right display_inlineBlock">
+        <h2>from a color space</h2>
         <div id="colorpicker_squareContainer">
           <canvas id="colorpicker_square" width="255" height="255"></canvas><!--
           --><ul id="colorspaceSwitcherMenu">
@@ -32,6 +40,10 @@
 
         <div id="colorpicker_channels">
           <ul>
+            <li>R <input type="number" value="" class="colorChannelInput" data-colorType="rgb" data-channel="r"><input type="number" value="" class="colorChannelInputHover" data-colorType="rgb" data-channel="r" disabled></li>
+            <li>G <input type="number" value="" class="colorChannelInput" data-colorType="rgb" data-channel="g"><input type="number" value="" class="colorChannelInputHover" data-colorType="rgb" data-channel="g" disabled></li>
+            <li>B <input type="number" value="" class="colorChannelInput" data-colorType="rgb" data-channel="b"><input type="number" value="" class="colorChannelInputHover" data-colorType="rgb" data-channel="b" disabled></li>
+
             <li>L <input type="number" value="" class="colorChannelInput" data-colorType="lab" data-channel="l"><input type="number" value="" class="colorChannelInputHover" data-colorType="lab" data-channel="l" disabled></li>
             <li>a <input type="number" value="" class="colorChannelInput" data-colorType="lab" data-channel="a"><input type="number" value="" class="colorChannelInputHover" data-colorType="lab" data-channel="a" disabled></li>
             <li>b <input type="number" value="" class="colorChannelInput" data-colorType="lab" data-channel="b"><input type="number" value="" class="colorChannelInputHover" data-colorType="lab" data-channel="b" disabled></li>
@@ -44,24 +56,22 @@
             <li>a <input type="number" value="" class="colorChannelInput" data-colorType="jab" data-channel="a"><input type="number" value="" class="colorChannelInputHover" data-colorType="jab" data-channel="a" disabled></li>
             <li>b <input type="number" value="" class="colorChannelInput" data-colorType="jab" data-channel="b"><input type="number" value="" class="colorChannelInputHover" data-colorType="jab" data-channel="b" disabled></li>
 
-            <li>R <input type="number" value="" class="colorChannelInput" data-colorType="rgb" data-channel="r"><input type="number" value="" class="colorChannelInputHover" data-colorType="rgb" data-channel="r" disabled></li>
-            <li>G <input type="number" value="" class="colorChannelInput" data-colorType="rgb" data-channel="g"><input type="number" value="" class="colorChannelInputHover" data-colorType="rgb" data-channel="g" disabled></li>
-            <li>B <input type="number" value="" class="colorChannelInput" data-colorType="rgb" data-channel="b"><input type="number" value="" class="colorChannelInputHover" data-colorType="rgb" data-channel="b" disabled></li>
-
             <li class="emptyRight"># <input type="text" value="" class="colorChannelInput" data-colorType="hex"></li>
-            <li class="emptyRight"><input type="color" value="#777777" class="colorChannelInput" data-colorType="hex"></li>
+            <!-- <li class="emptyRight"><input type="color" value="#777777" class="colorChannelInput" data-colorType="hex"></li> -->
           </ul>
           <input type="text" class="freetextColorInput" placeholder="enter valid css color">
         </div>
         <div class="previewColor">
           <div class="hoverColor"></div>
           <div class="selectedColor"></div>
-          <button id="addColorToPaletteBtn">+</button>
         </div>
+
+        <button id="addColorToPaletteBtn">Add color</button>
 
       </div>
 
-      <div class="content_container">
+      <div class="content_container display_inlineBlock">
+        <h2>from an image</h2>
         <div class="imageProcessor">
           <div class="uploadForm">
             Upload <input type="file"> <button class="uploadBtn">Upload</button>
@@ -78,7 +88,15 @@
         </div>
       </div>
 
+      <div class="palettePreview">
+        <ul class="palettePreviewList"></ul>
+      </div>
+    </div>
+
+    <div class="container border_bottom">
+      <h1>Color palette information</h1>
       <div class="content_container">
+        <h2>Selected colors</h2>
         <table class="paletteTable">
           <thead>
             <tr>
@@ -105,6 +123,37 @@
       </div>
 
       <div class="content_container">
+        <h2>Color discriminability estimate</h2>
+        <div class="jndTable">
+          <ul class="jndParameters">
+            <li data-parameter="percent">Percent (Conservativeness): <span class="value">50%</span> <input type="range" min="0.1" max="1.0" step="0.05" value="0.5" /></li>
+            <li data-parameter="size">Size (Visual Angle): <span class="value">0.10</span> <input type="range" min="0.05" max="2.0" step="0.05" value="0.1"/></li>
+          </ul>
+
+          <table>
+            <tr class="palette"><td></td></tr>
+          </table>
+        </div>
+
+        <table class="cvdTable">
+          <tr class="palette"><td>palette</td></tr>
+          <tr class="protanomaly"><td>protanomaly</td></tr>
+          <tr class="protanopia"><td>protanopia</td></tr>
+          <tr class="deuteranomaly"><td>deuteranomaly</td></tr>
+          <tr class="deuteranopia"><td>deuteranopia</td></tr>
+          <tr class="tritanomaly"><td>tritanomaly</td></tr>
+          <tr class="tritanopia"><td>tritanopia</td></tr>
+          <tr class="achromatomaly"><td>achromatomaly</td></tr>
+          <tr class="achromatopsia"><td>achromatopsia</td></tr>
+        </table>
+
+
+      </div>
+    </div>
+
+
+    <div class="container">
+      <div class="content_container">
         <div class="gradientPicker">
           <div class="gradientPickerMenu">
             <div class="startColor">
@@ -125,9 +174,9 @@
             <li>Lab <canvas height="1" width="200" data-colorType="lab"></canvas><input data-colorType="lab" type="text" class="gradientOutputText" disabled></li>
             <li>RGB <canvas height="1" width="200" data-colorType="rgb"></canvas><input data-colorType="rgb" type="text" class="gradientOutputText" disabled></li>
 
-            <li>Jab <canvas class="sequential" height="1" width="10" data-colorType="jab"></canvas><input type="text" data-colorType="jab" class="gradientOutputText sequential" disabled></li>
-            <li>Lab <canvas class="sequential" height="1" width="10" data-colorType="lab"></canvas><input type="text" data-colorType="lab" class="gradientOutputText sequential" disabled></li>
-            <li>RGB <canvas class="sequential" height="1" width="10" data-colorType="rgb"></canvas><input type="text" data-colorType="rgb" class="gradientOutputText sequential" disabled></li>
+            <li>Jab <canvas class="sequential" height="1" width="5" data-colorType="jab"></canvas><input type="text" data-colorType="jab" class="gradientOutputText sequential" disabled></li>
+            <li>Lab <canvas class="sequential" height="1" width="5" data-colorType="lab"></canvas><input type="text" data-colorType="lab" class="gradientOutputText sequential" disabled></li>
+            <li>RGB <canvas class="sequential" height="1" width="5" data-colorType="rgb"></canvas><input type="text" data-colorType="rgb" class="gradientOutputText sequential" disabled></li>
           </ul>
         </div>
 
@@ -194,33 +243,6 @@
           </table>
         </div>
       </div>
-
-      <div class="content_container">
-        <div class="jndTable">
-          <ul class="jndParameters">
-            <li data-parameter="percent">Percent (Conservativeness): <span class="value">50%</span> <input type="range" min="0.1" max="1.0" step="0.05" value="0.5" /></li>
-            <li data-parameter="size">Size (Visual Angle): <span class="value">0.10</span> <input type="range" min="0.05" max="2.0" step="0.05" value="0.1"/></li>
-          </ul>
-
-          <table>
-            <tr class="palette"><td></td></tr>
-          </table>
-        </div>
-
-        <table class="cvdTable">
-          <tr class="palette"><td>palette</td></tr>
-          <tr class="protanomaly"><td>protanomaly</td></tr>
-          <tr class="protanopia"><td>protanopia</td></tr>
-          <tr class="deuteranomaly"><td>deuteranomaly</td></tr>
-          <tr class="deuteranopia"><td>deuteranopia</td></tr>
-          <tr class="tritanomaly"><td>tritanomaly</td></tr>
-          <tr class="tritanopia"><td>tritanopia</td></tr>
-          <tr class="achromatomaly"><td>achromatomaly</td></tr>
-          <tr class="achromatopsia"><td>achromatopsia</td></tr>
-        </table>
-
-
-      </div>
     </div>
     <script src="src/js/d3.js"></script>
     <script src="src/js/d3-cam02.js"></script>
@@ -236,6 +258,7 @@
     <script src="src/js/jndtable/jndtable.js"></script>
     <script src="src/js/jndtable/cvdTable.js"></script>
     <script src="src/js/gradientpicker/cvdgradientpicker.js"></script>
+    <script src="src/js/palettepreview/palettepreview.js"></script>
     <script src="src/js/main.js"></script>
   </body>
 </html>

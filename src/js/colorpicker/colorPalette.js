@@ -3,6 +3,24 @@ var colorPalette = function(tbl) {
       palettePreview = tbl.select(".palettePreview");
 
   var obj = {};
+
+  dispatch.on("addSelectedColor.colorPalette", function() {
+    var rgbstr = d3.rgb(this.selectedColor).toString();
+    if(inPalette.indexOf(rgbstr) > -1) return;
+    obj.addColorToPalette(this.selectedColor);
+  });
+
+  dispatch.on("deletePaletteColor.colorPalette", function() {
+    var idx = inPalette.indexOf(this.color);
+    inPalette.splice(idx, 1);
+    tbl.select("tbody").selectAll("tr").each(function(d,i) {
+      if(i !== idx) return;
+      d3.select(this).remove();
+    });
+
+    obj.updatePalettePreview();
+  });
+
   obj.updatePalettePreview = function() {
     palettePreview.attr("width", inPalette.length);
 
@@ -45,10 +63,7 @@ var colorPalette = function(tbl) {
     var newRow = tbl.select("tbody").insert("tr", ":first-child");
     newRow.append("td").append("span").classed("deletePaletteTableColor", true).text("×")//"✖")
         .on("click", function() {
-          inPalette.splice(inPalette.indexOf(rgb.toString()), 1);
-          newRow.remove();
-          obj.updatePalettePreview();
-          dispatch.call("deletePaletteColor", {color: rgb});
+          dispatch.call("deletePaletteColor", {color: rgb.toString()});
         });
     tbl.selectAll('tbody input[type="radio"]')
         .property("checked", false);
@@ -68,18 +83,12 @@ var colorPalette = function(tbl) {
     tbl.select(".paletteInputField").property("value", '"'+inPalette.join('","')+'"');
   };
 
-  dispatch.on("addSelectedColor.colorPalette", function() {
-    var rgbstr = d3.rgb(this.selectedColor).toString();
-    if(inPalette.indexOf(rgbstr) > -1) return;
-    obj.addColorToPalette(this.selectedColor);
-  });
-
   tbl.select(".paletteInputField").on("blur", function() {
-    tbl.select("tbody").selectAll("tr").each(function() {
-      var color = d3.select(this).select(".swatch").style("background-color");
-      dispatch.call("deletePaletteColor", {color: color});
-      d3.select(this).select(".deletePaletteTableColor").on("click")();
-    });
+    while(inPalette.length > 0) {
+      dispatch.call("deletePaletteColor", { color: inPalette[0] });
+    }
+    tbl.select("tbody").selectAll("tr").remove();
+    inPalette = [];
 
     if(this.value === "") return;
 

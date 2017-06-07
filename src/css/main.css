@@ -1,3 +1,4 @@
+@charset "UTF-8";
 @font-face {
   font-family: "AUdimat";
   src: url(../fonts/audimat/AUdimat-Regular.otf);
@@ -8,7 +9,7 @@
   font-weight: normal; }
 html,
 body {
-  background-color: #232F35;
+  background: #EEE;
   padding: 0;
   margin: 0; }
 
@@ -31,6 +32,11 @@ header h1 {
   font-weight: 100;
   margin: 0;
   padding: 0; }
+
+h1, h2 {
+  color: rgba(0, 0, 0, 0.75);
+  font-family: -apple-system, 'Helvetica Neue', Helvetica, sans-serif;
+  font-weight: normal; }
 
 input[type=number], input[type=color], input[type=text] {
   border-radius: 2px;
@@ -55,16 +61,32 @@ nav .logo {
   padding: 0; }
 
 .container {
-  padding: 15px; }
+  margin: 0 auto;
+  text-align: center; }
 
 .content_container {
-  background: white;
-  box-shadow: 0 0 0px 10px #49555C;
-  border-radius: 5px;
-  display: inline-block;
   margin: 15px;
   padding: 10px;
   vertical-align: top; }
+
+.display_inlineBlock {
+  display: inline-block; }
+
+.border_bottom {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+  padding-bottom: 15px; }
+
+.border_left {
+  border-left: 1px solid rgba(0, 0, 0, 0.25);
+  padding-left: 15px; }
+
+.border_right {
+  border-right: 1px solid rgba(0, 0, 0, 0.25);
+  padding-right: 15px; }
+
+.border_top {
+  border-top: 1px solid rgba(0, 0, 0, 0.25);
+  padding-top: 15px; }
 
 .subnav {
   background: #5499fb;
@@ -101,6 +123,29 @@ nav .logo {
   position: absolute;
   right: -10px;
   width: 10px; }
+
+.banner {
+  background: linear-gradient(0deg, #333 60%, powderblue);
+  background-attachment: fixed;
+  height: 200px;
+  padding: 25px 50px;
+  text-align: center; }
+
+.banner h1 {
+  color: rgba(255, 255, 255, 0.25); }
+
+.banner p {
+  margin: 0;
+  padding: 0;
+  font-size: 18px;
+  line-height: 18px; }
+
+.banner img {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  margin: 15px;
+  opacity: 50%;
+  padding: 10px; }
 
 #colorpicker_squareContainer {
   float: left; }
@@ -206,7 +251,9 @@ nav .logo {
 .paletteTable {
   border-collapse: collapse;
   font-family: "Hack";
-  font-size: 12px; }
+  font-size: 12px;
+  margin: 0 auto;
+  width: 500px; }
 
 .paletteTable thead {
   background: #ddd; }
@@ -373,6 +420,9 @@ nav .logo {
 .jndTable table {
   border: 1px solid #ddd; }
 
+.jndTable table, .cvdTable {
+  margin: 0 auto; }
+
 .jndTable tr:nth-child(n+2):hover {
   background-color: #ddd; }
 
@@ -396,5 +446,50 @@ nav .logo {
 
 .jndTable .notDifferent {
   background-color: rgba(255, 0, 0, 0.25); }
+
+.palettePreview {
+  background: #ccc;
+  height: 100px;
+  image-rendering: pixelated;
+  width: 100%; }
+
+.palettePreviewList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  position: relative; }
+
+.palettePreviewList::before {
+  content: "Palette Preview";
+  color: rgba(0, 0, 0, 0.25);
+  line-height: 100px;
+  position: absolute;
+  margin: 0 auto;
+  left: 50%; }
+
+.palettePreviewList li {
+  display: inline-block;
+  line-height: 20px;
+  height: 100px;
+  margin: 0;
+  position: relative; }
+
+.palettePreviewList li::before {
+  content: "×";
+  background: rgba(255, 255, 255, 0.5);
+  color: rgba(0, 0, 0, 0.5);
+  line-height: 100px;
+  left: 0;
+  position: absolute;
+  top: 0;
+  opacity: 0;
+  overflow: hidden;
+  width: 100%; }
+
+.palettePreviewList li:hover {
+  cursor: pointer; }
+
+.palettePreviewList li:hover::before {
+  opacity: 1.0; }
 
 /*# sourceMappingURL=main.css.map */

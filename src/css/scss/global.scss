@@ -13,8 +13,8 @@ $nav-height: 35px;
 
 html,
 body {
-  // background: #DDD;
-  background-color: #232F35;
+  background: #EEE;
+  // background-color: #232F35;
   padding: 0;
   margin: 0;
 }
@@ -42,6 +42,13 @@ header h1 {
   padding: 0;
 }
 
+h1, h2 {
+  color: rgba(0,0,0,0.75);
+  font-family: -apple-system, 'Helvetica Neue', Helvetica, sans-serif;
+  font-weight: normal;
+}
+h1 {
+}
 
 input[type=number], input[type=color], input[type=text] {
   border-radius: 2px;
@@ -70,19 +77,47 @@ nav .logo {
 }
 
 .container {
-  padding: 15px;
+  // padding: 15px;
+  margin: 0 auto;
+  text-align: center;
+  // width: 50%;
+}
+
+.container_left {
+  // float: left;
 }
 
 .content_container {
-  background: white;
-  box-shadow: 0 0 0px 10px #49555C;
-  border-radius: 5px;
-  display: inline-block;
+  // background: rgba(255,255,255,0.5);
+  // box-shadow: 0 0 0px 10px #49555C;
+  // border-radius: 5px;
   margin: 15px;
   padding: 10px;
   vertical-align: top;
 }
 
+.display_inlineBlock {
+  display: inline-block;
+}
+
+$borderColor: rgba(0,0,0,0.25);
+$borderPadding: 15px;
+.border_bottom {
+  border-bottom: 1px solid $borderColor;
+  padding-bottom: $borderPadding;
+}
+.border_left {
+  border-left: 1px solid $borderColor;
+  padding-left: $borderPadding;
+}
+.border_right {
+  border-right: 1px solid $borderColor;
+  padding-right: $borderPadding;
+}
+.border_top {
+  border-top: 1px solid $borderColor;
+  padding-top: $borderPadding;
+}
 
 $subnav-height: 25px;
 $subnav-background: lighten($nav-background, 10%);
