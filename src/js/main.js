@@ -7,4 +7,5 @@ var cvd = colorVisionDeficiency(),
     jnds = jndtable(d3.select(".jndTable")),
     cvdTable = cvdtable(d3.select(".cvdTable")),
     cvdGrads = cvdgradientpicker(d3.select(".cvdGradientPicker")),
-    palettePreview = palettepreview(d3.select(".palettePreview"));
+    palettePreview = palettepreview(d3.select(".palettePreview")),
+    visPreview = vispreview(d3.select(".visPreview"));

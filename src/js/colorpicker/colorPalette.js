@@ -60,10 +60,12 @@ var colorPalette = function(tbl) {
     var jabstr = "Jab("+[jab.J, jab.a, jab.b].map(Math.round).join(',')+")",
         labstr = "Lab("+[lab.l, lab.a, lab.b].map(Math.round).join(',')+")"
 
-    var newRow = tbl.select("tbody").insert("tr", ":first-child");
+    var newRow = tbl.select("tbody").append("tr");
     newRow.append("td").append("span").classed("deletePaletteTableColor", true).text("×")//"✖")
         .on("click", function() {
-          dispatch.call("deletePaletteColor", {color: rgb.toString()});
+          var swatch = d3.select(this.parentNode.parentNode).select(".swatch"),
+              color = swatch.style("background-color");
+          dispatch.call("deletePaletteColor", {color: d3.rgb(color).toString()});
         });
     tbl.selectAll('tbody input[type="radio"]')
         .property("checked", false);
