@@ -1,0 +1,46 @@
+.palettePreview {
+  background: #ccc;
+  height: 100px;
+  image-rendering: pixelated;
+  width: 100%;
+}
+
+.palettePreviewList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  position: relative;
+}
+.palettePreviewList::before {
+  content: "Palette Preview";
+  color: rgba(0,0,0,0.25);
+  line-height: 100px;
+  position: absolute;
+  margin: 0 auto;
+  left: 50%;
+}
+.palettePreviewList li {
+  display: inline-block;
+  line-height: 20px;
+  height: 100px;
+  margin: 0;
+  position: relative;
+}
+.palettePreviewList li::before {
+  content: "×";
+  background: rgba(255,255,255,0.5);
+  color: rgba(0,0,0,0.5);
+  line-height: 100px;
+  left: 0;
+  position: absolute;
+  top: 0;
+  opacity: 0;
+  overflow: hidden;
+  width: 100%;
+}
+.palettePreviewList li:hover {
+  cursor: pointer;
+}
+.palettePreviewList li:hover::before {
+  opacity: 1.0;
+}
