@@ -69,6 +69,11 @@ nav .logo {
   padding: 10px;
   vertical-align: top; }
 
+.content_container:after {
+  content: "";
+  display: table;
+  clear: both; }
+
 .display_inlineBlock {
   display: inline-block; }
 
@@ -147,6 +152,10 @@ nav .logo {
   opacity: 50%;
   padding: 10px; }
 
+.colorpicker > div {
+  display: inline-block;
+  vertical-align: top; }
+
 #colorpicker_squareContainer {
   float: left; }
 
@@ -174,12 +183,11 @@ nav .logo {
   fill: steelblue; }
 
 #colorpicker_channels {
-  background: rgba(255, 255, 255, 0.05);
-  display: inline-block;
-  vertical-align: top; }
+  background: rgba(255, 255, 255, 0.05); }
 
 #colorpicker_channels ul {
   list-style: none;
+  margin: 0;
   padding: 0; }
 
 #colorpicker_channels ul li {
@@ -237,11 +245,11 @@ nav .logo {
 
 .previewColor {
   border: 1px solid #ccc;
-  display: inline-block;
-  vertical-align: top;
+  display: block;
   width: 60px; }
 
 .previewColor button {
+  display: block;
   width: 100%; }
 
 .hoverColor, .selectedColor {
@@ -354,6 +362,9 @@ nav .logo {
 .cvdGradientPicker canvas {
   height: 15px;
   width: 90px; }
+
+.cvdGradientPicker table {
+  margin: 0 auto; }
 
 .cvdGradientPicker tr td:first-child {
   text-align: right; }

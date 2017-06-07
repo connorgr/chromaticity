@@ -95,6 +95,11 @@ nav .logo {
   padding: 10px;
   vertical-align: top;
 }
+.content_container:after { // clearfix
+  content: "";
+  display: table;
+  clear: both;
+}
 
 .display_inlineBlock {
   display: inline-block;

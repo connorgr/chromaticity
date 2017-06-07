@@ -19,6 +19,7 @@
 
     <div class="container border_bottom">
       <h1>Select colors...</h1>
+      <p>(click to read about color selection)</p>
 
       <div class="colorpicker content_container border_right display_inlineBlock">
         <h2>from a color space</h2>
@@ -37,7 +38,6 @@
             <polygon points="0,5 5,0 20,0 20,10 5,10 "/>
           </g>
         </svg>
-
         <div id="colorpicker_channels">
           <ul>
             <li>R <input type="number" value="" class="colorChannelInput" data-colorType="rgb" data-channel="r"><input type="number" value="" class="colorChannelInputHover" data-colorType="rgb" data-channel="r" disabled></li>
@@ -61,12 +61,15 @@
           </ul>
           <input type="text" class="freetextColorInput" placeholder="enter valid css color">
         </div>
-        <div class="previewColor">
-          <div class="hoverColor"></div>
-          <div class="selectedColor"></div>
-        </div>
 
-        <button id="addColorToPaletteBtn">Add color</button>
+        <div>
+          <div class="previewColor">
+            <div class="hoverColor"></div>
+            <div class="selectedColor"></div>
+          </div>
+
+          <button id="addColorToPaletteBtn">Add color</button>
+        </div>
 
       </div>
 
@@ -113,6 +116,9 @@
           </tbody>
           <tfoot>
             <tr>
+              <td colspan="7"><strong>* - Export options - *</strong></td>
+            </tr>
+            <tr>
               <td colspan="7">Copyable image: <canvas class="palettePreview" height="1"></canvas></td>
             </tr>
             <tr>
@@ -135,6 +141,7 @@
           </table>
         </div>
 
+        <h2>Color discriminability for color vision deficiencies</h2>
         <table class="cvdTable">
           <tr class="palette"><td>palette</td></tr>
           <tr class="protanomaly"><td>protanomaly</td></tr>
@@ -153,6 +160,7 @@
 
 
     <div class="container">
+      <h1>Color gradient picker</h1>
       <div class="content_container">
         <div class="gradientPicker">
           <div class="gradientPickerMenu">
@@ -180,6 +188,7 @@
           </ul>
         </div>
 
+        <h2>Color gradient appearences for color vision deficiencies</h2>
         <div class="cvdGradientPicker">
           <table>
             <thead>

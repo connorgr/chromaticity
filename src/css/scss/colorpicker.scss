@@ -1,6 +1,10 @@
 // .colorpicker {
 //   float: left;
 // }
+.colorpicker > div {
+  display: inline-block;
+  vertical-align: top;
+}
 #colorpicker_squareContainer {
   float: left;
 }
@@ -34,11 +38,10 @@ $colorpickerSquare_width: 255px;
 
 #colorpicker_channels {
   background: rgba(255,255,255,0.05);
-  display: inline-block;
-  vertical-align: top;
 }
 #colorpicker_channels ul {
   list-style: none;
+  margin: 0;
   padding: 0;
 }
 #colorpicker_channels ul li {
@@ -103,8 +106,12 @@ $colorpicker_channels_inputWidth: 50px;
   width: $colorpicker_channels_inputWidth;
 }
 
-.previewColor { border: 1px solid #ccc; display: inline-block; vertical-align:top; width: 60px; }
-.previewColor button { width: 100%; }
+.previewColor {
+  border: 1px solid #ccc;
+  display: block;
+  width: 60px;
+}
+.previewColor button { display: block; width: 100%; }
 .hoverColor, .selectedColor { height: 40px; width: 100%; }
 
 
