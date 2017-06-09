@@ -130,7 +130,7 @@ nav .logo {
   width: 10px; }
 
 .banner {
-  background: linear-gradient(0deg, #333 60%, powderblue);
+  background: linear-gradient(0deg, #444 60%, #9192A4);
   background-attachment: fixed;
   height: 200px;
   padding: 25px 50px;
@@ -140,17 +140,28 @@ nav .logo {
   color: rgba(255, 255, 255, 0.25); }
 
 .banner p {
-  margin: 0;
-  padding: 0;
+  color: rgba(0, 0, 0, 0.75);
   font-size: 18px;
-  line-height: 18px; }
+  line-height: 18px;
+  margin: 0;
+  padding: 0; }
 
 .banner img {
   background: rgba(255, 255, 255, 0.1);
   border-radius: 20px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.25);
   margin: 15px;
   opacity: 50%;
   padding: 10px; }
+
+footer {
+  background: #333;
+  padding: 50px 0;
+  text-align: center;
+  width: 100%; }
+
+footer p {
+  color: #8F9AAD; }
 
 .colorpicker > div {
   display: inline-block;
