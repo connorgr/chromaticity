@@ -47,6 +47,11 @@ var gradientpicker = function(container) {
             });
   });
 
+  dispatch.on("clearPalette.gradientpicker", function() {
+    inPalette = [];
+    gradientMenu.selectAll("li").remove();
+  });
+
   dispatch.on("deletePaletteColor.gradientpicker", function() {
     var rgb = d3.rgb(this.color);
     gradientMenu.selectAll("li").filter(function() {

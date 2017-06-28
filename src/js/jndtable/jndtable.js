@@ -54,6 +54,16 @@ var jndtable = function(table) {
     obj.addColorToTable(this.selectedColor);
   });
 
+  dispatch.on("clearPalette.jndtable", function() {
+    curPalette = [];
+
+    var colorCells = table.selectAll(".palette td").filter((d,i) => i > 0),
+        rows = table.selectAll(".ndRow");
+    colorCells.remove();
+    rows.remove();
+  });
+
+
   dispatch.on("deletePaletteColor.jndtable", function() {
     var curPalette = getCurrentColors(),
         cIdx = curPalette.indexOf(d3.rgb(this.color).toString()),

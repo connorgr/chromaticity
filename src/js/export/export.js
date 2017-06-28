@@ -55,16 +55,16 @@ var exportFunction = function(container) {
   };
 
   paletteInputField.on("blur", function() {
-    while(inPalette.length > 0) {
-      dispatch.call("deletePaletteColor", { color: inPalette[0] });
-    }
-    inPalette = [];
-
     if(this.value === "") return;
-
-    var tkns = this.value.replace(/\s/g, "").replace("[","").replace("]","")
+    var tkns = this.value.replace(/\s/g, "").replace(/\"/g, "").replace("[","").replace("]","")
             .split('",');
     if(tkns.length < 1) return;
+
+    dispatch.call("clearPalette");
+    return;
+
+    inPalette = [];
+
     var colors = tkns.map(d => d.replace(/"/g, ""));
     colors.forEach(obj.addColorToPalette);
     colors.forEach(d => dispatch.call("addSelectedColor", { selectedColor: d }));

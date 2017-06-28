@@ -65,6 +65,13 @@ var vispreview = function(container) {
     obj.addColorToPalette(rgbstr);
   });
 
+  dispatch.on("clearPalette.visPreview", function() {
+    inPalette = [];
+    updateScatter();
+    updateBar();
+    updateMap();
+  });
+
   dispatch.on("deletePaletteColor.visPreview", function() {
     var rgbstr = d3.rgb(this.color).toString(),
         idx = inPalette.indexOf(rgbstr);

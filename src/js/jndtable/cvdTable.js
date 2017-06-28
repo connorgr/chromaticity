@@ -29,12 +29,20 @@ var cvdtable = function(table) {
     obj.addColorToTable(this.selectedColor);
   });
 
+  dispatch.on("clearPalette.cvdtable", function() {
+    curPalette = [];
+    table.selectAll("tr").each(function() {
+      var row = d3.select(this);
+      row.selectAll("td").filter((d,i) => i > 0).remove();
+    });
+  });
+
   dispatch.on("deletePaletteColor.cvdtable", function() {
     var curPalette = getCurrentColors(),
         cIdx = curPalette.indexOf(d3.rgb(this.color).toString());
 
     table.selectAll("tr").each(function() {
-      var row = d3.select(this)
+      var row = d3.select(this),
           tds = row.selectAll("td").filter((d,i) => i > 0);
       tds.filter((d,i) => i === cIdx).remove();
     });

@@ -1,4 +1,4 @@
-var dispatch = d3.dispatch("addSelectedColor", "deletePaletteColor", "updateGradientColors", "updateJNDParameters", "updateSelectedColor");
+var dispatch = d3.dispatch("addSelectedColor", "clearPalette", "deletePaletteColor", "updateGradientColors", "updateJNDParameters", "updateSelectedColor");
 
 var colorVisionDeficiency = function() {
     var colorProfile = "sRGB", gammaCorrection = 2.2;
@@ -189,6 +189,10 @@ var colorPalette = function(tbl) {
         if (inPalette.indexOf(rgbstr) > -1) return;
         obj.addColorToPalette(this.selectedColor);
     });
+    dispatch.on("clearPalette.colorPalette", function() {
+        inPalette = [];
+        tbl.select("tbody").selectAll("tr").remove();
+    });
     dispatch.on("deletePaletteColor.colorPalette", function() {
         var idx = inPalette.indexOf(this.color);
         inPalette.splice(idx, 1);
@@ -196,28 +200,7 @@ var colorPalette = function(tbl) {
             if (i !== idx) return;
             d3.select(this).remove();
         });
-        obj.updatePalettePreview();
     });
-    obj.updatePalettePreview = function() {
-        palettePreview.attr("width", inPalette.length);
-        if (inPalette.length === 0) return;
-        var width = palettePreview.attr("width"), context = palettePreview.node().getContext("2d"), image = context.createImageData(width, 1), i = -1, rgb, idx;
-        for (var x = 0; x < width; ++x) {
-            rgb = d3.rgb(inPalette[x]);
-            if (rgb.displayable()) {
-                image.data[++i] = rgb.r;
-                image.data[++i] = rgb.g;
-                image.data[++i] = rgb.b;
-                image.data[++i] = 255;
-            } else {
-                image.data[++i] = 0;
-                image.data[++i] = 0;
-                image.data[++i] = 0;
-                image.data[++i] = 255;
-            }
-        }
-        context.putImageData(image, 0, 0);
-    };
     obj.addColorToPalette = function(newColor) {
         var jab = d3.jab(newColor), lab = d3.lab(newColor), rgb = d3.rgb(newColor);
         inPalette.push(rgb.toString());
@@ -243,23 +226,6 @@ var colorPalette = function(tbl) {
         newRow.append("td").text(jabstr);
         newRow.append("td").text(labstr);
     };
-    tbl.select(".paletteInputField").on("blur", function() {
-        while (inPalette.length > 0) {
-            dispatch.call("deletePaletteColor", {
-                color: inPalette[0]
-            });
-        }
-        tbl.select("tbody").selectAll("tr").remove();
-        inPalette = [];
-        if (this.value === "") return;
-        var tkns = this.value.replace(/\s/g, "").replace("[", "").replace("]", "").split('",');
-        if (tkns.length < 1) return;
-        var colors = tkns.map(d => d.replace(/"/g, ""));
-        colors.forEach(obj.addColorToPalette);
-        colors.forEach(d => dispatch.call("addSelectedColor", {
-            selectedColor: d
-        }));
-    });
     return obj;
 };
 
@@ -500,27 +466,27 @@ function rgb2hex(rgbstr) {
 }
 
 var exportFunction = function(container) {
-    console.log("loaded");
     var inPalette = [], obj = {}, paletteInputField = container.select(".paletteInputField");
     paletteCanvas = container.select(".paletteCanvas");
     dispatch.on("addSelectedColor.export", function() {
         var rgbstr = d3.rgb(this.selectedColor).toString();
         if (inPalette.indexOf(rgbstr) > -1) return;
         obj.addColorToPalette(this.selectedColor);
+        obj.updatePaletteCanvas();
+        obj.updatePaletteInputField();
     });
     dispatch.on("deletePaletteColor.export", function() {
         var idx = inPalette.indexOf(this.color);
         inPalette.splice(idx, 1);
         obj.updatePaletteCanvas();
+        obj.updatePaletteInputField();
     });
     obj.updatePaletteCanvas = function() {
-        console.log("updating");
         paletteCanvas.attr("width", inPalette.length);
         if (inPalette.length === 0) return;
         var width = paletteCanvas.attr("width"), context = paletteCanvas.node().getContext("2d"), image = context.createImageData(width, 1), i = -1, rgb, idx;
         for (var x = 0; x < width; ++x) {
             rgb = d3.rgb(inPalette[x]);
-            console.log(rgb);
             if (rgb.displayable()) {
                 image.data[++i] = rgb.r;
                 image.data[++i] = rgb.g;
@@ -535,21 +501,19 @@ var exportFunction = function(container) {
         }
         context.putImageData(image, 0, 0);
     };
-    obj.addColorToPalette = function(newColor) {
-        inPalette.push(d3.rgb(newColor).toString());
-        obj.updatePaletteCanvas();
+    obj.updatePaletteInputField = function() {
         paletteInputField.property("value", '"' + inPalette.join('","') + '"');
     };
+    obj.addColorToPalette = function(newColor) {
+        inPalette.push(d3.rgb(newColor).toString());
+    };
     paletteInputField.on("blur", function() {
-        while (inPalette.length > 0) {
-            dispatch.call("deletePaletteColor", {
-                color: inPalette[0]
-            });
-        }
-        inPalette = [];
         if (this.value === "") return;
-        var tkns = this.value.replace(/\s/g, "").replace("[", "").replace("]", "").split('",');
+        var tkns = this.value.replace(/\s/g, "").replace(/\"/g, "").replace("[", "").replace("]", "").split('",');
         if (tkns.length < 1) return;
+        dispatch.call("clearPalette");
+        return;
+        inPalette = [];
         var colors = tkns.map(d => d.replace(/"/g, ""));
         colors.forEach(obj.addColorToPalette);
         colors.forEach(d => dispatch.call("addSelectedColor", {
@@ -623,6 +587,10 @@ var gradientpicker = function(container) {
             stopColor = rgbstr;
             renderGradients();
         });
+    });
+    dispatch.on("clearPalette.gradientpicker", function() {
+        inPalette = [];
+        gradientMenu.selectAll("li").remove();
     });
     dispatch.on("deletePaletteColor.gradientpicker", function() {
         var rgb = d3.rgb(this.color);
@@ -774,11 +742,17 @@ var cvdtable = function(table) {
     dispatch.on("addSelectedColor.cvdtable", function() {
         obj.addColorToTable(this.selectedColor);
     });
+    dispatch.on("clearPalette.cvdtable", function() {
+        curPalette = [];
+        table.selectAll("tr").each(function() {
+            var row = d3.select(this);
+            row.selectAll("td").filter((d, i) => i > 0).remove();
+        });
+    });
     dispatch.on("deletePaletteColor.cvdtable", function() {
         var curPalette = getCurrentColors(), cIdx = curPalette.indexOf(d3.rgb(this.color).toString());
         table.selectAll("tr").each(function() {
-            var row = d3.select(this);
-            tds = row.selectAll("td").filter((d, i) => i > 0);
+            var row = d3.select(this), tds = row.selectAll("td").filter((d, i) => i > 0);
             tds.filter((d, i) => i === cIdx).remove();
         });
         updateJNDs();
@@ -855,6 +829,12 @@ var jndtable = function(table) {
     };
     dispatch.on("addSelectedColor.jndtable", function() {
         obj.addColorToTable(this.selectedColor);
+    });
+    dispatch.on("clearPalette.jndtable", function() {
+        curPalette = [];
+        var colorCells = table.selectAll(".palette td").filter((d, i) => i > 0), rows = table.selectAll(".ndRow");
+        colorCells.remove();
+        rows.remove();
     });
     dispatch.on("deletePaletteColor.jndtable", function() {
         var curPalette = getCurrentColors(), cIdx = curPalette.indexOf(d3.rgb(this.color).toString()), colorCells = table.selectAll(".palette td").filter((d, i) => i > 0), rows = table.selectAll(".ndRow");
@@ -936,6 +916,10 @@ var palettepreview = function(container) {
         if (inPalette.indexOf(rgbstr) > -1) return;
         obj.addColorToPreview(this.selectedColor);
     });
+    dispatch.on("clearPalette.palettePreview", function() {
+        inPalette = [];
+        colorList.selectAll("li").remove();
+    });
     dispatch.on("deletePaletteColor.palettePreview", function() {
         var idx = inPalette.indexOf(this.color);
         if (idx < 0) return;
@@ -1008,6 +992,12 @@ var vispreview = function(container) {
         var rgbstr = d3.rgb(this.selectedColor).toString();
         if (inPalette.indexOf(rgbstr) > -1) return;
         obj.addColorToPalette(rgbstr);
+    });
+    dispatch.on("clearPalette.visPreview", function() {
+        inPalette = [];
+        updateScatter();
+        updateBar();
+        updateMap();
     });
     dispatch.on("deletePaletteColor.visPreview", function() {
         var rgbstr = d3.rgb(this.color).toString(), idx = inPalette.indexOf(rgbstr);

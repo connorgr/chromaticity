@@ -20,6 +20,12 @@ var palettepreview = function(container) {
     obj.addColorToPreview(this.selectedColor);
   });
 
+
+  dispatch.on("clearPalette.palettePreview", function() {
+    inPalette = [];
+    colorList.selectAll("li").remove();
+  });
+
   dispatch.on("deletePaletteColor.palettePreview", function() {
     var idx = inPalette.indexOf(this.color);
     if(idx < 0) return;

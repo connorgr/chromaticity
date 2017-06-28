@@ -10,6 +10,11 @@ var colorPalette = function(tbl) {
     obj.addColorToPalette(this.selectedColor);
   });
 
+  dispatch.on("clearPalette.colorPalette", function() {
+    inPalette = [];
+    tbl.select("tbody").selectAll("tr").remove();
+  });
+
   dispatch.on("deletePaletteColor.colorPalette", function() {
     var idx = inPalette.indexOf(this.color);
     inPalette.splice(idx, 1);
