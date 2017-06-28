@@ -56,16 +56,16 @@ var exportFunction = function(container) {
 
   paletteInputField.on("blur", function() {
     if(this.value === "") return;
-    var tkns = this.value.replace(/\s/g, "").replace(/\"/g, "").replace("[","").replace("]","")
+    var colors = this.value.replace(/\s/g, "").replace(/\"/g, "")
+            .replace("[","").replace("]","")
             .split('",');
-    if(tkns.length < 1) return;
+    if(colors.length < 1) return;
 
     dispatch.call("clearPalette");
-    return;
 
     inPalette = [];
 
-    var colors = tkns.map(d => d.replace(/"/g, ""));
+    // var colors = tkns.map(d => d.replace(/"/g, ""));
     colors.forEach(obj.addColorToPalette);
     colors.forEach(d => dispatch.call("addSelectedColor", { selectedColor: d }));
     obj.updatePaletteCanvas();
