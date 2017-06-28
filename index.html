@@ -13,9 +13,7 @@
 
     <section class="banner">
       <img src="src/img/logo_raw3.svg" height="60px"/>
-      <!-- <p>In Chromaticity you can make palettes in the color spaces you prefer
-         and easily see the accessibility of your design.</p> -->
-      <p><strong>Chromaticity</strong>: a tool for effective color palette creation</p>
+      <p><strong>Chromaticity</strong>: a tool for creating legible color palettes</p>
     </section>
 
     <div class="container border_bottom">
@@ -422,14 +420,19 @@
             </g>
             </svg>
 
-          <p>Visualization configuration options</p>
-          <div>
-            <ul class="scatterOptions">
+
+          <div class="hiddenMenu">
+            <p class="hiddenMenuTitle">Configure visualization previews (click to show/hide)</p>
+            <ul class="scatterOptions hiddenMenuContent">
               <li><strong>Scatter Plot</strong></li>
               <li>Radius <input type="range" min="1" max="10" value="5" class="scatterOptions_radius"></li>
               <li>Show fill? <input type="checkbox"  class="scatterOptions_showFill" /> </li>
               <li>Show stroke? <input type="checkbox" class="scatterOptions_showStroke" checked /></li>
               <li>Stroke width <input type="range" min="1" max="10" value="1" class="scatterOptions_stroke_width"></li>
+              <li><strong>Map</strong></li>
+              <li>Show stroke? <input type="checkbox" class="mapOptions_showStroke" checked /></li>
+              <li>Stroke color <input type="text" class="mapOptions_stroke_color" placeholder="enter valid css color"></li>
+              <li>Stroke width <input type="range" min="1" max="10" value="1" class="mapOptions_stroke_width"></li>
             </ul>
           </div>
         </div>
@@ -440,8 +443,16 @@
         <div class="jndTable">
           <ul class="jndParameters">
             <li data-parameter="percent">Percent (Conservativeness): <span class="value">50%</span> <input type="range" min="0.1" max="1.0" step="0.05" value="0.5" /></li>
-            <li data-parameter="size">Size (Visual Angle): <span class="value">0.10</span> <input type="range" min="0.05" max="2.0" step="0.05" value="0.1"/></li>
+            <li data-parameter="size">Size (Visual Angle, degrees): <span class="value">0.10</span> <input type="range" min="0.05" max="2.0" step="0.05" value="0.1"/></li>
           </ul>
+
+          <p>(1 degree ≈ index fingernail width when arm outstretched)
+          <div class="hiddenMenu">
+            <p class="hiddenMenuTitle">Visual Angle Calculator (click to show/hide)</p>
+            <p class="hiddenMenuContent">Physical size (e.g., cm) <input type="number" class="visualangle_size" min="0" value="1" placeholder="size (cm)" /><br />
+              Physical distance: <input type="number" class="visualangle_distance" min="0" value="100" placeholder="screen distance (cm)" /><br />
+              Visual angle (degrees): <span class="visualangle_va"></span></p>
+          </div>
 
           <table>
             <tr class="palette"><td></td></tr>
@@ -568,19 +579,6 @@
     <script src="src/js/d3.js"></script>
     <script src="src/js/d3-cam02.js"></script>
     <script src="src/js/d3-jnd.js"></script>
-    <script src="src/js/cvd.js"></script>
-    <script src="src/js/dispatch.js"></script>
-    <script src="src/js/colorpicker/util.js"></script>
-    <script src="src/js/colorpicker/colorStore.js"></script>
-    <script src="src/js/colorpicker/colorpicker.js"></script>
-    <script src="src/js/imageprocessor/imageprocessor.js"></script>
-    <script src="src/js/colorpicker/colorPalette.js"></script>
-    <script src="src/js/gradientpicker/gradientpicker.js"></script>
-    <script src="src/js/jndtable/jndtable.js"></script>
-    <script src="src/js/jndtable/cvdTable.js"></script>
-    <script src="src/js/gradientpicker/cvdgradientpicker.js"></script>
-    <script src="src/js/palettepreview/palettepreview.js"></script>
-    <script src="src/js/vispreview/vispreview.js"></script>
-    <script src="src/js/main.js"></script>
+    <script src="index.js"></script>
   </body>
 </html>

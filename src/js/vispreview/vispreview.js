@@ -13,6 +13,12 @@ var vispreview = function(container) {
     STROKE_WIDTH : 1
   };
 
+  var MAP_OPTIONS = {
+    SHOW_STROKE : true,
+    STROKE_COLOR : 'white',
+    STROKE_WIDTH : 1
+  }
+
   var numMapPoly = mapSvg.selectAll("polygon").size(),
       mapSvgPolyData = new Array(numMapPoly);
 
@@ -37,6 +43,20 @@ var vispreview = function(container) {
   container.select(".scatterOptions_stroke_width").on("input", function() {
     SCATTER_OPTIONS.STROKE_WIDTH = +d3.select(this).property("value");
     updateScatter();
+  });
+
+  container.select(".mapOptions_showStroke").on("change", function() {
+    MAP_OPTIONS.SHOW_STROKE = !MAP_OPTIONS.SHOW_STROKE;
+    updateMap();
+  });
+  container.select(".mapOptions_stroke_color").on("blur", function() {
+    MAP_OPTIONS.STROKE_COLOR = d3.select(this).property("value");
+    console.log(MAP_OPTIONS.STROKE_COLOR);
+    updateMap();
+  });
+  container.select(".mapOptions_stroke_width").on("input", function() {
+    MAP_OPTIONS.STROKE_WIDTH = +d3.select(this).property("value");
+    updateMap();
   });
 
   dispatch.on("addSelectedColor.visPreview", function() {
@@ -93,7 +113,9 @@ var vispreview = function(container) {
 
   function updateMap() {
     mapSvg.selectAll("polygon")
-        .style("fill", (d,i) => inPalette[mapSvgPolyData[i]  % inPalette.length]);
+        .style("fill", (d,i) => inPalette[mapSvgPolyData[i]  % inPalette.length])
+        .style("stroke",(d,i) => MAP_OPTIONS.SHOW_STROKE ? MAP_OPTIONS.STROKE_COLOR : "none")
+        .style("stroke-width",(d,i) => MAP_OPTIONS.STROKE_WIDTH);
   }
 
 

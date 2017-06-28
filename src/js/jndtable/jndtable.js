@@ -110,6 +110,24 @@ var jndtable = function(table) {
   });
 
 
+  // jnd calculator
+  var va_text = table.select(".visualangle_va"),
+      dist = table.select(".visualangle_distance"),
+      size = table.select(".visualangle_size");
+
+  dist.on("blur", calculateVA);
+  size.on("blur", calculateVA);
+  calculateVA();
+
+  function calculateVA() {
+    var d = +dist.property("value"),
+        s = +size.property("value"),
+        va = 2*Math.atan( (s/2) / d );
+    va = va * 180 / Math.PI; // radian to degrees
+    va_text.text(d3.format(".3f")(va));
+  }
+
+
   function getCurrentColors() {
     var colors = [];
     table.select(".palette").selectAll("td").each(function(d,i) {
