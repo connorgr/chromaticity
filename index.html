@@ -6,7 +6,6 @@
     <link rel="stylesheet" href="src/css/main.css">
   </head>
   <body>
-
     <section class="banner">
       <img src="src/img/logo_raw3.svg" height="60px"/>
       <p><strong>Chromaticity</strong>: a tool for creating legible color palettes</p>
@@ -92,6 +91,14 @@
     </div>
 
     <div class="container border_bottom">
+      <h1>Export options</h1>
+      <div class="exportOptionsContainer">
+        <div>Copyable image: <canvas class="paletteCanvas" height="1"></canvas></div>
+        <div>Copy/Paste JSON array of css colors: <input class="paletteInputField" type="text"></div>
+      </div>
+    </div>
+
+    <div class="container border_bottom">
       <h1>Color palette information</h1>
       <div class="content_container">
         <h2>Selected colors</h2>
@@ -109,17 +116,6 @@
           </thead>
           <tbody>
           </tbody>
-          <tfoot>
-            <tr>
-              <td colspan="7"><strong>* - Export options - *</strong></td>
-            </tr>
-            <tr>
-              <td colspan="7">Copyable image: <canvas class="palettePreview" height="1"></canvas></td>
-            </tr>
-            <tr>
-              <td colspan="7">Copy/Paste JSON array of css colors: <input class="paletteInputField" type="text"></td>
-            </tr>
-          </tfoot>
         </table>
       </div>
 

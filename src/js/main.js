@@ -1,5 +1,6 @@
 var cvd = colorVisionDeficiency(),
     colorDB = colorStore(),
+    exprt = exportFunction(d3.select(".exportOptionsContainer")),
     cp = colorpicker(d3.select(".colorpicker")),
     ip = imageprocessor(d3.select(".imageProcessor")),
     palette = colorPalette(d3.select(".paletteTable")),

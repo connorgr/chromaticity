@@ -1,1 +1,1080 @@
-function rgb2hex(e){var t=e.replace("rgb(","").replace(")","").split(",").map(e=>+e);return function(e){return new Array(7-e.length).join("0")+e}((t[0]<<16|t[1]<<8|t[2]).toString(16).toUpperCase())}var dispatch=d3.dispatch("addSelectedColor","deletePaletteColor","updateGradientColors","updateJNDParameters","updateSelectedColor"),colorVisionDeficiency=function(){var e=[3.240712470389558,-.969259258688888,.05563600315398933,-1.5372626602963142,1.875996969313966,-.2039948802843549,-.49857440415943116,.041556132211625726,1.0570636917433989],t=[.41242371206635076,.21265606784927693,.019331987577444885,.3575793401363035,.715157818248362,.11919267420354762,.1804662232369621,.0721864539171564,.9504491124870351],a={protan:{x:.7465,y:.2535,m:1.273463,yi:-.073894},deutan:{x:1.4,y:-.4,m:.968437,yi:.003331},tritan:{x:.1748,y:0,m:.062921,yi:.292119},custom:{x:.735,y:.265,m:-1.059259,yi:1.026914}},l=function(e){var a=t,l={},r=e.R/255,o=e.G/255,n=e.B/255;return r=r>.04045?Math.pow((r+.055)/1.055,2.4):r/12.92,o=o>.04045?Math.pow((o+.055)/1.055,2.4):o/12.92,n=n>.04045?Math.pow((n+.055)/1.055,2.4):n/12.92,l.X=r*a[0]+o*a[3]+n*a[6],l.Y=r*a[1]+o*a[4]+n*a[7],l.Z=r*a[2]+o*a[5]+n*a[8],l},r=function(e){var t=e.X+e.Y+e.Z;return 0===t?{x:0,y:0,Y:e.Y}:{x:e.X/t,y:e.Y/t,Y:e.Y}},o=function(t,o,n){var c,i,d,s,p,u,h,f,g,v,b,y,m,C,S,k,w,T,x,O,R;return"achroma"===o?(c=.212656*t.R+.715158*t.G+.072186*t.B,c={R:c,G:c,B:c},n&&(d=(i=1.75)+1,c.R=(i*c.R+t.R)/d,c.G=(i*c.G+t.G)/d,c.B=(i*c.B+t.B)/d),c):(s=a[o],p=r(l(t)),u=(p.y-s.y)/(p.x-s.x),h=p.y-p.x*u,f=(s.yi-h)/(u-s.m),g=u*f+h,0,c={},c.X=f*p.Y/g,c.Y=p.Y,c.Z=(1-(f+g))*p.Y/g,T=.312713*p.Y/.329016,x=.358271*p.Y/.329016,v=T-c.X,b=x-c.Z,O=e,y=v*O[0]+0*O[3]+b*O[6],m=v*O[1]+0*O[4]+b*O[7],C=v*O[2]+0*O[5]+b*O[8],c.R=c.X*O[0]+c.Y*O[3]+c.Z*O[6],c.G=c.X*O[1]+c.Y*O[4]+c.Z*O[7],c.B=c.X*O[2]+c.Y*O[5]+c.Z*O[8],S=((c.R<0?0:1)-c.R)/y,k=((c.G<0?0:1)-c.G)/m,w=((c.B<0?0:1)-c.B)/C,S=S>1||S<0?0:S,k=k>1||k<0?0:k,w=w>1||w<0?0:w,R=S>k?S:k,w>R&&(R=w),c.R+=R*y,c.G+=R*m,c.B+=R*C,c.R=255*(c.R<=0?0:c.R>=1?1:Math.pow(c.R,1/2.2)),c.G=255*(c.G<=0?0:c.G>=1?1:Math.pow(c.G,1/2.2)),c.B=255*(c.B<=0?0:c.B>=1?1:Math.pow(c.B,1/2.2)),n&&(d=(i=1.75)+1,c.R=(i*c.R+t.R)/d,c.G=(i*c.G+t.G)/d,c.B=(i*c.B+t.B)/d),c)},n={protanomaly:{type:"protan",anomalize:!0},protanopia:{type:"protan"},deuteranomaly:{type:"deutan",anomalize:!0},deuteranopia:{type:"deutan"},tritanomaly:{type:"tritan",anomalize:!0},tritanopia:{type:"tritan"},achromatomaly:{type:"achroma",anomalize:!0},achromatopsia:{type:"achroma"}},c={cvdTypes:n,colorTransforms:{}};for(var i in n)c.colorTransforms[i]=function(e){return function(t){var a=d3.rgb(t);if(a){var l=new o({R:a.r,G:a.g,B:a.b},n[e].type,n[e].anomalize);return l.R=l.R||0,l.G=l.G||0,l.B=l.B||0,d3.rgb(l.R,l.G,l.B)}}}(i);return c},colorPalette=function(e){var t=[],a=e.select(".palettePreview"),l={};return dispatch.on("addSelectedColor.colorPalette",function(){var e=d3.rgb(this.selectedColor).toString();t.indexOf(e)>-1||l.addColorToPalette(this.selectedColor)}),dispatch.on("deletePaletteColor.colorPalette",function(){var a=t.indexOf(this.color);t.splice(a,1),e.select("tbody").selectAll("tr").each(function(e,t){t===a&&d3.select(this).remove()}),l.updatePalettePreview()}),l.updatePalettePreview=function(){if(a.attr("width",t.length),0!==t.length){for(var e,l=a.attr("width"),r=a.node().getContext("2d"),o=r.createImageData(l,1),n=-1,c=0;c<l;++c)(e=d3.rgb(t[c])).displayable()?(o.data[++n]=e.r,o.data[++n]=e.g,o.data[++n]=e.b,o.data[++n]=255):(o.data[++n]=0,o.data[++n]=0,o.data[++n]=0,o.data[++n]=255);r.putImageData(o,0,0)}},l.addColorToPalette=function(a){var r=d3.jab(a),o=d3.lab(a),n=d3.rgb(a);t.push(n.toString());var c="Jab("+[r.J,r.a,r.b].map(Math.round).join(",")+")",i="Lab("+[o.l,o.a,o.b].map(Math.round).join(",")+")",d=e.select("tbody").append("tr");d.append("td").append("span").classed("deletePaletteTableColor",!0).text("×").on("click",function(){var e=d3.select(this.parentNode.parentNode).select(".swatch").style("background-color");dispatch.call("deletePaletteColor",{color:d3.rgb(e).toString()})}),e.selectAll('tbody input[type="radio"]').property("checked",!1),d.append("td").append("input").attr("type","radio").property("checked",!0).on("click",function(){d3.selectAll('.paletteTable tbody input[type="radio"]').property("checked",!1),d3.select(this).property("checked",!0),dispatch.call("updateSelectedColor",{selectedColor:n})}),d.append("td").classed("swatch",!0).style("background",a),d.append("td").text(rgb2hex(a)),d.append("td").text(n.toString().replace(/\s/g,"")),d.append("td").text(c),d.append("td").text(i),l.updatePalettePreview(),e.select(".paletteInputField").property("value",'"'+t.join('","')+'"')},e.select(".paletteInputField").on("blur",function(){for(;t.length>0;)dispatch.call("deletePaletteColor",{color:t[0]});if(e.select("tbody").selectAll("tr").remove(),t=[],""!==this.value){var a=this.value.replace(/\s/g,"").replace("[","").replace("]","").split('",');if(!(a.length<1)){var r=a.map(e=>e.replace(/"/g,""));r.forEach(l.addColorToPalette),r.forEach(e=>dispatch.call("addSelectedColor",{selectedColor:e}))}}}),l},colorStore=function(){var e=[],t=[];return dispatch.on("addSelectedColor.colorStore",function(){colorDB.addColor(this.selectedColor)}),{addColor:function(a){e.push(a),t.push(d3.rgb(a))},getColors:function(){return e},getRGBColors:function(){return t}}},colorpicker=function(e){function t(t){"rgb"===s?y.range([255,0]):y.range([100,0]);var a=d3.scaleLinear().domain(y.range()).range(y.domain());e.select(".thumb").attr("transform","translate(0,"+a(t)+")")}function a(e){var t,a,l,r,o=d3.select("#colorpicker_square").node(),n=o.getContext("2d"),c=o.height,i=o.width,p=n.createImageData(i,c),u=d3.scaleLinear().domain([0,i]).range([359,0]),f=d3.scaleLinear().domain([c,0]).range([0,135]),g=d3.scaleLinear().domain([0,i]).range([-115,115]),v=d3.scaleLinear().domain([0,i]).range([-45,45]),b=colorDB.getRGBColors(),y=-1;for(l=c;l>0;l--)for(r=i;r>0;r--)t=!0,d&&(t=b.reduce(function(e,t){return e&&d3.noticeablyDifferent(t,a,.3)},!0)),!1===t?a=h:"rgb"===s?a=d3.rgb(e,r,l):("lab"===s?a=d3.lab(e,-g(r),g(l)):"hcl"===s?a=d3.hcl(u(r),f(l),e):((a=d3.jab(e,-v(r),v(l))).J<42&&a.b>25||a.J<10&&a.b>12||a.J<4&&a.b>7||a.J<2&&(a.b>3||a.a<-8||a.a>8))&&(a=h),a=!1===a.displayable()?h:d3.rgb(a)),p.data[++y]=a.r,p.data[++y]=a.g,p.data[++y]=a.b,p.data[++y]=255;n.putImageData(p,0,0)}function l(){var e,t,a=d3.select("#colorpicker_bar").node(),l=a.getContext("2d"),r=a.height,o=a.width,n=l.createImageData(1,r),c=-1,i=d3.scaleLinear().domain([0,r]).range("rgb"===s?[0,255]:[0,100]);for(t=r;t>0;t--)"rgb"===s?e=d3.rgb(i(t),0,0):"hcl"===s?e=d3.rgb(d3.hcl(0,0,i(t))):"lab"===s?e=d3.rgb(d3.lab(i(t),0,0)):"jab"===s&&(e=d3.rgb(d3.jab(i(t),0,0))),n.data[++c]=e.r,n.data[++c]=e.g,n.data[++c]=e.b,n.data[++c]=255;for(x=0;x<o;x++)l.putImageData(n,x,0)}function r(e){n(e,".colorChannelInput")}function o(e){n(e,".colorChannelInputHover")}function n(e,t){var a={rgb:d3.rgb(e),jab:d3.jab(e),lab:d3.lab(e),hcl:d3.hcl(e)};a.hex="#"+rgb2hex(a.rgb.toString()),d3.selectAll(t).each(function(){var e=d3.select(this),t=e.attr("data-colorType");if("hex"===t)e.property("value",a.hex);else{var l=a[t],r=Math.round(l[e.attr("data-channel")]);!1===isNaN(r)?e.node().value=r:e.node().value=null}})}function c(){if(""===this.value)this.value=m;else{var e,o=d3.select(this).attr("data-colorType");if("hex"===o)e=d3.rgb(this.value).toString();else{var n='.colorChannelInput[data-colorType="'+o+'"]',c=[];d3.selectAll(n).each(function(){c.push(this.value)}),e="hcl"!==o?d3[o](c[0],c[1],c[2]).toString():d3[o](c[2],c[1],c[0]).toString()}r(e),d3.select(".selectedColor").style("background",e);d3.select(".selectedColor");var i,d=d3[s](e);a(i="jab"===s?d.J:"lab"===s||"hcl"===s?d.l:d.r),l(),t(i)}}var i,d=!1,s="lab",p=[50,0,0],u={space:s,value:p,color:d3[s].apply(this,p)},h=d3.rgb("#282c34");i="jab"===s?u.color.J:"lab"===s||"hcl"===s?u.color.l:u.color.r,e.select(".selectedColor").style("background",u.color.toString()),r(u.color.toString()),a(i),l(),e.select("#addColorToPaletteBtn").on("click",function(){dispatch.call("addSelectedColor",{selectedColor:e.select(".selectedColor").style("background-color")})}),e.selectAll("#colorspaceSwitcherMenu li").on("click",function(){e.selectAll("#colorspaceSwitcherMenu li").classed("active",!1),d3.select(this).classed("active",!0);var r=d3.select(this).attr("data-space");if(r!==s){s=r;var o,n=e.select(".selectedColor").style("background-color"),c=d3[s](n);a(o="jab"===s?c.J:"lab"===s||"hcl"===s?c.l:c.r),l(),t(o)}}),e.selectAll(".colorChannelInput").on("focus",function(){m=this.value}).on("blur",c),e.selectAll('.colorChannelInput[type="color"]').on("change",c),e.select(".freetextColorInput").on("blur",function(){var a=d3.rgb(this.value.replace(/\'/g,"").replace(/\"/g,""));if(this.value="",NaN!==a.opacity&&(a.opacity=1),a.displayable()){r(a.toString()),e.select(".selectedColor").style("background-color",a);t("jab"===s?d3.jab(a).J:"lab"===s||"hcl"===s?d3.lab(a).l:a.r)}}),e.select("#colorpicker_square").on("click",function(){var e="rgba("+this.getContext("2d").getImageData(d3.mouse(this)[0],d3.mouse(this)[1],1,1).data.slice(0,4).join(",")+")";d3.select(".selectedColor").style("background",e),r(e)}).on("mousemove",function(){var t="rgba("+this.getContext("2d").getImageData(d3.mouse(this)[0],d3.mouse(this)[1],1,1).data.slice(0,4).join(",")+")";e.select(".hoverColor").style("background",t),o(t)});var f=e.select("#colorpicker_slider"),g={top:10,right:0,bottom:10,left:0},v=f.select(".thumb"),b=+f.style("height").replace("px",""),y=d3.scaleLinear().domain([0,b-g.top]);v.attr("transform","translate(0,"+(b/2-g.top)+")"),v.call(d3.drag().on("drag",function(){"rgb"===s?y.range([255,0]):y.range([100,0]);var e,t=b-g.bottom;e=d3.event.y<0?0:d3.event.y>t?t:d3.event.y,d3.select(this).attr("transform","translate(0,"+e+")"),a(y(e));var l=[y(e)];d3.selectAll(".colorChannelInput").filter(function(){return d3.select(this).attr("data-colorType")===s}).each(function(t,a){0!==a?l.push(+this.value):this.value=y(e)});var o;r(o="hcl"!==s?d3[s](l[0],l[1],l[2]):d3[s](l[2],l[1],l[0])),d3.select(".selectedColor").style("background-color",o.toString())})),dispatch.on("updateSelectedColor.colorpicker",function(){var o,n=this.selectedColor,c=d3[s](n);"jab"===s?o=c.J:"lab"===s||"hcl"===s?o=c.l:"rgb"===s&&(o=c.r),e.select(".selectedColor").style("background",c.toString()),r(c.toString()),a(o),l(),t(o)});var m},cvdgradientpicker=function(e){function t(t,r){e.selectAll("tbody tr").each(function(){var e=d3.select(this),o=e.attr("data-cvdType"),n=cvd.colorTransforms[o];e.selectAll("td").filter((e,t)=>t>0).each(function(e,o){a(d3.select(this).select("canvas"),t,r,l[o],n)})})}function a(e,t,a,l,r){for(var o,n=e.attr("width"),c=e.node().getContext("2d"),i=c.createImageData(n,1),d=-1,s=d3["interpolate"+l[0].toUpperCase()+l.slice(1)],p=d3.scaleLinear().domain([0,n-1]).interpolate(s).range([t,a]),u=0;u<n;++u)o=d3.rgb(p(u)),void 0!==r&&(o=r(o)),o.displayable()?(i.data[++d]=o.r,i.data[++d]=o.g,i.data[++d]=o.b,i.data[++d]=255):(i.data[++d]=0,i.data[++d]=0,i.data[++d]=0,i.data[++d]=255);c.putImageData(i,0,0)}var l=["jab","lab","rgb"];t("black","white"),dispatch.on("updateGradientColors",function(){t(this.startColor,this.stopColor)})},gradientpicker=function(e){function t(){void 0===f&&void 0===g||void 0!==f&&void 0!==g&&(dispatch.call("updateGradientColors",{startColor:f,stopColor:g}),e.selectAll("canvas").each(function(){a(d3.select(this),f,g)}),e.selectAll(".gradientOutputText").each(function(){l(d3.select(this),f,g)}))}function a(e,t,a){for(var l,r=e.attr("width"),o=e.node().getContext("2d"),n=o.createImageData(r,1),c=-1,i=e.attr("data-colorType"),d=d3["interpolate"+i[0].toUpperCase()+i.slice(1)],s=d3.scaleLinear().domain([0,r-1]).interpolate(d).range([t,a]),p=0;p<r;++p)(l=d3.rgb(s(p))).displayable()?(n.data[++c]=l.r,n.data[++c]=l.g,n.data[++c]=l.b,n.data[++c]=255):(n.data[++c]=0,n.data[++c]=0,n.data[++c]=0,n.data[++c]=255);o.putImageData(n,0,0)}function l(e,t,a){var l=e.attr("data-colorType"),r=d3["interpolate"+l[0].toUpperCase()+l.slice(1)],o=d3.scaleLinear().domain([0,e.classed("sequential")?c-1:1]).interpolate(r).range([t,a]),n=Array.from(Array(c),(e,t)=>o(t));e.property("value",JSON.stringify(n))}function r(e){return function(){var a=d3.rgb(e.property("value"));a.displayable()&&(e.classed("gradientStartColor")?f=a:g=a,t())}}var o,n,c=5,i=[],d=e.select(".gradientPickerMenu"),s=d.select(".startColor .swatchList"),p=d.select(".stopColor .swatchList"),u=e.select(".gradientStartColor"),h=e.select(".gradientStopColor"),f="rgb(0, 0, 0)",g="rgb(255, 255, 255)";t(),e.selectAll(".gradientPickerInput").on("focus",function(){o=f,n=g}),u.on("blur",r(u)),h.on("blur",r(h)),e.select(".gradientStepCount").on("blur",function(){c=+this.value,e.selectAll(".sequential").attr("width",c),t()}),dispatch.on("addSelectedColor.gradientpicker",function(){var e=d3.rgb(this.selectedColor).toString();if(!(i.indexOf(e)>-1)){i.push(e);s.append("li").style("background-color",this.selectedColor).on("click",function(){f=e,t()}),p.append("li").style("background-color",this.selectedColor).on("click",function(){g=e,t()})}}),dispatch.on("deletePaletteColor.gradientpicker",function(){var e=d3.rgb(this.color);d.selectAll("li").filter(function(){return d3.select(this).style("background-color")===e.toString()}).remove(),i.splice(i.indexOf(e.toString()),1)})},imageprocessor=function(e){var t=e.select("canvas").node(),a=t.getContext("2d"),l=e.select(".uniqueColors"),r=e.select(".dragArea"),o=e.select(".dropImg"),n=e.select(".uploadBtn");r.on("dragover",function(e){d3.event.stopPropagation(),d3.event.preventDefault(),d3.event.dataTransfer.dropEffect="copy"}),r.on("drop",function(){d3.event.stopPropagation(),d3.event.preventDefault();var e=d3.event.dataTransfer.files;if(!(e.length<1)){var t=e[0];if(t.type.match("image.*")){var a=new FileReader;a.onload=function(e){o.node().src=e.target.result},a.readAsDataURL(t)}}}),o.on("load",function(){a.clearRect(0,0,t.width,t.height),a.drawImage(o.node(),0,0,t.width,t.height);for(var e=a.getImageData(0,0,t.width,t.height),r=Array(t.width*t.height),n=-1,c=0;c<t.width*t.height;++c)r[c]=d3.hcl(d3.rgb(e.data[++n],e.data[++n],e.data[++n]).toString()),++n;var i=r.filter(function(e,t,a){return a.indexOf(e)===t}).reduce(function(e,t,a){if(0===e.length)return[t];for(var a=0,a=0;a<e.length;a++)if(!1===d3.noticeablyDifferent(e[a],t,1,.5))return e;return e.push(t),e},[]).sort(function(e,t){var a=e.h-t.h;if(Math.abs(a)>15)return a;var l=e.l-t.l;return Math.abs(l)>5?l:e.c-t.c});l.selectAll("li").remove(),l.selectAll("li").data(i).enter().append("li").style("background-color",e=>e).on("click",function(e){dispatch.call("addSelectedColor",{selectedColor:e.toString()})})}),n.on("click",function(){var t=e.select('.uploadForm input[type="file"]');if(t.property("files").length>0){var a=new FileReader;a.onload=function(e){o.node().src=e.target.result},a.readAsDataURL(t.property("files")[0])}})},cvdtable=function(e){function t(){var t=[];return e.select(".palette").selectAll("td").each(function(e,a){0!==a&&t.push(d3.select(this).style("background-color"))}),t}function a(){e.selectAll("tbody tr").each(function(){var e=d3.select(this),t=(e.attr("class"),[]);e.selectAll("td").each(function(e,a){0!==a&&t.push(d3.select(this).style("background-color"))}),e.selectAll("td").each(function(e,a){if(0!==a){var l=d3.select(this),n=l.style("background-color"),c=t.indexOf(n),i=t.reduce(function(e,t,a){if(a===c)return e;var l=d3.noticeablyDifferent(t,n,o,r);return e&&l},!0);l.classed("notDifferent",!1===i).text(!1===i?"⚠":""),d3.lab(n).l<30&&l.style("color","rgba(255,255,255,0.25)")}})})}var l={},r=.5,o=.1;return l.addColorToTable=function(l){var r=d3.rgb(l).toString();t().indexOf(r)>-1||(e.selectAll("tbody tr").each(function(){var e,t=d3.select(this),a=t.attr("class");e="palette"===a?r:cvd.colorTransforms[a](r),t.append("td").style("background-color",e)}),a())},dispatch.on("addSelectedColor.cvdtable",function(){l.addColorToTable(this.selectedColor)}),dispatch.on("deletePaletteColor.cvdtable",function(){var l=t().indexOf(d3.rgb(this.color).toString());e.selectAll("tr").each(function(){var e=d3.select(this);tds=e.selectAll("td").filter((e,t)=>t>0),tds.filter((e,t)=>t===l).remove()}),a()}),dispatch.on("updateJNDParameters.cvdTable",function(){r=this.percent,o=this.size,a()}),l},jndtable=function(e){function t(){var e=+i.property("value"),t=+d.property("value"),a=2*Math.atan(t/2/e);a=180*a/Math.PI,c.text(d3.format(".3f")(a))}function a(){var t=[];return e.select(".palette").selectAll("td").each(function(e,a){0!==a&&t.push(d3.select(this).style("background-color"))}),t}var l=.5,r=.1,o={},n=e.select(".jndParameters");o.addColorToTable=function(t){var o=d3.rgb(t).toString(),n=a(),c=e.select(".palette");if(!(n.indexOf(o)>-1)){c.append("td").style("background-color",o),e.selectAll(".ndRow").each(function(e,t){var a=n[t],c=d3.select(this).append("td");!1===d3.noticeablyDifferent(o,a,r,l)&&c.classed("notDifferent",!0).text("⚠")});var i=e.select("tbody").append("tr").classed("ndRow",!0);i.append("td").style("background-color",o),n.forEach(function(e){var t=i.append("td");!1===d3.noticeablyDifferent(o,e,r,l)&&t.classed("notDifferent",!0).text("⚠")}),i.append("td")}},o.updateColorTable=function(){var t=a();e.selectAll(".ndRow").each(function(e,a){var o=t[a];d3.select(this).selectAll("td").filter((e,t)=>t>0).each(function(e,a){var n=t[a];if(n!==o){var c=d3.noticeablyDifferent(n,o,r,l);d3.select(this).classed("notDifferent",!c).text(c?"":"⚠")}})})},dispatch.on("addSelectedColor.jndtable",function(){o.addColorToTable(this.selectedColor)}),dispatch.on("deletePaletteColor.jndtable",function(){var t=a(),l=t.indexOf(d3.rgb(this.color).toString()),r=e.selectAll(".palette td").filter((e,t)=>t>0),o=e.selectAll(".ndRow");t.splice(l,1),r.filter((e,t)=>t===l).remove(),r.each(function(e,t){t===l&&d3.select(this).remove()}),o.each(function(e,t){var a=d3.select(this);if(t!==l){var r=a.style("background-color"),o=a.selectAll("td").filter((e,t)=>t>0);o.filter((e,t)=>t===l).remove(),o.each(function(e,t){var a=d3.select(this),l=a.style("background-color");if(l!==r){var o=!d3.noticeablyDifferent(l,r);a.classed("notDifferent",o).text(o?"⚠":"")}})}else a.remove()})}),n.selectAll("li").each(function(){var e=d3.select(this),t=e.attr("data-parameter"),a=e.select(".value");e.select("input").on("input",function(){var e=+d3.select(this).property("value");"percent"===t?(l=e,e=e.toFixed(2).replace("0.","").replace(".","")+"%"):"size"===t&&(r=e,e=e.toFixed(2)),a.text(e),o.updateColorTable(),dispatch.call("updateJNDParameters",{percent:l,size:r})})});var c=e.select(".visualangle_va"),i=e.select(".visualangle_distance"),d=e.select(".visualangle_size");return i.on("blur",t),d.on("blur",t),t(),o},palettepreview=function(e){function t(){a.selectAll("li").style("width",1/l.length*100+"%")}var a=e.select("ul"),l=[],r={};return r.addColorToPreview=function(e){a.append("li").style("background-color",e).on("click",function(){var e=d3.select(this).style("background-color");dispatch.call("deletePaletteColor",{color:e})}),l.push(d3.rgb(e).toString()),t()},dispatch.on("addSelectedColor.palettePreview",function(){var e=d3.rgb(this.selectedColor).toString();l.indexOf(e)>-1||r.addColorToPreview(this.selectedColor)}),dispatch.on("deletePaletteColor.palettePreview",function(){var e=l.indexOf(this.color);e<0||(a.selectAll("li").each(function(t,a){a===e&&d3.select(this).remove()}),l.splice(e,1),t())}),r},vispreview=function(e){function t(){var e=n.attr("width")-d.left-d.right,t=n.attr("height")-d.top-d.bottom,a=d3.scaleBand().domain(o).range([0,e]).padding(.1),l=d3.scaleLinear().domain([0,1]).range([t,0]),r=n.select(".bars").selectAll("rect").data(o);r.enter().append("rect").each(function(){var e=d3.select(this),a=l(Math.random());e.attr("y",a).attr("height",t-a)}).merge(r).style("fill",e=>e).attr("x",e=>a(e)).attr("width",a.bandwidth()),r.exit().remove()}function a(){c.selectAll("polygon").style("fill",(e,t)=>o[f[t]%o.length]).style("stroke",(e,t)=>u.SHOW_STROKE?u.STROKE_COLOR:"none").style("stroke-width",(e,t)=>u.STROKE_WIDTH)}function l(){i.select(".circles").selectAll("circle").attr("r",p.RADIUS).style("fill",(e,t)=>p.SHOW_FILL?o[t%o.length]:"none").style("stroke",(e,t)=>p.SHOW_STROKE?o[t%o.length]:"none").style("stroke-width",(e,t)=>p.STROKE_WIDTH)}function r(e,t){var a=+e.attr("width")-d.left-d.right,l=+e.attr("height")-d.top-d.bottom,r=e.append("g").attr("transform","translate("+d.left+","+d.top+")"),o=d3.scaleLinear().domain([0,1]).range([0,a]),n=d3.scaleLinear().domain([0,1]).range([l,0]);return t&&(r.append("g").attr("transform","translate(0,"+l+")").call(d3.axisBottom(o).ticks(0)),r.append("g").call(d3.axisLeft(n).ticks(0))),{height:l,margin:d,svg:r,width:a,x:o,y:n}}for(var o=[],n=e.select(".barPreview"),c=e.select(".mapPreview"),i=e.select(".scatterPreview"),d={top:15,right:15,bottom:20,left:15},s={},p={RADIUS:5,SHOW_FILL:!1,SHOW_STROKE:!0,STROKE_WIDTH:1},u={SHOW_STROKE:!0,STROKE_COLOR:"white",STROKE_WIDTH:1},h=c.selectAll("polygon").size(),f=new Array(h),g=0;g<h;g++)f[g]=g;f=d3.shuffle(f),function(){var e=r(n,!0);e.margin,e.width,e.height;e.svg.append("g").classed("bars",!0)}(),function(){for(var e=r(i,!0),t=(e.margin,e.width,e.height,e.svg),a=e.x,l=e.y,o=t.append("g").classed("circles",!0),n=0;n<100;n++)o.append("circle").attr("cx",a(Math.random())).attr("cy",l(Math.random())).attr("r",p.RADIUS).style("stroke-width",(e,t)=>p.STROKE_WIDTH)}(),e.select(".scatterOptions_radius").on("input",function(){p.RADIUS=+d3.select(this).property("value"),l()}),e.select(".scatterOptions_showStroke").on("change",function(){p.SHOW_STROKE=!p.SHOW_STROKE,l()}),e.select(".scatterOptions_showFill").on("change",function(){p.SHOW_FILL=!p.SHOW_FILL,l()}),e.select(".scatterOptions_stroke_width").on("input",function(){p.STROKE_WIDTH=+d3.select(this).property("value"),l()}),e.select(".mapOptions_showStroke").on("change",function(){u.SHOW_STROKE=!u.SHOW_STROKE,a()}),e.select(".mapOptions_stroke_color").on("blur",function(){u.STROKE_COLOR=d3.select(this).property("value"),console.log(u.STROKE_COLOR),a()}),e.select(".mapOptions_stroke_width").on("input",function(){u.STROKE_WIDTH=+d3.select(this).property("value"),a()}),dispatch.on("addSelectedColor.visPreview",function(){var e=d3.rgb(this.selectedColor).toString();o.indexOf(e)>-1||s.addColorToPalette(e)}),dispatch.on("deletePaletteColor.visPreview",function(){var e=d3.rgb(this.color).toString(),r=o.indexOf(e);r<0||(o.splice(r,1),l(),t(),a())}),s.addColorToPalette=function(e){o.push(e),l(),t(),a()}},cvd=colorVisionDeficiency(),colorDB=colorStore(),cp=colorpicker(d3.select(".colorpicker")),ip=imageprocessor(d3.select(".imageProcessor")),palette=colorPalette(d3.select(".paletteTable")),gp=gradientpicker(d3.select(".gradientPicker")),jnds=jndtable(d3.select(".jndTable")),cvdTable=cvdtable(d3.select(".cvdTable")),cvdGrads=cvdgradientpicker(d3.select(".cvdGradientPicker")),palettePreview=palettepreview(d3.select(".palettePreview")),visPreview=vispreview(d3.select(".visPreview"));d3.selectAll(".hiddenMenu").each(function(){var e=d3.select(this),t=e.select(".hiddenMenuTitle"),a=e.select(".hiddenMenuContent");t.on("click",function(){var e="hidden"===a.style("visibility");a.style("visibility",e?"visible":"hidden").style("display",e?"inline-block":"none")})});
+var dispatch = d3.dispatch("addSelectedColor", "deletePaletteColor", "updateGradientColors", "updateJNDParameters", "updateSelectedColor");
+
+var colorVisionDeficiency = function() {
+    var colorProfile = "sRGB", gammaCorrection = 2.2;
+    var matrixXyzRgb = [ 3.240712470389558, -.969259258688888, .05563600315398933, -1.5372626602963142, 1.875996969313966, -.2039948802843549, -.49857440415943116, .041556132211625726, 1.0570636917433989 ];
+    var matrixRgbXyz = [ .41242371206635076, .21265606784927693, .019331987577444885, .3575793401363035, .715157818248362, .11919267420354762, .1804662232369621, .0721864539171564, .9504491124870351 ];
+    var blinder = {
+        protan: {
+            x: .7465,
+            y: .2535,
+            m: 1.273463,
+            yi: -.073894
+        },
+        deutan: {
+            x: 1.4,
+            y: -.4,
+            m: .968437,
+            yi: .003331
+        },
+        tritan: {
+            x: .1748,
+            y: 0,
+            m: .062921,
+            yi: .292119
+        },
+        custom: {
+            x: .735,
+            y: .265,
+            m: -1.059259,
+            yi: 1.026914
+        }
+    };
+    var convertRgbToXyz = function(o) {
+        var M = matrixRgbXyz, z = {}, R = o.R / 255, G = o.G / 255, B = o.B / 255;
+        if (colorProfile === "sRGB") {
+            R = R > .04045 ? Math.pow((R + .055) / 1.055, 2.4) : R / 12.92;
+            G = G > .04045 ? Math.pow((G + .055) / 1.055, 2.4) : G / 12.92;
+            B = B > .04045 ? Math.pow((B + .055) / 1.055, 2.4) : B / 12.92;
+        } else {
+            R = Math.pow(R, gammaCorrection);
+            G = Math.pow(G, gammaCorrection);
+            B = Math.pow(B, gammaCorrection);
+        }
+        z.X = R * M[0] + G * M[3] + B * M[6];
+        z.Y = R * M[1] + G * M[4] + B * M[7];
+        z.Z = R * M[2] + G * M[5] + B * M[8];
+        return z;
+    };
+    var convertXyzToXyy = function(o) {
+        var n = o.X + o.Y + o.Z;
+        if (n === 0) return {
+            x: 0,
+            y: 0,
+            Y: o.Y
+        };
+        return {
+            x: o.X / n,
+            y: o.Y / n,
+            Y: o.Y
+        };
+    };
+    var Blind = function(rgb, type, anomalize) {
+        var z, v, n, line, c, slope, yi, dx, dy, dX, dY, dZ, dR, dG, dB, _r, _g, _b, ngx, ngz, M, adjust;
+        if (type === "achroma") {
+            z = rgb.R * .212656 + rgb.G * .715158 + rgb.B * .072186;
+            z = {
+                R: z,
+                G: z,
+                B: z
+            };
+            if (anomalize) {
+                v = 1.75;
+                n = v + 1;
+                z.R = (v * z.R + rgb.R) / n;
+                z.G = (v * z.G + rgb.G) / n;
+                z.B = (v * z.B + rgb.B) / n;
+            }
+            return z;
+        }
+        line = blinder[type];
+        c = convertXyzToXyy(convertRgbToXyz(rgb));
+        slope = (c.y - line.y) / (c.x - line.x);
+        yi = c.y - c.x * slope;
+        dx = (line.yi - yi) / (slope - line.m);
+        dy = slope * dx + yi;
+        dY = 0;
+        z = {};
+        z.X = dx * c.Y / dy;
+        z.Y = c.Y;
+        z.Z = (1 - (dx + dy)) * c.Y / dy;
+        ngx = .312713 * c.Y / .329016;
+        ngz = .358271 * c.Y / .329016;
+        dX = ngx - z.X;
+        dZ = ngz - z.Z;
+        M = matrixXyzRgb;
+        dR = dX * M[0] + dY * M[3] + dZ * M[6];
+        dG = dX * M[1] + dY * M[4] + dZ * M[7];
+        dB = dX * M[2] + dY * M[5] + dZ * M[8];
+        z.R = z.X * M[0] + z.Y * M[3] + z.Z * M[6];
+        z.G = z.X * M[1] + z.Y * M[4] + z.Z * M[7];
+        z.B = z.X * M[2] + z.Y * M[5] + z.Z * M[8];
+        _r = ((z.R < 0 ? 0 : 1) - z.R) / dR;
+        _g = ((z.G < 0 ? 0 : 1) - z.G) / dG;
+        _b = ((z.B < 0 ? 0 : 1) - z.B) / dB;
+        _r = _r > 1 || _r < 0 ? 0 : _r;
+        _g = _g > 1 || _g < 0 ? 0 : _g;
+        _b = _b > 1 || _b < 0 ? 0 : _b;
+        adjust = _r > _g ? _r : _g;
+        if (_b > adjust) {
+            adjust = _b;
+        }
+        z.R += adjust * dR;
+        z.G += adjust * dG;
+        z.B += adjust * dB;
+        z.R = 255 * (z.R <= 0 ? 0 : z.R >= 1 ? 1 : Math.pow(z.R, 1 / gammaCorrection));
+        z.G = 255 * (z.G <= 0 ? 0 : z.G >= 1 ? 1 : Math.pow(z.G, 1 / gammaCorrection));
+        z.B = 255 * (z.B <= 0 ? 0 : z.B >= 1 ? 1 : Math.pow(z.B, 1 / gammaCorrection));
+        if (anomalize) {
+            v = 1.75;
+            n = v + 1;
+            z.R = (v * z.R + rgb.R) / n;
+            z.G = (v * z.G + rgb.G) / n;
+            z.B = (v * z.B + rgb.B) / n;
+        }
+        return z;
+    };
+    var colorVisionData = {
+        protanomaly: {
+            type: "protan",
+            anomalize: true
+        },
+        protanopia: {
+            type: "protan"
+        },
+        deuteranomaly: {
+            type: "deutan",
+            anomalize: true
+        },
+        deuteranopia: {
+            type: "deutan"
+        },
+        tritanomaly: {
+            type: "tritan",
+            anomalize: true
+        },
+        tritanopia: {
+            type: "tritan"
+        },
+        achromatomaly: {
+            type: "achroma",
+            anomalize: true
+        },
+        achromatopsia: {
+            type: "achroma"
+        }
+    };
+    var createBlinder = function(key) {
+        return function(colorString) {
+            var color = d3.rgb(colorString);
+            if (!color) {
+                return undefined;
+            }
+            var rgb = new Blind({
+                R: color.r,
+                G: color.g,
+                B: color.b
+            }, colorVisionData[key].type, colorVisionData[key].anomalize);
+            rgb.R = rgb.R || 0;
+            rgb.G = rgb.G || 0;
+            rgb.B = rgb.B || 0;
+            return d3.rgb(rgb.R, rgb.G, rgb.B);
+        };
+    };
+    var obj = {
+        cvdTypes: colorVisionData,
+        colorTransforms: {}
+    };
+    for (var key in colorVisionData) {
+        obj.colorTransforms[key] = createBlinder(key);
+    }
+    return obj;
+};
+
+var colorPalette = function(tbl) {
+    var inPalette = [], palettePreview = tbl.select(".palettePreview");
+    var obj = {};
+    dispatch.on("addSelectedColor.colorPalette", function() {
+        var rgbstr = d3.rgb(this.selectedColor).toString();
+        if (inPalette.indexOf(rgbstr) > -1) return;
+        obj.addColorToPalette(this.selectedColor);
+    });
+    dispatch.on("deletePaletteColor.colorPalette", function() {
+        var idx = inPalette.indexOf(this.color);
+        inPalette.splice(idx, 1);
+        tbl.select("tbody").selectAll("tr").each(function(d, i) {
+            if (i !== idx) return;
+            d3.select(this).remove();
+        });
+        obj.updatePalettePreview();
+    });
+    obj.updatePalettePreview = function() {
+        palettePreview.attr("width", inPalette.length);
+        if (inPalette.length === 0) return;
+        var width = palettePreview.attr("width"), context = palettePreview.node().getContext("2d"), image = context.createImageData(width, 1), i = -1, rgb, idx;
+        for (var x = 0; x < width; ++x) {
+            rgb = d3.rgb(inPalette[x]);
+            if (rgb.displayable()) {
+                image.data[++i] = rgb.r;
+                image.data[++i] = rgb.g;
+                image.data[++i] = rgb.b;
+                image.data[++i] = 255;
+            } else {
+                image.data[++i] = 0;
+                image.data[++i] = 0;
+                image.data[++i] = 0;
+                image.data[++i] = 255;
+            }
+        }
+        context.putImageData(image, 0, 0);
+    };
+    obj.addColorToPalette = function(newColor) {
+        var jab = d3.jab(newColor), lab = d3.lab(newColor), rgb = d3.rgb(newColor);
+        inPalette.push(rgb.toString());
+        var jabstr = "Jab(" + [ jab.J, jab.a, jab.b ].map(Math.round).join(",") + ")", labstr = "Lab(" + [ lab.l, lab.a, lab.b ].map(Math.round).join(",") + ")";
+        var newRow = tbl.select("tbody").append("tr");
+        newRow.append("td").append("span").classed("deletePaletteTableColor", true).text("×").on("click", function() {
+            var swatch = d3.select(this.parentNode.parentNode).select(".swatch"), color = swatch.style("background-color");
+            dispatch.call("deletePaletteColor", {
+                color: d3.rgb(color).toString()
+            });
+        });
+        tbl.selectAll('tbody input[type="radio"]').property("checked", false);
+        newRow.append("td").append("input").attr("type", "radio").property("checked", true).on("click", function() {
+            d3.selectAll('.paletteTable tbody input[type="radio"]').property("checked", false);
+            d3.select(this).property("checked", true);
+            dispatch.call("updateSelectedColor", {
+                selectedColor: rgb
+            });
+        });
+        newRow.append("td").classed("swatch", true).style("background", newColor);
+        newRow.append("td").text(rgb2hex(newColor));
+        newRow.append("td").text(rgb.toString().replace(/\s/g, ""));
+        newRow.append("td").text(jabstr);
+        newRow.append("td").text(labstr);
+    };
+    tbl.select(".paletteInputField").on("blur", function() {
+        while (inPalette.length > 0) {
+            dispatch.call("deletePaletteColor", {
+                color: inPalette[0]
+            });
+        }
+        tbl.select("tbody").selectAll("tr").remove();
+        inPalette = [];
+        if (this.value === "") return;
+        var tkns = this.value.replace(/\s/g, "").replace("[", "").replace("]", "").split('",');
+        if (tkns.length < 1) return;
+        var colors = tkns.map(d => d.replace(/"/g, ""));
+        colors.forEach(obj.addColorToPalette);
+        colors.forEach(d => dispatch.call("addSelectedColor", {
+            selectedColor: d
+        }));
+    });
+    return obj;
+};
+
+var colorStore = function() {
+    var colors = [], rgbs = [];
+    dispatch.on("addSelectedColor.colorStore", function() {
+        colorDB.addColor(this.selectedColor);
+    });
+    return {
+        addColor: function(c) {
+            colors.push(c);
+            rgbs.push(d3.rgb(c));
+        },
+        getColors: function() {
+            return colors;
+        },
+        getRGBColors: function() {
+            return rgbs;
+        }
+    };
+};
+
+var colorpicker = function(container) {
+    var CHECK_FOR_ND = false, COLORPICKER_SPACE = "lab", START_COLOR_VALUES = [ 50, 0, 0 ], START_COLOR = {
+        space: COLORPICKER_SPACE,
+        value: START_COLOR_VALUES,
+        color: d3[COLORPICKER_SPACE].apply(this, START_COLOR_VALUES)
+    };
+    var CLEAR_COLOR = d3.rgb("#282c34"), CLEAR_COLOR_RGB = [ 40, 44, 52 ];
+    var startBarValue;
+    if (COLORPICKER_SPACE === "jab") startBarValue = START_COLOR.color.J; else if (COLORPICKER_SPACE === "lab" || COLORPICKER_SPACE === "hcl") startBarValue = START_COLOR.color.l; else startBarValue = START_COLOR.color.r;
+    container.select(".selectedColor").style("background", START_COLOR.color.toString());
+    updateColorChannelInput(START_COLOR.color.toString());
+    renderColorpicker(startBarValue);
+    renderColorpicker_bar();
+    container.select("#addColorToPaletteBtn").on("click", function() {
+        dispatch.call("addSelectedColor", {
+            selectedColor: container.select(".selectedColor").style("background-color")
+        });
+    });
+    container.selectAll("#colorspaceSwitcherMenu li").on("click", function() {
+        container.selectAll("#colorspaceSwitcherMenu li").classed("active", false);
+        d3.select(this).classed("active", true);
+        var newSpace = d3.select(this).attr("data-space");
+        if (newSpace !== COLORPICKER_SPACE) {
+            COLORPICKER_SPACE = newSpace;
+            var selectedColor = container.select(".selectedColor").style("background-color"), color = d3[COLORPICKER_SPACE](selectedColor), barValue;
+            if (COLORPICKER_SPACE === "jab") barValue = color.J; else if (COLORPICKER_SPACE === "lab" || COLORPICKER_SPACE === "hcl") barValue = color.l; else barValue = color.r;
+            renderColorpicker(barValue);
+            renderColorpicker_bar();
+            relocateColorpickerBarThumb(barValue);
+        }
+    });
+    container.selectAll(".colorChannelInput").on("focus", storeColorChannelValue).on("blur", triggerColorChannelUpdate);
+    container.selectAll('.colorChannelInput[type="color"]').on("change", triggerColorChannelUpdate);
+    container.select(".freetextColorInput").on("blur", function() {
+        var colorInput = d3.rgb(this.value.replace(/\'/g, "").replace(/\"/g, ""));
+        this.value = "";
+        if (colorInput.opacity !== NaN) colorInput.opacity = 1;
+        if (colorInput.displayable()) updateColorChannelInput(colorInput.toString()); else return;
+        container.select(".selectedColor").style("background-color", colorInput);
+        var barValue;
+        if (COLORPICKER_SPACE === "jab") barValue = d3.jab(colorInput).J; else if (COLORPICKER_SPACE === "lab" || COLORPICKER_SPACE === "hcl") barValue = d3.lab(colorInput).l; else barValue = colorInput.r;
+        relocateColorpickerBarThumb(barValue);
+    });
+    container.select("#colorpicker_square").on("click", function() {
+        var context = this.getContext("2d"), px = context.getImageData(d3.mouse(this)[0], d3.mouse(this)[1], 1, 1).data, rgb = "rgba(" + px.slice(0, 4).join(",") + ")";
+        d3.select(".selectedColor").style("background", rgb);
+        updateColorChannelInput(rgb);
+    }).on("mousemove", function() {
+        var context = this.getContext("2d"), px = context.getImageData(d3.mouse(this)[0], d3.mouse(this)[1], 1, 1).data, rgb = "rgba(" + px.slice(0, 4).join(",") + ")";
+        container.select(".hoverColor").style("background", rgb);
+        updateColorChannelInputHover(rgb);
+    });
+    var slider = container.select("#colorpicker_slider"), sliderMargin = {
+        top: 10,
+        right: 0,
+        bottom: 10,
+        left: 0
+    }, thumb = slider.select(".thumb"), sliderHeight = +slider.style("height").replace("px", ""), sliderScale = d3.scaleLinear().domain([ 0, sliderHeight - sliderMargin.top ]);
+    thumb.attr("transform", "translate(0," + (sliderHeight / 2 - sliderMargin.top) + ")");
+    thumb.call(d3.drag().on("drag", dragColorpickerSlider));
+    dispatch.on("updateSelectedColor.colorpicker", function() {
+        var selectedColor = this.selectedColor, color = d3[COLORPICKER_SPACE](selectedColor), barValue;
+        if (COLORPICKER_SPACE === "jab") barValue = color.J; else if (COLORPICKER_SPACE === "lab" || COLORPICKER_SPACE === "hcl") barValue = color.l; else if (COLORPICKER_SPACE === "rgb") barValue = color.r;
+        container.select(".selectedColor").style("background", color.toString());
+        updateColorChannelInput(color.toString());
+        renderColorpicker(barValue);
+        renderColorpicker_bar();
+        relocateColorpickerBarThumb(barValue);
+    });
+    function relocateColorpickerBarThumb(barValue) {
+        if (COLORPICKER_SPACE === "rgb") sliderScale.range([ 255, 0 ]); else sliderScale.range([ 100, 0 ]);
+        var newThumbLoc = d3.scaleLinear().domain(sliderScale.range()).range(sliderScale.domain());
+        container.select(".thumb").attr("transform", "translate(0," + newThumbLoc(barValue) + ")");
+    }
+    function renderColorpicker(barValue) {
+        var colorpicker = d3.select("#colorpicker_square").node(), context = colorpicker.getContext("2d");
+        var height = colorpicker.height, width = colorpicker.width, img = context.createImageData(width, height);
+        var hclScale_hue = d3.scaleLinear().domain([ 0, width ]).range([ 359, 0 ]), hclScale_chroma = d3.scaleLinear().domain([ height, 0 ]).range([ 0, 135 ]);
+        var labScale = d3.scaleLinear().domain([ 0, width ]).range([ -115, 115 ]);
+        var jabScale = d3.scaleLinear().domain([ 0, width ]).range([ -45, 45 ]);
+        var paletteColors = colorDB.getRGBColors(), nd;
+        var c, y, x, i = -1;
+        for (y = height; y > 0; y--) {
+            for (x = width; x > 0; x--) {
+                nd = true;
+                if (CHECK_FOR_ND) {
+                    nd = paletteColors.reduce(function(nd, rgb) {
+                        return nd && d3.noticeablyDifferent(rgb, c, .3);
+                    }, true);
+                }
+                if (nd === false) {
+                    c = CLEAR_COLOR;
+                } else if (COLORPICKER_SPACE === "rgb") c = d3.rgb(barValue, x, y); else {
+                    if (COLORPICKER_SPACE === "lab") {
+                        c = d3.lab(barValue, -labScale(x), labScale(y));
+                    } else if (COLORPICKER_SPACE === "hcl") {
+                        c = d3.hcl(hclScale_hue(x), hclScale_chroma(y), barValue);
+                    } else {
+                        c = d3.jab(barValue, -jabScale(x), jabScale(y));
+                        if (c.J < 42 && c.b > 25 || c.J < 10 && c.b > 12 || c.J < 4 && c.b > 7 || c.J < 2 && (c.b > 3 || c.a < -8 || c.a > 8)) c = CLEAR_COLOR;
+                    }
+                    if (c.displayable() === false) c = CLEAR_COLOR; else c = d3.rgb(c);
+                }
+                img.data[++i] = c.r;
+                img.data[++i] = c.g;
+                img.data[++i] = c.b;
+                img.data[++i] = 255;
+            }
+        }
+        context.putImageData(img, 0, 0);
+    }
+    function renderColorpicker_bar() {
+        var colorpicker_bar = d3.select("#colorpicker_bar").node(), context = colorpicker_bar.getContext("2d"), height = colorpicker_bar.height, width = colorpicker_bar.width, img = context.createImageData(1, height);
+        var c, y, i = -1;
+        var barScale = d3.scaleLinear().domain([ 0, height ]).range(COLORPICKER_SPACE === "rgb" ? [ 0, 255 ] : [ 0, 100 ]);
+        for (y = height; y > 0; y--) {
+            if (COLORPICKER_SPACE === "rgb") c = d3.rgb(barScale(y), 0, 0); else if (COLORPICKER_SPACE === "hcl") {
+                c = d3.rgb(d3.hcl(0, 0, barScale(y)));
+            } else if (COLORPICKER_SPACE === "lab") {
+                c = d3.rgb(d3.lab(barScale(y), 0, 0));
+            } else if (COLORPICKER_SPACE === "jab") {
+                c = d3.rgb(d3.jab(barScale(y), 0, 0));
+            }
+            img.data[++i] = c.r;
+            img.data[++i] = c.g;
+            img.data[++i] = c.b;
+            img.data[++i] = 255;
+        }
+        for (x = 0; x < width; x++) context.putImageData(img, x, 0);
+    }
+    function dragColorpickerSlider() {
+        if (COLORPICKER_SPACE === "rgb") sliderScale.range([ 255, 0 ]); else sliderScale.range([ 100, 0 ]);
+        var sliderH = sliderHeight - sliderMargin.bottom, y;
+        if (d3.event.y < 0) y = 0; else if (d3.event.y > sliderH) y = sliderH; else y = d3.event.y;
+        d3.select(this).attr("transform", "translate(0," + y + ")");
+        renderColorpicker(sliderScale(y));
+        var channels = [ sliderScale(y) ];
+        d3.selectAll(".colorChannelInput").filter(function() {
+            return d3.select(this).attr("data-colorType") === COLORPICKER_SPACE;
+        }).each(function(d, i) {
+            if (i !== 0) channels.push(+this.value); else this.value = sliderScale(y);
+        });
+        var newColor;
+        if (COLORPICKER_SPACE !== "hcl") {
+            newColor = d3[COLORPICKER_SPACE](channels[0], channels[1], channels[2]);
+        } else {
+            newColor = d3[COLORPICKER_SPACE](channels[2], channels[1], channels[0]);
+        }
+        updateColorChannelInput(newColor);
+        d3.select(".selectedColor").style("background-color", newColor.toString());
+    }
+    function toggleThumbVisibility() {
+        var isHidden = d3.select(this).classed(".thumbHidden");
+        d3.select(this).classed("thumbHidden", !isHidden);
+    }
+    function updateColorChannelInput(rgbstr) {
+        updateColorChannelInput_abstract(rgbstr, ".colorChannelInput");
+    }
+    function updateColorChannelInputHover(rgbstr) {
+        updateColorChannelInput_abstract(rgbstr, ".colorChannelInputHover");
+    }
+    function updateColorChannelInput_abstract(rgbstr, inputClass) {
+        var colors = {
+            rgb: d3.rgb(rgbstr),
+            jab: d3.jab(rgbstr),
+            lab: d3.lab(rgbstr),
+            hcl: d3.hcl(rgbstr)
+        };
+        colors.hex = "#" + rgb2hex(colors.rgb.toString());
+        d3.selectAll(inputClass).each(function() {
+            var input = d3.select(this), colorType = input.attr("data-colorType");
+            if (colorType === "hex") {
+                input.property("value", colors.hex);
+            } else {
+                var color = colors[colorType], channelValue = Math.round(color[input.attr("data-channel")]);
+                if (isNaN(channelValue) === false) input.node().value = channelValue; else input.node().value = null;
+            }
+        });
+    }
+    var TMP_COLOR_CHANNEL_VALUE;
+    function storeColorChannelValue() {
+        TMP_COLOR_CHANNEL_VALUE = this.value;
+    }
+    function triggerColorChannelUpdate() {
+        if (this.value === "") {
+            this.value = TMP_COLOR_CHANNEL_VALUE;
+        } else {
+            var thisEl = d3.select(this), colorType = thisEl.attr("data-colorType"), rgbstr;
+            if (colorType === "hex") rgbstr = d3.rgb(this.value).toString(); else {
+                var selector = '.colorChannelInput[data-colorType="' + colorType + '"]', values = [];
+                d3.selectAll(selector).each(function() {
+                    values.push(this.value);
+                });
+                if (colorType !== "hcl") {
+                    rgbstr = d3[colorType](values[0], values[1], values[2]).toString();
+                } else {
+                    rgbstr = d3[colorType](values[2], values[1], values[0]).toString();
+                }
+            }
+            updateColorChannelInput(rgbstr);
+            d3.select(".selectedColor").style("background", rgbstr);
+            var selectedColor = d3.select(".selectedColor"), color = d3[COLORPICKER_SPACE](rgbstr), barValue;
+            if (COLORPICKER_SPACE === "jab") barValue = color.J; else if (COLORPICKER_SPACE === "lab" || COLORPICKER_SPACE === "hcl") barValue = color.l; else barValue = color.r;
+            renderColorpicker(barValue);
+            renderColorpicker_bar();
+            relocateColorpickerBarThumb(barValue);
+        }
+    }
+};
+
+function rgb2hex(rgbstr) {
+    var rgb = rgbstr.replace("rgb(", "").replace(")", "").split(",").map(d => +d), r = rgb[0], g = rgb[1], b = rgb[2], bin = r << 16 | g << 8 | b;
+    return function(h) {
+        return new Array(7 - h.length).join("0") + h;
+    }(bin.toString(16).toUpperCase());
+}
+
+var exportFunction = function(container) {
+    console.log("loaded");
+    var inPalette = [], obj = {}, paletteInputField = container.select(".paletteInputField");
+    paletteCanvas = container.select(".paletteCanvas");
+    dispatch.on("addSelectedColor.export", function() {
+        var rgbstr = d3.rgb(this.selectedColor).toString();
+        if (inPalette.indexOf(rgbstr) > -1) return;
+        obj.addColorToPalette(this.selectedColor);
+    });
+    dispatch.on("deletePaletteColor.export", function() {
+        var idx = inPalette.indexOf(this.color);
+        inPalette.splice(idx, 1);
+        obj.updatePaletteCanvas();
+    });
+    obj.updatePaletteCanvas = function() {
+        console.log("updating");
+        paletteCanvas.attr("width", inPalette.length);
+        if (inPalette.length === 0) return;
+        var width = paletteCanvas.attr("width"), context = paletteCanvas.node().getContext("2d"), image = context.createImageData(width, 1), i = -1, rgb, idx;
+        for (var x = 0; x < width; ++x) {
+            rgb = d3.rgb(inPalette[x]);
+            console.log(rgb);
+            if (rgb.displayable()) {
+                image.data[++i] = rgb.r;
+                image.data[++i] = rgb.g;
+                image.data[++i] = rgb.b;
+                image.data[++i] = 255;
+            } else {
+                image.data[++i] = 0;
+                image.data[++i] = 0;
+                image.data[++i] = 0;
+                image.data[++i] = 255;
+            }
+        }
+        context.putImageData(image, 0, 0);
+    };
+    obj.addColorToPalette = function(newColor) {
+        inPalette.push(d3.rgb(newColor).toString());
+        obj.updatePaletteCanvas();
+        paletteInputField.property("value", '"' + inPalette.join('","') + '"');
+    };
+    paletteInputField.on("blur", function() {
+        while (inPalette.length > 0) {
+            dispatch.call("deletePaletteColor", {
+                color: inPalette[0]
+            });
+        }
+        inPalette = [];
+        if (this.value === "") return;
+        var tkns = this.value.replace(/\s/g, "").replace("[", "").replace("]", "").split('",');
+        if (tkns.length < 1) return;
+        var colors = tkns.map(d => d.replace(/"/g, ""));
+        colors.forEach(obj.addColorToPalette);
+        colors.forEach(d => dispatch.call("addSelectedColor", {
+            selectedColor: d
+        }));
+        obj.updatePaletteCanvas();
+    });
+};
+
+var cvdgradientpicker = function(container) {
+    var COLOR_SPACES = [ "jab", "lab", "rgb" ];
+    var startColor = "black", stopColor = "white";
+    renderGradients(startColor, stopColor);
+    dispatch.on("updateGradientColors", function() {
+        renderGradients(this.startColor, this.stopColor);
+    });
+    function renderGradients(start, stop) {
+        var rows = container.selectAll("tbody tr");
+        rows.each(function() {
+            var row = d3.select(this), cvdType = row.attr("data-cvdType"), cvdFn = cvd.colorTransforms[cvdType];
+            row.selectAll("td").filter((d, i) => i > 0).each(function(d, i) {
+                var td = d3.select(this), canvas = td.select("canvas");
+                renderGradient(canvas, start, stop, COLOR_SPACES[i], cvdFn);
+            });
+        });
+    }
+    function renderGradient(canvas, start, stop, space, cvdFn) {
+        var width = canvas.attr("width"), context = canvas.node().getContext("2d"), image = context.createImageData(width, 1), i = -1, interpolator = d3["interpolate" + space[0].toUpperCase() + space.slice(1)], scale = d3.scaleLinear().domain([ 0, width - 1 ]).interpolate(interpolator).range([ start, stop ]);
+        var c;
+        for (var x = 0; x < width; ++x) {
+            c = d3.rgb(scale(x));
+            if (cvdFn !== undefined) c = cvdFn(c);
+            if (c.displayable()) {
+                image.data[++i] = c.r;
+                image.data[++i] = c.g;
+                image.data[++i] = c.b;
+                image.data[++i] = 255;
+            } else {
+                image.data[++i] = 0;
+                image.data[++i] = 0;
+                image.data[++i] = 0;
+                image.data[++i] = 255;
+            }
+        }
+        context.putImageData(image, 0, 0);
+    }
+};
+
+var gradientpicker = function(container) {
+    var TMP_START_COLOR_VALUE, TMP_STOP_COLOR_VALUE, NUM_COLOR_STEPS = 5;
+    var inPalette = [];
+    var gradientMenu = container.select(".gradientPickerMenu"), startColorSwatchList = gradientMenu.select(".startColor .swatchList"), stopColorSwatchList = gradientMenu.select(".stopColor .swatchList"), startInput = container.select(".gradientStartColor"), stopInput = container.select(".gradientStopColor");
+    var startColor = "rgb(0, 0, 0)", stopColor = "rgb(255, 255, 255)";
+    renderGradients();
+    container.selectAll(".gradientPickerInput").on("focus", storeColorValue);
+    startInput.on("blur", triggerTextInputColorChange(startInput));
+    stopInput.on("blur", triggerTextInputColorChange(stopInput));
+    container.select(".gradientStepCount").on("blur", function() {
+        NUM_COLOR_STEPS = +this.value;
+        container.selectAll(".sequential").attr("width", NUM_COLOR_STEPS);
+        renderGradients();
+    });
+    dispatch.on("addSelectedColor.gradientpicker", function() {
+        var rgbstr = d3.rgb(this.selectedColor).toString();
+        if (inPalette.indexOf(rgbstr) > -1) return;
+        inPalette.push(rgbstr);
+        var newStart = startColorSwatchList.append("li").style("background-color", this.selectedColor).on("click", function() {
+            startColor = rgbstr;
+            renderGradients();
+        }), newStop = stopColorSwatchList.append("li").style("background-color", this.selectedColor).on("click", function() {
+            stopColor = rgbstr;
+            renderGradients();
+        });
+    });
+    dispatch.on("deletePaletteColor.gradientpicker", function() {
+        var rgb = d3.rgb(this.color);
+        gradientMenu.selectAll("li").filter(function() {
+            return d3.select(this).style("background-color") === rgb.toString();
+        }).remove();
+        inPalette.splice(inPalette.indexOf(rgb.toString()), 1);
+    });
+    function renderGradients() {
+        if (startColor === undefined && stopColor === undefined) {
+            return;
+        } else if (startColor === undefined) {
+            return;
+        } else if (stopColor === undefined) {
+            return;
+        }
+        dispatch.call("updateGradientColors", {
+            startColor: startColor,
+            stopColor: stopColor
+        });
+        container.selectAll("canvas").each(function() {
+            renderSingleGradient(d3.select(this), startColor, stopColor);
+        });
+        container.selectAll(".gradientOutputText").each(function() {
+            renderSingleGradientText(d3.select(this), startColor, stopColor);
+        });
+    }
+    function renderSingleGradient(canvas, start, stop) {
+        var width = canvas.attr("width"), context = canvas.node().getContext("2d"), image = context.createImageData(width, 1), i = -1, space = canvas.attr("data-colorType"), interpolator = d3["interpolate" + space[0].toUpperCase() + space.slice(1)], scale = d3.scaleLinear().domain([ 0, width - 1 ]).interpolate(interpolator).range([ start, stop ]);
+        var c;
+        for (var x = 0; x < width; ++x) {
+            c = d3.rgb(scale(x));
+            if (c.displayable()) {
+                image.data[++i] = c.r;
+                image.data[++i] = c.g;
+                image.data[++i] = c.b;
+                image.data[++i] = 255;
+            } else {
+                image.data[++i] = 0;
+                image.data[++i] = 0;
+                image.data[++i] = 0;
+                image.data[++i] = 255;
+            }
+        }
+        context.putImageData(image, 0, 0);
+    }
+    function renderSingleGradientText(input, start, stop) {
+        var space = input.attr("data-colorType"), interpolator = d3["interpolate" + space[0].toUpperCase() + space.slice(1)], scale = d3.scaleLinear().domain([ 0, input.classed("sequential") ? NUM_COLOR_STEPS - 1 : 1 ]).interpolate(interpolator).range([ start, stop ]), colors = Array.from(Array(NUM_COLOR_STEPS), (d, i) => scale(i));
+        input.property("value", JSON.stringify(colors));
+    }
+    function storeColorValue() {
+        TMP_START_COLOR_VALUE = startColor;
+        TMP_STOP_COLOR_VALUE = stopColor;
+    }
+    function triggerTextInputColorChange(inputSelection) {
+        return function() {
+            var input = d3.rgb(inputSelection.property("value"));
+            if (input.displayable()) {
+                if (inputSelection.classed("gradientStartColor")) startColor = input; else stopColor = input;
+                renderGradients();
+            }
+        };
+    }
+};
+
+var imageprocessor = function(container) {
+    var canvas = container.select("canvas").node(), context = canvas.getContext("2d"), colorList = container.select(".uniqueColors"), dropArea = container.select(".dragArea"), dropImg = container.select(".dropImg"), uploadBtn = container.select(".uploadBtn");
+    dropArea.on("dragover", dragOverArea);
+    dropArea.on("drop", selectFile);
+    dropImg.on("load", buildCanvas);
+    uploadBtn.on("click", function() {
+        var localFile = container.select('.uploadForm input[type="file"]');
+        if (localFile.property("files").length > 0) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                dropImg.node().src = e.target.result;
+            };
+            reader.readAsDataURL(localFile.property("files")[0]);
+        }
+    });
+    function buildCanvas() {
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        context.drawImage(dropImg.node(), 0, 0, canvas.width, canvas.height);
+        var image = context.getImageData(0, 0, canvas.width, canvas.height), pxs = Array(canvas.width * canvas.height);
+        var i = -1;
+        for (var x = 0; x < canvas.width * canvas.height; ++x) {
+            pxs[x] = d3.hcl(d3.rgb(image.data[++i], image.data[++i], image.data[++i]).toString());
+            ++i;
+        }
+        var uniqueColors = pxs.filter(function(d, i, self) {
+            return self.indexOf(d) === i;
+        }).reduce(function(acc, d, i) {
+            if (acc.length === 0) return [ d ];
+            var i = 0, isND;
+            for (var i = 0; i < acc.length; i++) {
+                isND = d3.noticeablyDifferent(acc[i], d, 1, .5);
+                if (isND === false) return acc;
+            }
+            acc.push(d);
+            return acc;
+        }, []).sort(function(a, b) {
+            var hDiff = a.h - b.h;
+            if (Math.abs(hDiff) > 15) return hDiff;
+            var lDiff = a.l - b.l;
+            if (Math.abs(lDiff) > 5) return lDiff; else return a.c - b.c;
+        });
+        colorList.selectAll("li").remove();
+        colorList.selectAll("li").data(uniqueColors).enter().append("li").style("background-color", d => d).on("click", function(d) {
+            dispatch.call("addSelectedColor", {
+                selectedColor: d.toString()
+            });
+        });
+    }
+    function dragOverArea(e) {
+        d3.event.stopPropagation();
+        d3.event.preventDefault();
+        d3.event.dataTransfer.dropEffect = "copy";
+    }
+    function selectFile() {
+        d3.event.stopPropagation();
+        d3.event.preventDefault();
+        var files = d3.event.dataTransfer.files;
+        if (files.length < 1) return;
+        var file = files[0];
+        if (!file.type.match("image.*")) {
+            return;
+        }
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            dropImg.node().src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+    }
+};
+
+var cvdtable = function(table) {
+    var obj = {};
+    var JND_PERCENT = .5, JND_SIZE = .1;
+    obj.addColorToTable = function(newColor) {
+        var c = d3.rgb(newColor), rgbstr = c.toString(), curPalette = getCurrentColors();
+        if (curPalette.indexOf(rgbstr) > -1) return;
+        table.selectAll("tbody tr").each(function() {
+            var tr = d3.select(this), cvdType = tr.attr("class"), color;
+            if (cvdType === "palette") color = rgbstr; else color = cvd.colorTransforms[cvdType](rgbstr);
+            tr.append("td").style("background-color", color);
+        });
+        updateJNDs();
+    };
+    dispatch.on("addSelectedColor.cvdtable", function() {
+        obj.addColorToTable(this.selectedColor);
+    });
+    dispatch.on("deletePaletteColor.cvdtable", function() {
+        var curPalette = getCurrentColors(), cIdx = curPalette.indexOf(d3.rgb(this.color).toString());
+        table.selectAll("tr").each(function() {
+            var row = d3.select(this);
+            tds = row.selectAll("td").filter((d, i) => i > 0);
+            tds.filter((d, i) => i === cIdx).remove();
+        });
+        updateJNDs();
+    });
+    dispatch.on("updateJNDParameters.cvdTable", function() {
+        JND_PERCENT = this.percent;
+        JND_SIZE = this.size;
+        updateJNDs();
+    });
+    function getCurrentColors() {
+        var colors = [];
+        table.select(".palette").selectAll("td").each(function(d, i) {
+            if (i !== 0) colors.push(d3.select(this).style("background-color"));
+        });
+        return colors;
+    }
+    function updateJNDs() {
+        table.selectAll("tbody tr").each(function() {
+            var tr = d3.select(this), cvdType = tr.attr("class");
+            var rowColors = [];
+            tr.selectAll("td").each(function(d, i) {
+                if (i === 0) return;
+                rowColors.push(d3.select(this).style("background-color"));
+            });
+            tr.selectAll("td").each(function(d, i) {
+                if (i === 0) return;
+                var td = d3.select(this), tdBG = td.style("background-color"), tdBGIdx = rowColors.indexOf(tdBG), isND = rowColors.reduce(function(acc, d, i) {
+                    if (i === tdBGIdx) return acc;
+                    var ndResult = d3.noticeablyDifferent(d, tdBG, JND_SIZE, JND_PERCENT);
+                    return acc && ndResult;
+                }, true);
+                td.classed("notDifferent", isND === false).text(isND === false ? "⚠" : "");
+                if (d3.lab(tdBG).l < 30) td.style("color", "rgba(255,255,255,0.25)");
+            });
+        });
+    }
+    return obj;
+};
+
+var jndtable = function(table) {
+    var JND_PERCENT = .5, JND_SIZE = .1;
+    var obj = {}, paramMenu = table.select(".jndParameters");
+    obj.addColorToTable = function(newColor) {
+        var c = d3.rgb(newColor), rgbstr = c.toString(), curPalette = getCurrentColors(), palette = table.select(".palette");
+        if (curPalette.indexOf(rgbstr) > -1) return;
+        palette.append("td").style("background-color", rgbstr);
+        table.selectAll(".ndRow").each(function(d, i) {
+            var rowColor = curPalette[i], td = d3.select(this).append("td");
+            if (d3.noticeablyDifferent(rgbstr, rowColor, JND_SIZE, JND_PERCENT) === false) {
+                td.classed("notDifferent", true).text("⚠");
+            }
+        });
+        var newRow = table.select("tbody").append("tr").classed("ndRow", true);
+        newRow.append("td").style("background-color", rgbstr);
+        curPalette.forEach(function(c) {
+            var td = newRow.append("td");
+            if (d3.noticeablyDifferent(rgbstr, c, JND_SIZE, JND_PERCENT) === false) {
+                td.classed("notDifferent", true).text("⚠");
+            }
+        });
+        newRow.append("td");
+    };
+    obj.updateColorTable = function() {
+        var curPalette = getCurrentColors();
+        table.selectAll(".ndRow").each(function(d, i) {
+            var rowColor = curPalette[i], tr = d3.select(this);
+            tr.selectAll("td").filter((d, i) => i > 0).each(function(td, j) {
+                var c = curPalette[j];
+                if (c === rowColor) return;
+                var isND = d3.noticeablyDifferent(c, rowColor, JND_SIZE, JND_PERCENT);
+                d3.select(this).classed("notDifferent", !isND).text(isND ? "" : "⚠");
+            });
+        });
+    };
+    dispatch.on("addSelectedColor.jndtable", function() {
+        obj.addColorToTable(this.selectedColor);
+    });
+    dispatch.on("deletePaletteColor.jndtable", function() {
+        var curPalette = getCurrentColors(), cIdx = curPalette.indexOf(d3.rgb(this.color).toString()), colorCells = table.selectAll(".palette td").filter((d, i) => i > 0), rows = table.selectAll(".ndRow");
+        curPalette.splice(cIdx, 1);
+        colorCells.filter((d, i) => i === cIdx).remove();
+        colorCells.each(function(d, i) {
+            if (i === cIdx) d3.select(this).remove();
+        });
+        rows.each(function(d, i) {
+            var row = d3.select(this);
+            if (i === cIdx) {
+                row.remove();
+                return;
+            }
+            var rowColor = row.style("background-color");
+            var cmps = row.selectAll("td").filter((d, i) => i > 0);
+            cmps.filter((d, i) => i === cIdx).remove();
+            cmps.each(function(d, j) {
+                var td = d3.select(this), bg = td.style("background-color");
+                if (bg === rowColor) return;
+                var notDiff = !d3.noticeablyDifferent(bg, rowColor);
+                td.classed("notDifferent", notDiff).text(notDiff ? "⚠" : "");
+            });
+        });
+    });
+    paramMenu.selectAll("li").each(function() {
+        var li = d3.select(this), parameter = li.attr("data-parameter"), valText = li.select(".value");
+        li.select("input").on("input", function() {
+            var val = +d3.select(this).property("value");
+            if (parameter === "percent") {
+                JND_PERCENT = val;
+                val = val.toFixed(2).replace("0.", "").replace(".", "") + "%";
+            } else if (parameter === "size") {
+                JND_SIZE = val;
+                val = val.toFixed(2);
+            }
+            valText.text(val);
+            obj.updateColorTable();
+            dispatch.call("updateJNDParameters", {
+                percent: JND_PERCENT,
+                size: JND_SIZE
+            });
+        });
+    });
+    var va_text = table.select(".visualangle_va"), dist = table.select(".visualangle_distance"), size = table.select(".visualangle_size");
+    dist.on("blur", calculateVA);
+    size.on("blur", calculateVA);
+    calculateVA();
+    function calculateVA() {
+        var d = +dist.property("value"), s = +size.property("value"), va = 2 * Math.atan(s / 2 / d);
+        va = va * 180 / Math.PI;
+        va_text.text(d3.format(".3f")(va));
+    }
+    function getCurrentColors() {
+        var colors = [];
+        table.select(".palette").selectAll("td").each(function(d, i) {
+            if (i !== 0) colors.push(d3.select(this).style("background-color"));
+        });
+        return colors;
+    }
+    return obj;
+};
+
+var palettepreview = function(container) {
+    var colorList = container.select("ul"), inPalette = [];
+    var obj = {};
+    obj.addColorToPreview = function(newColor) {
+        colorList.append("li").style("background-color", newColor).on("click", function() {
+            var rgb = d3.select(this).style("background-color");
+            dispatch.call("deletePaletteColor", {
+                color: rgb
+            });
+        });
+        inPalette.push(d3.rgb(newColor).toString());
+        updatePreview();
+    };
+    dispatch.on("addSelectedColor.palettePreview", function() {
+        var rgbstr = d3.rgb(this.selectedColor).toString();
+        if (inPalette.indexOf(rgbstr) > -1) return;
+        obj.addColorToPreview(this.selectedColor);
+    });
+    dispatch.on("deletePaletteColor.palettePreview", function() {
+        var idx = inPalette.indexOf(this.color);
+        if (idx < 0) return;
+        colorList.selectAll("li").each(function(d, i) {
+            if (i !== idx) return;
+            d3.select(this).remove();
+        });
+        inPalette.splice(idx, 1);
+        updatePreview();
+    });
+    function updatePreview() {
+        colorList.selectAll("li").style("width", 1 / inPalette.length * 100 + "%");
+    }
+    return obj;
+};
+
+var vispreview = function(container) {
+    var inPalette = [], barSvg = container.select(".barPreview"), mapSvg = container.select(".mapPreview"), scatterSvg = container.select(".scatterPreview"), margin = {
+        top: 15,
+        right: 15,
+        bottom: 20,
+        left: 15
+    }, obj = {};
+    var SCATTER_OPTIONS = {
+        RADIUS: 5,
+        SHOW_FILL: false,
+        SHOW_STROKE: true,
+        STROKE_WIDTH: 1
+    };
+    var MAP_OPTIONS = {
+        SHOW_STROKE: true,
+        STROKE_COLOR: "white",
+        STROKE_WIDTH: 1
+    };
+    var numMapPoly = mapSvg.selectAll("polygon").size(), mapSvgPolyData = new Array(numMapPoly);
+    for (var i = 0; i < numMapPoly; i++) mapSvgPolyData[i] = i;
+    mapSvgPolyData = d3.shuffle(mapSvgPolyData);
+    drawBar();
+    drawScatter();
+    container.select(".scatterOptions_radius").on("input", function() {
+        SCATTER_OPTIONS.RADIUS = +d3.select(this).property("value");
+        updateScatter();
+    });
+    container.select(".scatterOptions_showStroke").on("change", function() {
+        SCATTER_OPTIONS.SHOW_STROKE = !SCATTER_OPTIONS.SHOW_STROKE;
+        updateScatter();
+    });
+    container.select(".scatterOptions_showFill").on("change", function() {
+        SCATTER_OPTIONS.SHOW_FILL = !SCATTER_OPTIONS.SHOW_FILL;
+        updateScatter();
+    });
+    container.select(".scatterOptions_stroke_width").on("input", function() {
+        SCATTER_OPTIONS.STROKE_WIDTH = +d3.select(this).property("value");
+        updateScatter();
+    });
+    container.select(".mapOptions_showStroke").on("change", function() {
+        MAP_OPTIONS.SHOW_STROKE = !MAP_OPTIONS.SHOW_STROKE;
+        updateMap();
+    });
+    container.select(".mapOptions_stroke_color").on("blur", function() {
+        MAP_OPTIONS.STROKE_COLOR = d3.select(this).property("value");
+        console.log(MAP_OPTIONS.STROKE_COLOR);
+        updateMap();
+    });
+    container.select(".mapOptions_stroke_width").on("input", function() {
+        MAP_OPTIONS.STROKE_WIDTH = +d3.select(this).property("value");
+        updateMap();
+    });
+    dispatch.on("addSelectedColor.visPreview", function() {
+        var rgbstr = d3.rgb(this.selectedColor).toString();
+        if (inPalette.indexOf(rgbstr) > -1) return;
+        obj.addColorToPalette(rgbstr);
+    });
+    dispatch.on("deletePaletteColor.visPreview", function() {
+        var rgbstr = d3.rgb(this.color).toString(), idx = inPalette.indexOf(rgbstr);
+        if (idx < 0) return;
+        inPalette.splice(idx, 1);
+        updateScatter();
+        updateBar();
+        updateMap();
+    });
+    obj.addColorToPalette = function(color) {
+        inPalette.push(color);
+        updateScatter();
+        updateBar();
+        updateMap();
+    };
+    function updateBar() {
+        var width = barSvg.attr("width") - margin.left - margin.right, height = barSvg.attr("height") - margin.top - margin.bottom;
+        var x = d3.scaleBand().domain(inPalette).range([ 0, width ]).padding(.1), y = d3.scaleLinear().domain([ 0, 1 ]).range([ height, 0 ]), g = barSvg.select(".bars");
+        var bars = g.selectAll("rect").data(inPalette);
+        bars.enter().append("rect").each(function() {
+            var bar = d3.select(this), yVal = y(Math.random());
+            bar.attr("y", yVal).attr("height", height - yVal);
+        }).merge(bars).style("fill", d => d).attr("x", d => x(d)).attr("width", x.bandwidth());
+        bars.exit().remove();
+    }
+    function updateMap() {
+        mapSvg.selectAll("polygon").style("fill", (d, i) => inPalette[mapSvgPolyData[i] % inPalette.length]).style("stroke", (d, i) => MAP_OPTIONS.SHOW_STROKE ? MAP_OPTIONS.STROKE_COLOR : "none").style("stroke-width", (d, i) => MAP_OPTIONS.STROKE_WIDTH);
+    }
+    function updateScatter() {
+        scatterSvg.select(".circles").selectAll("circle").attr("r", SCATTER_OPTIONS.RADIUS).style("fill", (d, i) => SCATTER_OPTIONS.SHOW_FILL ? inPalette[i % inPalette.length] : "none").style("stroke", (d, i) => SCATTER_OPTIONS.SHOW_STROKE ? inPalette[i % inPalette.length] : "none").style("stroke-width", (d, i) => SCATTER_OPTIONS.STROKE_WIDTH);
+    }
+    function drawBar() {
+        var outline = generateChartBasics(barSvg, true), margin = outline.margin, width = outline.width, height = outline.height, svg = outline.svg;
+        svg.append("g").classed("bars", true);
+    }
+    function drawScatter() {
+        var outline = generateChartBasics(scatterSvg, true), margin = outline.margin, width = outline.width, height = outline.height, svg = outline.svg, x = outline.x, y = outline.y;
+        var circles = svg.append("g").classed("circles", true);
+        for (var i = 0; i < 100; i++) {
+            circles.append("circle").attr("cx", x(Math.random())).attr("cy", y(Math.random())).attr("r", SCATTER_OPTIONS.RADIUS).style("stroke-width", (d, i) => SCATTER_OPTIONS.STROKE_WIDTH);
+        }
+    }
+    function generateChartBasics(svgObj, makeAxis) {
+        var width = +svgObj.attr("width") - margin.left - margin.right, height = +svgObj.attr("height") - margin.top - margin.bottom;
+        var svg = svgObj.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+        var x = d3.scaleLinear().domain([ 0, 1 ]).range([ 0, width ]), y = d3.scaleLinear().domain([ 0, 1 ]).range([ height, 0 ]);
+        if (makeAxis) {
+            svg.append("g").attr("transform", "translate(0," + height + ")").call(d3.axisBottom(x).ticks(0));
+            svg.append("g").call(d3.axisLeft(y).ticks(0));
+        }
+        return {
+            height: height,
+            margin: margin,
+            svg: svg,
+            width: width,
+            x: x,
+            y: y
+        };
+    }
+};
+
+var cvd = colorVisionDeficiency(), colorDB = colorStore(), exprt = exportFunction(d3.select(".exportOptionsContainer")), cp = colorpicker(d3.select(".colorpicker")), ip = imageprocessor(d3.select(".imageProcessor")), palette = colorPalette(d3.select(".paletteTable")), gp = gradientpicker(d3.select(".gradientPicker")), jnds = jndtable(d3.select(".jndTable")), cvdTable = cvdtable(d3.select(".cvdTable")), cvdGrads = cvdgradientpicker(d3.select(".cvdGradientPicker")), palettePreview = palettepreview(d3.select(".palettePreview")), visPreview = vispreview(d3.select(".visPreview"));
+
+d3.selectAll(".hiddenMenu").each(function() {
+    var menu = d3.select(this), title = menu.select(".hiddenMenuTitle"), content = menu.select(".hiddenMenuContent");
+    title.on("click", function() {
+        var isHidden = content.style("visibility") === "hidden";
+        content.style("visibility", isHidden ? "visible" : "hidden").style("display", isHidden ? "inline-block" : "none");
+    });
+});

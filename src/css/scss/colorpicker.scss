@@ -125,12 +125,7 @@ $colorpicker_channels_inputWidth: 50px;
 .paletteTable thead { background: #ddd; }
 .paletteTable tbody tr { border-bottom: 1px solid #ddd; }
 // .paletteTable tbody td, .paletteTable tfoot td { font-size: 12px; }
-.paletteTable tfoot .palettePreview {
-  height: 20px;
-  image-rendering: pixelated;
-  vertical-align: bottom;
-  width: 200px;
-}
+
 .paletteTable td { padding: 0 2px; text-align: center; width: 15px;}
 .paletteTable td:nth-child(3) { width: 15px; }
 .paletteTable td:nth-child(4) { width: 50px; }
