@@ -509,12 +509,12 @@ var exportFunction = function(container) {
     };
     paletteInputField.on("blur", function() {
         if (this.value === "") return;
-        var tkns = this.value.replace(/\s/g, "").replace(/\"/g, "").replace("[", "").replace("]", "").split('",');
-        if (tkns.length < 1) return;
+        var colors = this.value.replace(/\s/g, "").replace("[", "").replace("]", "").split('",');
+        if (colors.length < 1) return;
         dispatch.call("clearPalette");
-        return;
         inPalette = [];
-        var colors = tkns.map(d => d.replace(/"/g, ""));
+        colors = colors.map(d => d.replace(/\"/g, ""));
+        console.log(colors);
         colors.forEach(obj.addColorToPalette);
         colors.forEach(d => dispatch.call("addSelectedColor", {
             selectedColor: d
