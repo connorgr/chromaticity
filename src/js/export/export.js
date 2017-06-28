@@ -65,9 +65,11 @@ var exportFunction = function(container) {
 
     inPalette = [];
 
-    colors = colors.map(d => d.replace(/\"/g, ""));
+    colors = colors.map(d => d.replace(/\"/g, "")).filter(d => d3.rgb(d).displayable());
     colors.forEach(obj.addColorToPalette);
     colors.forEach(d => dispatch.call("addSelectedColor", { selectedColor: d }));
     obj.updatePaletteCanvas();
+
+    paletteInputField.property("value", "\""+colors.join("\",\"")+"\"");
   });
 };

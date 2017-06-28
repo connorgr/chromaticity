@@ -513,13 +513,13 @@ var exportFunction = function(container) {
         if (colors.length < 1) return;
         dispatch.call("clearPalette");
         inPalette = [];
-        colors = colors.map(d => d.replace(/\"/g, ""));
-        console.log(colors);
+        colors = colors.map(d => d.replace(/\"/g, "")).filter(d => d3.rgb(d).displayable());
         colors.forEach(obj.addColorToPalette);
         colors.forEach(d => dispatch.call("addSelectedColor", {
             selectedColor: d
         }));
         obj.updatePaletteCanvas();
+        paletteInputField.property("value", '"' + colors.join('","') + '"');
     });
 };
 
