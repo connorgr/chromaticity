@@ -22,8 +22,10 @@ $colorpickerSquare_width: 255px;
 }
 
 #colorpicker_slider {
+  background: none;
   height: 265px;
   margin: 0px;
+  padding-right: 5px;
   width: 10px;
   vertical-align: top;
 }
@@ -38,6 +40,8 @@ $colorpickerSquare_width: 255px;
 
 #colorpicker_channels {
   background: rgba(255,255,255,0.05);
+  border-left: 1px solid #ddd;
+  padding-left: 5px;
 }
 #colorpicker_channels ul {
   list-style: none;

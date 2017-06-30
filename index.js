@@ -223,8 +223,8 @@ var colorPalette = function(tbl) {
         newRow.append("td").classed("swatch", true).style("background", newColor);
         newRow.append("td").text(rgb2hex(newColor));
         newRow.append("td").text(rgb.toString().replace(/\s/g, ""));
-        newRow.append("td").text(jabstr);
         newRow.append("td").text(labstr);
+        newRow.append("td").text(jabstr);
     };
     return obj;
 };
