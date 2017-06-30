@@ -51,7 +51,6 @@ var vispreview = function(container) {
   });
   container.select(".mapOptions_stroke_color").on("blur", function() {
     MAP_OPTIONS.STROKE_COLOR = d3.select(this).property("value");
-    console.log(MAP_OPTIONS.STROKE_COLOR);
     updateMap();
   });
   container.select(".mapOptions_stroke_width").on("input", function() {
@@ -105,7 +104,8 @@ var vispreview = function(container) {
         .append("rect")
             .each(function() {
               var bar = d3.select(this),
-                  yVal = y(Math.random());
+                  yVal = 0;
+              while(yVal < 0.25) yVal = y(Math.random());
               bar.attr("y", yVal).attr("height", height -yVal);
             })
         .merge(bars)
