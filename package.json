@@ -13,34 +13,22 @@
     "url": "https://gramaz.io"
   },
   "scripts": {
-    "test": "xo",
-    "start": "electron .",
-    "build": "electron-packager . --out=dist --asar --overwrite --all",
-    "css": "sass src/css/main.scss src/css/main.css"
+    "build": "npm run css; npm run js",
+    "js": "uglifyjs src/js/dispatch.js src/js/cvd.js src/js/*/*.js src/js/main.js -o index.js --beautify; uglifyjs index.js --compress --mangle -o index.min.js",
+    "css": "sass -t compressed src/css/main.scss src/css/main.css"
   },
   "files": [
     "index.js",
     "src/*"
   ],
   "keywords": [
-    "electron-app",
-    "electron",
-    "color"
+    "accessibility",
+    "color",
+    "design",
+    "discriminability",
+    "visualization"
   ],
   "dependencies": {
-    "electron-debug": "^1.0.0"
-  },
-  "devDependencies": {
-    "devtron": "^1.1.0",
-    "electron-packager": "^8.0.0",
-    "electron": "^1.0.1",
-    "xo": "^0.16.0"
-  },
-  "xo": {
-    "esnext": true,
-    "envs": [
-      "node",
-      "browser"
-    ]
+    "uglify-es": "^3.0.21"
   }
 }

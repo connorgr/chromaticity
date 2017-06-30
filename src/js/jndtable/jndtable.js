@@ -54,6 +54,16 @@ var jndtable = function(table) {
     obj.addColorToTable(this.selectedColor);
   });
 
+  dispatch.on("clearPalette.jndtable", function() {
+    curPalette = [];
+
+    var colorCells = table.selectAll(".palette td").filter((d,i) => i > 0),
+        rows = table.selectAll(".ndRow");
+    colorCells.remove();
+    rows.remove();
+  });
+
+
   dispatch.on("deletePaletteColor.jndtable", function() {
     var curPalette = getCurrentColors(),
         cIdx = curPalette.indexOf(d3.rgb(this.color).toString()),
@@ -108,6 +118,24 @@ var jndtable = function(table) {
       dispatch.call("updateJNDParameters", {percent: JND_PERCENT, size: JND_SIZE});
     });
   });
+
+
+  // jnd calculator
+  var va_text = table.select(".visualangle_va"),
+      dist = table.select(".visualangle_distance"),
+      size = table.select(".visualangle_size");
+
+  dist.on("blur", calculateVA);
+  size.on("blur", calculateVA);
+  calculateVA();
+
+  function calculateVA() {
+    var d = +dist.property("value"),
+        s = +size.property("value"),
+        va = 2*Math.atan( (s/2) / d );
+    va = va * 180 / Math.PI; // radian to degrees
+    va_text.text(d3.format(".3f")(va));
+  }
 
 
   function getCurrentColors() {

@@ -1,7 +1,7 @@
 var gradientpicker = function(container) {
   var TMP_START_COLOR_VALUE,
       TMP_STOP_COLOR_VALUE,
-      NUM_COLOR_STEPS = 10;
+      NUM_COLOR_STEPS = 5;
 
   var inPalette = [];
 
@@ -47,7 +47,12 @@ var gradientpicker = function(container) {
             });
   });
 
-  dispatch.on("deletePaletteColor.colorPalette", function() {
+  dispatch.on("clearPalette.gradientpicker", function() {
+    inPalette = [];
+    gradientMenu.selectAll("li").remove();
+  });
+
+  dispatch.on("deletePaletteColor.gradientpicker", function() {
     var rgb = d3.rgb(this.color);
     gradientMenu.selectAll("li").filter(function() {
       return d3.select(this).style("background-color") === rgb.toString();

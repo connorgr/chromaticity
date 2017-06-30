@@ -79,15 +79,15 @@ var colorpicker = function(container) {
       .on("click", function () {
         var context = this.getContext('2d'),
             px = context.getImageData(d3.mouse(this)[0], d3.mouse(this)[1], 1, 1).data, // remove alpha
-            rgb = "rgba("+px.join(',')+")";
+            rgb = "rgba("+px.slice(0,4).join(',')+")";
         d3.select(".selectedColor").style('background', rgb);
         updateColorChannelInput(rgb);
       })
       .on("mousemove", function() {
         var context = this.getContext('2d'),
             px = context.getImageData(d3.mouse(this)[0], d3.mouse(this)[1], 1, 1).data, // remove alpha
-            rgb = "rgba("+px.join(',')+")";
-        d3.select(".hoverColor").style("background", rgb);
+            rgb = "rgba("+px.slice(0,4).join(',')+")";
+        container.select(".hoverColor").style("background", rgb);
         updateColorChannelInputHover(rgb);
       });
 

@@ -20,6 +20,9 @@ $hoverColor: #ddd;
 .jndTable table {
   border: 1px solid #ddd;
 }
+.jndTable table, .cvdTable {
+  margin: 0 auto;
+}
 
 .jndTable tr:nth-child(n+2):hover {
   background-color: $hoverColor;
@@ -32,7 +35,9 @@ $hoverColor: #ddd;
   min-width: 20px;
   text-align: center;
 }
-.cvdTable tr td:first-child { text-align: right; }
+.cvdTable tr td:first-child {
+  text-align: right;
+}
 
 .jndTable tr:first-child td:nth-child(n+2),
 .jndTable tr:nth-child(n+2) td:first-child,
