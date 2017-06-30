@@ -936,6 +936,43 @@ var palettepreview = function(container) {
     return obj;
 };
 
+var uri = function() {
+    var inPalette = [];
+    loadUri();
+    dispatch.on("addSelectedColor.uri", function() {
+        var rgbstr = d3.rgb(this.selectedColor).toString();
+        if (inPalette.indexOf(rgbstr) > -1) return;
+        inPalette.push(rgbstr);
+        updateUri();
+    });
+    dispatch.on("clearPalette.uri", function() {
+        inPalette = [];
+        updateUri();
+    });
+    dispatch.on("deletePaletteColor.uri", function() {
+        var idx = inPalette.indexOf(this.color);
+        inPalette.splice(idx, 1);
+        updateUri();
+    });
+    function loadUri() {
+        var params = document.location.search.split("&"), palette = params.filter(d => d.indexOf("palette=") > -1);
+        if (palette.length === 0) return;
+        palette = palette[0].replace("?", "").replace("palette=", "").split(";");
+        var colors = palette.map(d => d3.rgb(d)).filter(d => d.displayable());
+        inPalette = colors.map(d => d.toString());
+        inPalette = inPalette.filter((d, i) => inPalette.indexOf(d) === i);
+        if (inPalette.length > 0) {
+            inPalette.forEach(d => dispatch.call("addSelectedColor", {
+                selectedColor: d
+            }));
+        }
+    }
+    function updateUri() {
+        var txt = "?palette=" + inPalette.map(d => d.toString().replace(/\s/g, "")).join(";");
+        document.location.search = txt;
+    }
+};
+
 var vispreview = function(container) {
     var inPalette = [], barSvg = container.select(".barPreview"), mapSvg = container.select(".mapPreview"), scatterSvg = container.select(".scatterPreview"), margin = {
         top: 15,
@@ -981,7 +1018,6 @@ var vispreview = function(container) {
     });
     container.select(".mapOptions_stroke_color").on("blur", function() {
         MAP_OPTIONS.STROKE_COLOR = d3.select(this).property("value");
-        console.log(MAP_OPTIONS.STROKE_COLOR);
         updateMap();
     });
     container.select(".mapOptions_stroke_width").on("input", function() {
@@ -1018,7 +1054,8 @@ var vispreview = function(container) {
         var x = d3.scaleBand().domain(inPalette).range([ 0, width ]).padding(.1), y = d3.scaleLinear().domain([ 0, 1 ]).range([ height, 0 ]), g = barSvg.select(".bars");
         var bars = g.selectAll("rect").data(inPalette);
         bars.enter().append("rect").each(function() {
-            var bar = d3.select(this), yVal = y(Math.random());
+            var bar = d3.select(this), yVal = 0;
+            while (yVal < .25) yVal = y(Math.random());
             bar.attr("y", yVal).attr("height", height - yVal);
         }).merge(bars).style("fill", d => d).attr("x", d => x(d)).attr("width", x.bandwidth());
         bars.exit().remove();
@@ -1059,7 +1096,7 @@ var vispreview = function(container) {
     }
 };
 
-var cvd = colorVisionDeficiency(), colorDB = colorStore(), exprt = exportFunction(d3.select(".exportOptionsContainer")), cp = colorpicker(d3.select(".colorpicker")), ip = imageprocessor(d3.select(".imageProcessor")), palette = colorPalette(d3.select(".paletteTable")), gp = gradientpicker(d3.select(".gradientPicker")), jnds = jndtable(d3.select(".jndTable")), cvdTable = cvdtable(d3.select(".cvdTable")), cvdGrads = cvdgradientpicker(d3.select(".cvdGradientPicker")), palettePreview = palettepreview(d3.select(".palettePreview")), visPreview = vispreview(d3.select(".visPreview"));
+var cvd = colorVisionDeficiency(), colorDB = colorStore(), exprt = exportFunction(d3.select(".exportOptionsContainer")), cp = colorpicker(d3.select(".colorpicker")), ip = imageprocessor(d3.select(".imageProcessor")), palette = colorPalette(d3.select(".paletteTable")), gp = gradientpicker(d3.select(".gradientPicker")), jnds = jndtable(d3.select(".jndTable")), cvdTable = cvdtable(d3.select(".cvdTable")), cvdGrads = cvdgradientpicker(d3.select(".cvdGradientPicker")), palettePreview = palettepreview(d3.select(".palettePreview")), visPreview = vispreview(d3.select(".visPreview")), share = uri();
 
 d3.selectAll(".hiddenMenu").each(function() {
     var menu = d3.select(this), title = menu.select(".hiddenMenuTitle"), content = menu.select(".hiddenMenuContent");

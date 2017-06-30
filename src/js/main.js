@@ -9,7 +9,8 @@ var cvd = colorVisionDeficiency(),
     cvdTable = cvdtable(d3.select(".cvdTable")),
     cvdGrads = cvdgradientpicker(d3.select(".cvdGradientPicker")),
     palettePreview = palettepreview(d3.select(".palettePreview")),
-    visPreview = vispreview(d3.select(".visPreview"));
+    visPreview = vispreview(d3.select(".visPreview")),
+    share = uri();
 
 d3.selectAll(".hiddenMenu").each(function() {
   var menu = d3.select(this),
