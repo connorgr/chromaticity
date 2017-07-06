@@ -466,20 +466,21 @@ function rgb2hex(rgbstr) {
 }
 
 var exportFunction = function(container) {
-    var inPalette = [], obj = {}, paletteInputField = container.select(".paletteInputField");
-    paletteCanvas = container.select(".paletteCanvas");
+    var inPalette = [], obj = {}, paletteCanvas = container.select(".paletteCanvas"), paletteInputField = container.select(".paletteInputField"), paletteShareField = container.select(".paletteShareField");
     dispatch.on("addSelectedColor.export", function() {
         var rgbstr = d3.rgb(this.selectedColor).toString();
         if (inPalette.indexOf(rgbstr) > -1) return;
         obj.addColorToPalette(this.selectedColor);
         obj.updatePaletteCanvas();
         obj.updatePaletteInputField();
+        obj.updatePaletteShareField();
     });
     dispatch.on("deletePaletteColor.export", function() {
         var idx = inPalette.indexOf(this.color);
         inPalette.splice(idx, 1);
         obj.updatePaletteCanvas();
         obj.updatePaletteInputField();
+        obj.updatePaletteShareField();
     });
     obj.updatePaletteCanvas = function() {
         paletteCanvas.attr("width", inPalette.length);
@@ -503,6 +504,11 @@ var exportFunction = function(container) {
     };
     obj.updatePaletteInputField = function() {
         paletteInputField.property("value", '"' + inPalette.join('","') + '"');
+    };
+    obj.updatePaletteShareField = function() {
+        var txt;
+        if (inPalette.length === 0) txt = ""; else txt = "?palette=" + inPalette.map(d => d.toString().replace(/\s/g, "")).join(";");
+        paletteShareField.property("value", document.location.pathname + txt);
     };
     obj.addColorToPalette = function(newColor) {
         inPalette.push(d3.rgb(newColor).toString());
@@ -938,38 +944,16 @@ var palettepreview = function(container) {
 
 var uri = function() {
     var inPalette = [];
-    loadUri();
-    dispatch.on("addSelectedColor.uri", function() {
-        var rgbstr = d3.rgb(this.selectedColor).toString();
-        if (inPalette.indexOf(rgbstr) > -1) return;
-        inPalette.push(rgbstr);
-        updateUri();
-    });
-    dispatch.on("clearPalette.uri", function() {
-        inPalette = [];
-        updateUri();
-    });
-    dispatch.on("deletePaletteColor.uri", function() {
-        var idx = inPalette.indexOf(this.color);
-        inPalette.splice(idx, 1);
-        updateUri();
-    });
-    function loadUri() {
-        var params = document.location.search.split("&"), palette = params.filter(d => d.indexOf("palette=") > -1);
-        if (palette.length === 0) return;
-        palette = palette[0].replace("?", "").replace("palette=", "").split(";");
-        var colors = palette.map(d => d3.rgb(d)).filter(d => d.displayable());
-        inPalette = colors.map(d => d.toString());
-        inPalette = inPalette.filter((d, i) => inPalette.indexOf(d) === i);
-        if (inPalette.length > 0) {
-            inPalette.forEach(d => dispatch.call("addSelectedColor", {
-                selectedColor: d
-            }));
-        }
-    }
-    function updateUri() {
-        var txt = "?palette=" + inPalette.map(d => d.toString().replace(/\s/g, "")).join(";");
-        document.location.search = txt;
+    var params = document.location.search.split("&"), palette = params.filter(d => d.indexOf("palette=") > -1);
+    if (palette.length === 0) return;
+    palette = palette[0].replace("?", "").replace("palette=", "").split(";");
+    var colors = palette.map(d => d3.rgb(d)).filter(d => d.displayable());
+    inPalette = colors.map(d => d.toString());
+    inPalette = inPalette.filter((d, i) => inPalette.indexOf(d) === i);
+    if (inPalette.length > 0) {
+        inPalette.forEach(d => dispatch.call("addSelectedColor", {
+            selectedColor: d
+        }));
     }
 };
 
@@ -1096,7 +1080,7 @@ var vispreview = function(container) {
     }
 };
 
-var cvd = colorVisionDeficiency(), colorDB = colorStore(), exprt = exportFunction(d3.select(".exportOptionsContainer")), cp = colorpicker(d3.select(".colorpicker")), ip = imageprocessor(d3.select(".imageProcessor")), palette = colorPalette(d3.select(".paletteTable")), gp = gradientpicker(d3.select(".gradientPicker")), jnds = jndtable(d3.select(".jndTable")), cvdTable = cvdtable(d3.select(".cvdTable")), cvdGrads = cvdgradientpicker(d3.select(".cvdGradientPicker")), palettePreview = palettepreview(d3.select(".palettePreview")), visPreview = vispreview(d3.select(".visPreview")), share = uri();
+var cvd = colorVisionDeficiency(), colorDB = colorStore(), exprt = exportFunction(d3.select(".exportOptionsContainer")), cp = colorpicker(d3.select(".colorpicker")), ip = imageprocessor(d3.select(".imageProcessor")), palette = colorPalette(d3.select(".paletteTable")), gp = gradientpicker(d3.select(".gradientPicker")), jnds = jndtable(d3.select(".jndTable")), cvdTable = cvdtable(d3.select(".cvdTable")), cvdGrads = cvdgradientpicker(d3.select(".cvdGradientPicker")), palettePreview = palettepreview(d3.select(".palettePreview")), visPreview = vispreview(d3.select(".visPreview")), processUriPalette = uri();
 
 d3.selectAll(".hiddenMenu").each(function() {
     var menu = d3.select(this), title = menu.select(".hiddenMenuTitle"), content = menu.select(".hiddenMenuContent");

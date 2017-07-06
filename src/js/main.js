@@ -10,7 +10,7 @@ var cvd = colorVisionDeficiency(),
     cvdGrads = cvdgradientpicker(d3.select(".cvdGradientPicker")),
     palettePreview = palettepreview(d3.select(".palettePreview")),
     visPreview = vispreview(d3.select(".visPreview")),
-    share = uri();
+    processUriPalette = uri(); // should be loaded last so that it can add colors correctly
 
 d3.selectAll(".hiddenMenu").each(function() {
   var menu = d3.select(this),

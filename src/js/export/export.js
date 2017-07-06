@@ -1,8 +1,9 @@
 var exportFunction = function(container) {
   var inPalette = [],
       obj = {},
-      paletteInputField = container.select(".paletteInputField");
-      paletteCanvas = container.select(".paletteCanvas");
+      paletteCanvas = container.select(".paletteCanvas"),
+      paletteInputField = container.select(".paletteInputField"),
+      paletteShareField = container.select(".paletteShareField");
 
   dispatch.on("addSelectedColor.export", function() {
     var rgbstr = d3.rgb(this.selectedColor).toString();
@@ -10,12 +11,14 @@ var exportFunction = function(container) {
     obj.addColorToPalette(this.selectedColor);
     obj.updatePaletteCanvas();
     obj.updatePaletteInputField();
+    obj.updatePaletteShareField();
   });
   dispatch.on("deletePaletteColor.export", function() {
     var idx = inPalette.indexOf(this.color);
     inPalette.splice(idx, 1);
     obj.updatePaletteCanvas();
     obj.updatePaletteInputField();
+    obj.updatePaletteShareField();
   });
 
   obj.updatePaletteCanvas = function() {
@@ -46,9 +49,19 @@ var exportFunction = function(container) {
     }
     context.putImageData(image, 0, 0);
   };
+
   obj.updatePaletteInputField = function() {
     paletteInputField.property("value", '"'+inPalette.join('","')+'"');
+  };
+
+  obj.updatePaletteShareField = function() {
+    var txt;
+    if(inPalette.length === 0) txt = "";
+    else txt = "?palette="+inPalette.map(d => d.toString().replace(/\s/g,"")).join(";");
+
+    paletteShareField.property("value", document.location.pathname+txt);
   }
+
 
   obj.addColorToPalette = function(newColor) {
     inPalette.push(d3.rgb(newColor).toString());
