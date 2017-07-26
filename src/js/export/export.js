@@ -59,7 +59,7 @@ var exportFunction = function(container) {
     if(inPalette.length === 0) txt = "";
     else txt = "?palette="+inPalette.map(d => d.toString().replace(/\s/g,"")).join(";");
 
-    paletteShareField.property("value", document.location.pathname+txt);
+    paletteShareField.property("value", document.location.host+document.location.pathname+txt);
   }
 
 
