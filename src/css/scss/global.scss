@@ -45,10 +45,9 @@ header h1 {
 h1, h2 {
   color: rgba(0,0,0,0.75);
   font-family: -apple-system, 'Helvetica Neue', Helvetica, sans-serif;
-  font-weight: normal;
 }
-h1 {
-}
+h1 { font-weight: bold; }
+h2 { font-weight: normal; }
 
 input[type=number], input[type=color], input[type=text] {
   border-radius: 2px;
@@ -174,6 +173,17 @@ $subnav-li-background: white;
   visibility: hidden;
 }
 .hiddenMenuTitle {
-  color: #906083;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 0 3px rgba(0,0,0,0.25);
   cursor: pointer;
+  margin: 0 auto;
+  padding: 5px;
+  text-align: center;
+  width: fit-content;
+}
+.hiddenMenuTitle:hover {
+  background: #ddd;
+  border-color: #aaa;
 }

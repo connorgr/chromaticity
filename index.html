@@ -12,8 +12,35 @@
     </section>
 
     <div class="container">
-      <h1>Select colors...</h1>
-      <p>(click to read about color selection)</p>
+      <h1>Select colors</h1>
+      <div class="hiddenMenu">
+        <p class="hiddenMenuTitle">What are these color spaces?</p>
+        <div class="hiddenMenuContent">
+          <dl>
+            <dt>Lab</dt>
+            <dl>A perceptual color space where farther apart colors are
+                more easily discriminable.
+                The dark area marks colors that typical monitors can't show.
+                Lab colors are organized by their redness-to-greenness
+                (a, horizontal) and their blueness-to-yellowness (b, vertical).
+                These color channels are based on how the human brain processes
+                color.
+                <a href="">(wikipedia)</a></dl>
+            <dt>LCh</dt>
+            <dl>An alternative view of LCh in terms of chroma (colorfulness)
+                and hue. <a href="">(wikipedia)</a></dl>
+
+            <dt>Jab</dt>
+            <dl>Jab is similar to Lab, where farther apart colors are more
+              easily discriminable.
+              The main difference is that Jab is based on a newer, updated color
+              appearance model.
+              This means that color distance should be more reliable for
+              approximating how discriminable two colors should be.
+              <a href="">(wikipedia)</a>
+          </dl>
+        </div>
+      </div>
 
       <div class="colorpicker content_container border_right display_inlineBlock">
         <h2>from a color space</h2>
@@ -91,7 +118,7 @@
     </div>
 
     <div class="container border_bottom">
-      <h1>Import/export options</h1>
+      <h2>Import/export options</h2>
       <div class="exportOptionsContainer">
         <div>Copyable image: <canvas class="paletteCanvas" height="1"></canvas></div>
         <div>Copy/Paste quoted list of css-valid colors: <input class="paletteInputField" type="text"></div>
@@ -415,7 +442,7 @@
 
 
           <div class="hiddenMenu">
-            <p class="hiddenMenuTitle">Configure visualization previews (click to show/hide)</p>
+            <p class="hiddenMenuTitle">Configure visualization previews</p>
             <ul class="scatterOptions hiddenMenuContent">
               <li><strong>Scatter Plot</strong></li>
               <li>Radius <input type="range" min="1" max="10" value="5" class="scatterOptions_radius"></li>
@@ -439,20 +466,97 @@
             <li data-parameter="size">Size (Visual Angle, degrees): <span class="value">0.10</span> <input type="range" min="0.05" max="2.0" step="0.05" value="0.1"/></li>
           </ul>
 
-          <p>(1 degree ≈ index fingernail width when arm outstretched)
+          <p>1 degree ≈ index fingernail width when arm outstretched
           <div class="hiddenMenu">
-            <p class="hiddenMenuTitle">Visual Angle Calculator (click to show/hide)</p>
+            <p class="hiddenMenuTitle">Visual Angle Calculator</p>
             <p class="hiddenMenuContent">Physical size (e.g., cm) <input type="number" class="visualangle_size" min="0" value="1" placeholder="size (cm)" /><br />
               Physical distance: <input type="number" class="visualangle_distance" min="0" value="100" placeholder="screen distance (cm)" /><br />
               Visual angle (degrees): <span class="visualangle_va"></span></p>
           </div>
 
+          <p>⚠ denotes poor discriminability</p>
           <table>
             <tr class="palette"><td></td></tr>
           </table>
         </div>
 
         <h2>Color discriminability for color vision deficiencies</h2>
+        <div class="hiddenMenu">
+          <p class="hiddenMenuTitle">What are color blindness deficiencies?</p>
+          <div class="hiddenMenuContent">
+            <p>Color blindness deficiency (“color blindness”)
+              refers to different mutations that affect color perception, and
+              affect roughly 8% of men and 0.5% of women.</p>
+            <p>While red-green color deficiency is most common (deuteranopia),
+              several other types exist and are caused by missing different
+              types of cone cells.
+              There are also less severe forms of color blindness where
+              most but not all colors can be seen, which is caused by weak
+              rather than missing cone cells
+              (e.g., deuteranopia vs. deuteranomaly).</p>
+            <p>If you'd like to know more, <a href="http://www.color-blindness.com/">
+              http://www.color-blindness.com/</a> is a great source of
+              information.</p>
+
+            <table class="cvdInfoTable">
+              <thead>
+                <tr>
+                  <th></th>
+                  <th colspan="2">Prevalence</th>
+                </tr>
+                <tr>
+                  <th>Type</th>
+                  <th>Men</th>
+                  <th>Women</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>protanomaly</td>
+                  <td>1.08%</td>
+                  <td>0.03%</td>
+                </tr>
+                <tr>
+                  <td>protanopia</td>
+                  <td>1.01%</td>
+                  <td>0.02%</td>
+                </tr>
+                <tr>
+                  <td>deuteranomaly</td>
+                  <td>4.63%</td>
+                  <td>0.36%</td>
+                </tr>
+                <tr>
+                  <td>deuteranopia</td>
+                  <td>1.27%</td>
+                  <td>0.01%</td>
+                </tr>
+                <tr>
+                  <td>tritanomaly</td>
+                  <td colspan="2">0.0002%</td>
+                </tr>
+                <tr>
+                  <td>tritanopia</td>
+                  <td colspan="2">0.0001%</td>
+                </tr>
+                <tr>
+                  <td>achromatomaly</td>
+                  <td></td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td>achromatopsia</td>
+                  <td colspan="2">0.00003%</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <td colspan="4">Source: <a href="http://www.color-blindness.com/types-of-color-blindness/">http://www.color-blindness.com/types-of-color-blindness/</a></td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        </div>
         <table class="cvdTable">
           <tr class="palette"><td>palette</td></tr>
           <tr class="protanomaly"><td>protanomaly</td></tr>
