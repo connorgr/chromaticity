@@ -15,7 +15,7 @@
       <h1>Select colors</h1>
       <div class="hiddenMenu">
         <p class="hiddenMenuTitle">What are these color spaces?</p>
-        <div class="hiddenMenuContent">
+        <div class="hiddenMenuContent" style="max-width: 600px">
           <dl>
             <dt>Lab</dt>
             <dl>A perceptual color space where farther apart colors are
@@ -25,10 +25,12 @@
                 (a, horizontal) and their blueness-to-yellowness (b, vertical).
                 These color channels are based on how the human brain processes
                 color.
-                <a href="">(wikipedia)</a></dl>
+                <a href="https://en.wikipedia.org/wiki/Lab_color_space">(wikipedia)</a></dl>
             <dt>LCh</dt>
             <dl>An alternative view of LCh in terms of chroma (colorfulness)
-                and hue. <a href="">(wikipedia)</a></dl>
+                and hue.
+                LCh is not the same as HSV, HSL, or HSB.
+                <a href="https://en.wikipedia.org/wiki/Lab_color_space#Cylindrical_representation:_CIELCh_or_CIEHLC">(wikipedia)</a></dl>
 
             <dt>Jab</dt>
             <dl>Jab is similar to Lab, where farther apart colors are more
@@ -37,7 +39,8 @@
               appearance model.
               This means that color distance should be more reliable for
               approximating how discriminable two colors should be.
-              <a href="">(wikipedia)</a>
+              <a href="http://gramaz.io/d3-cam02/#ciecam02">(more info)</a>
+              <a href="https://en.wikipedia.org/wiki/CIECAM02">(wikipedia)</a>
           </dl>
         </div>
       </div>
@@ -670,7 +673,9 @@
     </div>
 
     <footer>
-      <p>Made by Connor Gramazio. BSD license. Open sourced here.</p>
+      <p>Made by <a href="https://gramaz.io">Connor Gramazio</a>.
+        Open sourced
+        <a href="https://github.com/connorgr/chromaticity">here</a>.</p>
     </footer>
 
     <script src="src/js/d3.js"></script>

@@ -49,6 +49,9 @@ h1, h2 {
 h1 { font-weight: bold; }
 h2 { font-weight: normal; }
 
+a, a:visited, a:hover, a:active { color: #4A77BD; }
+
+
 input[type=number], input[type=color], input[type=text] {
   border-radius: 2px;
   border: 1px solid #ccc;
