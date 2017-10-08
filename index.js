@@ -483,11 +483,13 @@ var exportFunction = function(container) {
         obj.updatePaletteShareField();
     });
     obj.updatePaletteCanvas = function() {
-        paletteCanvas.attr("width", inPalette.length);
+        paletteCanvas.attr("width", 200);
         if (inPalette.length === 0) return;
         var width = paletteCanvas.attr("width"), context = paletteCanvas.node().getContext("2d"), image = context.createImageData(width, 1), i = -1, rgb, idx;
+        var pxForColor = Math.floor(width / inPalette.length), palIdx = -1;
         for (var x = 0; x < width; ++x) {
-            rgb = d3.rgb(inPalette[x]);
+            if (x % pxForColor === 0 && palIdx !== inPalette.length - 1) palIdx++;
+            rgb = d3.rgb(inPalette[palIdx]);
             if (rgb.displayable()) {
                 image.data[++i] = rgb.r;
                 image.data[++i] = rgb.g;
@@ -508,7 +510,7 @@ var exportFunction = function(container) {
     obj.updatePaletteShareField = function() {
         var txt;
         if (inPalette.length === 0) txt = ""; else txt = "?palette=" + inPalette.map(d => d.toString().replace(/\s/g, "")).join(";");
-        paletteShareField.property("value", document.location.pathname + txt);
+        paletteShareField.property("value", document.location.host + document.location.pathname + txt);
     };
     obj.addColorToPalette = function(newColor) {
         inPalette.push(d3.rgb(newColor).toString());

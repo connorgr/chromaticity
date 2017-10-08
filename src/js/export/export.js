@@ -22,7 +22,7 @@ var exportFunction = function(container) {
   });
 
   obj.updatePaletteCanvas = function() {
-    paletteCanvas.attr("width", inPalette.length);
+    paletteCanvas.attr("width", 200);
 
     if(inPalette.length === 0) return;
 
@@ -32,8 +32,12 @@ var exportFunction = function(container) {
         i = -1,
         rgb, idx;
 
+    var pxForColor = Math.floor(width / inPalette.length),
+        palIdx = -1;
+
     for(var x = 0; x < width; ++x) {
-      rgb = d3.rgb(inPalette[x]);
+      if(x % pxForColor === 0 && palIdx !== inPalette.length-1) palIdx++;
+      rgb = d3.rgb(inPalette[palIdx]);
 
       if(rgb.displayable()) {
         image.data[++i] = rgb.r;

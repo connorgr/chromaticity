@@ -49,7 +49,8 @@ h1, h2 {
 h1 { font-weight: bold; }
 h2 { font-weight: normal; }
 
-a, a:visited, a:hover, a:active { color: #4A77BD; }
+a, a:visited, a:active { color: #0043C9; text-decoration: none; }
+a:hover { color: #002CAA; }
 
 
 input[type=number], input[type=color], input[type=text] {
