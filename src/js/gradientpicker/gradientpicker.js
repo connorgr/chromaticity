@@ -30,7 +30,6 @@ var makeGradientPicker = function(container) {
   container.select(".gradientStepCount")
       .on("blur", function() {
         NUM_COLOR_STEPS = +this.value;
-        container.selectAll(".sequential").attr("width", NUM_COLOR_STEPS);
         renderGradients();
       });
 
@@ -94,15 +93,30 @@ var makeGradientPicker = function(container) {
         i = -1,
         space = canvas.attr("data-colorType"),
         interpolator = d3["interpolate" + space[0].toUpperCase() + space.slice(1)],
-        scale = d3.scaleLinear()
+        continuousScale = d3.scaleLinear()
             .domain([0, width-1])
+            .interpolate(interpolator)
+            .range([start, stop]),
+        discreteScale = d3.scaleLinear()
+            .domain([0, NUM_COLOR_STEPS-1])
             .interpolate(interpolator)
             .range([start, stop]);
 
-    var c;
+    var isContinuous = canvas.classed("continuous");
+
+    var pxPerColor = Math.floor(width / NUM_COLOR_STEPS),
+        colorIdx = 0;
+
+    var c = d3.rgb(continuousScale(0));
     for(var x = 0; x < width; ++x) {
-      c = d3.rgb(scale(x));
-      // console.log(c);
+      if(isContinuous) c = d3.rgb(continuousScale(x));
+      else if(x % pxPerColor === 0 && colorIdx !== NUM_COLOR_STEPS) {
+        c = d3.rgb(discreteScale(colorIdx));
+        colorIdx++;
+      }
+      // For continuous rendering
+
+
       if(c.displayable()) {
         image.data[++i] = c.r;
         image.data[++i] = c.g;

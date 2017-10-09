@@ -26,6 +26,7 @@
                 The dark area marks colors that typical monitors can't show.
                 Lab colors are organized by their redness-to-greenness
                 (a, horizontal) and their blueness-to-yellowness (b, vertical).
+                The vertical bar controls the lightness of color.
                 These color channels are based on how the human brain processes
                 color.
                 <a href="https://en.wikipedia.org/wiki/Lab_color_space">(wikipedia)</a></dd>
@@ -625,9 +626,9 @@
             <li>Lab <canvas height="1" width="200" data-colorType="lab"></canvas><input data-colorType="lab" type="text" class="gradientOutputText" disabled></li>
             <li>RGB <canvas height="1" width="200" data-colorType="rgb"></canvas><input data-colorType="rgb" type="text" class="gradientOutputText" disabled></li>
 
-            <li>Jab <canvas class="sequential" height="1" width="5" data-colorType="jab"></canvas><input type="text" data-colorType="jab" class="gradientOutputText sequential" disabled></li>
-            <li>Lab <canvas class="sequential" height="1" width="5" data-colorType="lab"></canvas><input type="text" data-colorType="lab" class="gradientOutputText sequential" disabled></li>
-            <li>RGB <canvas class="sequential" height="1" width="5" data-colorType="rgb"></canvas><input type="text" data-colorType="rgb" class="gradientOutputText sequential" disabled></li>
+            <li>Jab <canvas class="continuous" height="1" width="5" data-colorType="jab"></canvas><input type="text" data-colorType="jab" class="gradientOutputText continuous" disabled></li>
+            <li>Lab <canvas class="continuous" height="1" width="5" data-colorType="lab"></canvas><input type="text" data-colorType="lab" class="gradientOutputText continuous" disabled></li>
+            <li>RGB <canvas class="continuous" height="1" width="5" data-colorType="rgb"></canvas><input type="text" data-colorType="rgb" class="gradientOutputText continuous" disabled></li>
           </ul>
         </div>
 
