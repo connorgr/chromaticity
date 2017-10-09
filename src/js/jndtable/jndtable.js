@@ -1,4 +1,10 @@
-var jndtable = function(table) {
+import {dispatch} from "../dispatch";
+
+export function JndTable(table) {
+  this.jndTable = makeJndTable(table);
+}
+
+var makeJndTable = function(table) {
   var JND_PERCENT = 0.5,
       JND_SIZE = 0.1;
   var obj = {},

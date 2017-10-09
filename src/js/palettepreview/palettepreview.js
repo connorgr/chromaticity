@@ -1,4 +1,10 @@
-var palettepreview = function(container) {
+import {dispatch} from "../dispatch";
+
+export function PalettePreview(container) {
+  this.palettePreview = makePalettePreview(container);
+}
+
+var makePalettePreview = function(container) {
   var colorList = container.select("ul"),
       inPalette = [];
   var obj = {};

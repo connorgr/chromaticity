@@ -1,4 +1,12 @@
-var cvdgradientpicker = function(container) {
+import {dispatch} from "../dispatch";
+import {colorVisionDeficiency} from "../cvd";
+
+export function CvdGradientPicker(container) {
+  this.cvdGradientPicker = makeCvdGradientPicker(container);
+}
+
+var makeCvdGradientPicker = function(container) {
+  var cvd = colorVisionDeficiency();
 
   var COLOR_SPACES = ["jab", "lab", "rgb"];
 

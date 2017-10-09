@@ -43,15 +43,34 @@ header h1 {
 }
 
 h1, h2 {
-  color: rgba(0,0,0,0.75);
   font-family: -apple-system, 'Helvetica Neue', Helvetica, sans-serif;
 }
-h1 { font-weight: bold; }
-h2 { font-weight: normal; }
+h1 {
+  background: #333;
+  border-top: 3px solid rgb(50,50,50);
+  color: white;
+  font-size: 30px;
+  font-weight: normal;
+  height: 75px;
+  letter-spacing: 0.025em;
+  line-height: 75px;
+  margin: 0;
+  padding: 0;
+}
+h2 {
+  color: rgba(0,0,0,0.75);
+  font-weight: normal;
+}
 
-a, a:visited, a:active { color: #0043C9; text-decoration: none; }
+a, a:visited, a:active {
+  border-bottom: 1px dotted rgba(0,0,20,0.5);
+  color: rgba(0,0,0,0.75);
+  text-decoration: none;
+}
 a:hover { color: #002CAA; }
 
+dt { float: left; font-weight: bold; }
+dd { display: inline-block; }
 
 input[type=number], input[type=color], input[type=text] {
   border-radius: 2px;
@@ -78,6 +97,15 @@ nav .logo {
   margin: 0;
   padding: 0;
 }
+
+.aside {
+  color: rgba(0,0,0,0.5);
+  font-size: 12px;
+  margin: 0 auto 6px auto;
+  max-width: 600px;
+  text-align: center;
+}
+.aside a { color: rgba(0,0,0,0.5); }
 
 .container {
   // padding: 15px;
@@ -174,6 +202,7 @@ $subnav-li-background: white;
   display: none;
   margin: 0;
   padding: 15px;
+  text-align: left;
   visibility: hidden;
 }
 .hiddenMenuTitle {
@@ -182,10 +211,11 @@ $subnav-li-background: white;
   border-radius: 5px;
   box-shadow: 0 0 3px rgba(0,0,0,0.25);
   cursor: pointer;
+  display: table;
   margin: 0 auto;
   padding: 5px;
   text-align: center;
-  width: fit-content;
+  // width: fit-content;
 }
 .hiddenMenuTitle:hover {
   background: #ddd;

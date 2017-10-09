@@ -8,10 +8,10 @@
   <body>
     <section class="banner">
       <img src="src/img/logo_raw3.svg" height="60px"/>
-      <p><strong>Chromaticity</strong>: a tool for creating legible color palettes</p>
+      <p><strong>Chromaticity</strong>: guidance for accessible visualization color design</p>
       <p class="authorInfo">Made by <a href="https://gramaz.io">Connor Gramazio</a>.
         Open sourced
-        <a href="https://github.com/connorgr/chromaticity">here</a>.</p>
+        <a href="https://github.com/connorgr/chromaticity">here</a>. Got an idea? Get in touch!</p>
     </section>
 
     <div class="container">
@@ -21,22 +21,22 @@
         <div class="hiddenMenuContent" style="max-width: 600px">
           <dl>
             <dt>Lab</dt>
-            <dl>A perceptual color space where farther apart colors are
+            <dd>A perceptual color space where farther apart colors are
                 more easily discriminable.
                 The dark area marks colors that typical monitors can't show.
                 Lab colors are organized by their redness-to-greenness
                 (a, horizontal) and their blueness-to-yellowness (b, vertical).
                 These color channels are based on how the human brain processes
                 color.
-                <a href="https://en.wikipedia.org/wiki/Lab_color_space">(wikipedia)</a></dl>
+                <a href="https://en.wikipedia.org/wiki/Lab_color_space">(wikipedia)</a></dd>
             <dt>LCh</dt>
-            <dl>An alternative view of Lab in terms of chroma (colorfulness)
+            <dd>An alternative view of Lab in terms of chroma (colorfulness)
                 and hue.
                 LCh is not the same as HSV, HSL, or HSB.
-                <a href="https://en.wikipedia.org/wiki/Lab_color_space#Cylindrical_representation:_CIELCh_or_CIEHLC">(wikipedia)</a></dl>
+                <a href="https://en.wikipedia.org/wiki/Lab_color_space#Cylindrical_representation:_CIELCh_or_CIEHLC">(wikipedia)</a></dd>
 
             <dt>Jab</dt>
-            <dl>Jab is similar to Lab, where farther apart colors are more
+            <dd>Jab is similar to Lab, where farther apart colors are more
               easily discriminable.
               The main difference is that Jab is based on a newer, updated color
               appearance model.
@@ -44,7 +44,7 @@
               approximating how discriminable two colors should be.
               <a href="http://gramaz.io/d3-cam02/#ciecam02">(more info)</a>
               <a href="https://en.wikipedia.org/wiki/CIECAM02">(wikipedia)</a>
-          </dl>
+          </dd>
         </div>
       </div>
 
@@ -102,7 +102,7 @@
 
       <div class="content_container display_inlineBlock">
         <h2>from an image</h2>
-        <div class="imageProcessor">
+        <div class="imageColorPicker">
           <div class="uploadForm">
             Upload <input type="file"> <button class="uploadBtn">Upload</button>
           </div>
@@ -466,6 +466,27 @@
 
       <div class="content_container">
         <h2>Color discriminability estimate</h2>
+
+        <div class="hiddenMenu">
+          <p class="hiddenMenuTitle">What is discriminability? A JND? What are these sliders?</p>
+          <div class="hiddenMenuContent" style="max-width: 600px">
+            <p>This part of Chromaticity estimates whether colors are easily
+              discriminable by using empirical models that predict "just noticeable
+              differences" (JND). In Chromaticity, JNDs refer to whether you can
+              reliably tell two colors apart from one another.</p>
+
+            <p>The first slider – Percent (Conservativeness) – allows users to
+              define how strict they want "reliably" mean in for color
+              discriminability. A 50% would mean that 50% of people could easily
+              differentiate the two colors. While empirical studies often set
+              JNDs at 50%, stricter thresholds may make more sense in practice.
+            </p>
+            <p>The second slider – Size (Visual Angle,
+              degrees) – refers to how large the pixels are on the screen and
+              ultimately on your retina.</p>
+          </div>
+        </div>
+
         <div class="jndTable">
           <ul class="jndParameters">
             <li data-parameter="percent">Percent (Conservativeness): <span class="value">50%</span> <input type="range" min="0.1" max="1.0" step="0.05" value="0.5" /></li>
@@ -476,11 +497,12 @@
           <div class="hiddenMenu">
             <p class="hiddenMenuTitle">Visual Angle Calculator</p>
             <p class="hiddenMenuContent">Physical size (e.g., cm) <input type="number" class="visualangle_size" min="0" value="1" placeholder="size (cm)" /><br />
-              Physical distance: <input type="number" class="visualangle_distance" min="0" value="100" placeholder="screen distance (cm)" /><br />
+              Physical distance (e.g., cm): <input type="number" class="visualangle_distance" min="0" value="100" placeholder="screen distance (cm)" /><br />
               Visual angle (degrees): <span class="visualangle_va"></span></p>
           </div>
 
           <p>⚠ denotes poor discriminability</p>
+          <p class="aside">These estimates use <a href="http://www.danielleszafir.com/2014CIC_48_Stone_v3.pdf">Stone et al's model for color discriminability</a>; for those wishing for more precision, Szafir provides <a href="http://danielleszafir.com/colordiff_vis2017.pdf">updated, visualization-specific models</a>.</p>
           <table>
             <tr class="palette"><td></td></tr>
           </table>
@@ -489,7 +511,7 @@
         <h2>Color discriminability estimates for color vision deficiencies</h2>
         <div class="hiddenMenu">
           <p class="hiddenMenuTitle">What are color vision deficiencies?</p>
-          <div class="hiddenMenuContent">
+          <div class="hiddenMenuContent" style="max-width: 600px">
             <p>Color vision deficiency (“color blindness”)
               refers to different mutations that affect color perception, and
               affect roughly 8% of men and 0.5% of women.</p>
@@ -678,12 +700,14 @@
     <footer>
       <p>Made by <a href="https://gramaz.io">Connor Gramazio</a>.
         Open sourced
-        <a href="https://github.com/connorgr/chromaticity">here</a>.</p>
+        <a href="https://github.com/connorgr/chromaticity">here</a>.
+       Got an idea? Get in touch!</p>
     </footer>
 
     <script src="src/js/d3.js"></script>
     <script src="src/js/d3-cam02.js"></script>
     <script src="src/js/d3-jnd.js"></script>
-    <script src="index.js"></script>
+    <!-- <script src="index.js"></script> -->
+    <script src="chromaticity.js"></script>
   </body>
 </html>

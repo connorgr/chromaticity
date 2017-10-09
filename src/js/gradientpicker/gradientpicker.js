@@ -1,4 +1,10 @@
-var gradientpicker = function(container) {
+import {dispatch} from "../dispatch";
+
+export function GradientPicker(container) {
+  this.gradientPicker = makeGradientPicker(container);
+}
+
+var makeGradientPicker = function(container) {
   var TMP_START_COLOR_VALUE,
       TMP_STOP_COLOR_VALUE,
       NUM_COLOR_STEPS = 5;

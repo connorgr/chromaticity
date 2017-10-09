@@ -1,4 +1,9 @@
-var vispreview = function(container) {
+import {dispatch} from "../dispatch";
+export function VisualizationPreview(container) {
+  this.visPreview = makeVisPreview(container);
+}
+
+var makeVisPreview = function(container) {
   var inPalette = [],
       barSvg = container.select(".barPreview"),
       mapSvg = container.select(".mapPreview"),

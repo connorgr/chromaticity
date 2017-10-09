@@ -1,41 +1,41 @@
-.imageProcessor .invisible {
+.imageColorPicker .invisible {
   display: none;
   visibility: hidden;
 }
 
-.imageProcessor canvas {
+.imageColorPicker canvas {
   height: 100px;
   width: 100px;
 }
 
-.imageProcessor .dragArea {
+.imageColorPicker .dragArea {
   background: #ccc;
   border-radius: 10px;
   height: 200px;
   width: 195px;
 }
 
-.imageProcessor .dropImg {
+.imageColorPicker .dropImg {
   max-height: 200px;
   max-width: 200px;
 }
 
-.imageProcessor .dragArea p {
+.imageColorPicker .dragArea p {
   line-height: 200px;
   text-align: center;
 }
 
-.imageProcessor .imgContainer { width: 400px; }
-.imageProcessor .imgContainer * { display: inline-block; vertical-align: top; }
+.imageColorPicker .imgContainer { width: 400px; }
+.imageColorPicker .imgContainer * { display: inline-block; vertical-align: top; }
 
-.imageProcessor .uniqueColors {
+.imageColorPicker .uniqueColors {
   list-style: none;
   margin: 0;
   padding: 0;
   max-width: 400px;
 }
 
-.imageProcessor .uniqueColors li {
+.imageColorPicker .uniqueColors li {
   border: 1px solid #eee;
   border-radius: 50%;
   cursor: pointer;

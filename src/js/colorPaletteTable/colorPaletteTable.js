@@ -1,21 +1,30 @@
-var colorPalette = function(tbl) {
+import {dispatch} from "../dispatch";
+import {rgb2hex} from "../util/rgb2hex";
+
+export function ColorPaletteTable(container) {
+  this.colorpalettetable = makeColorPaletteTable(container)
+}
+
+var makeColorPaletteTable = function(tbl) {
+  var makeID = Date.now().toString();
+
   var inPalette = [],
       palettePreview = tbl.select(".palettePreview");
 
   var obj = {};
 
-  dispatch.on("addSelectedColor.colorPalette", function() {
+  dispatch.on("addSelectedColor.colorPalette"+makeID, function() {
     var rgbstr = d3.rgb(this.selectedColor).toString();
     if(inPalette.indexOf(rgbstr) > -1) return;
     obj.addColorToPalette(this.selectedColor);
   });
 
-  dispatch.on("clearPalette.colorPalette", function() {
+  dispatch.on("clearPalette.colorPalette"+makeID, function() {
     inPalette = [];
     tbl.select("tbody").selectAll("tr").remove();
   });
 
-  dispatch.on("deletePaletteColor.colorPalette", function() {
+  dispatch.on("deletePaletteColor.colorPalette"+makeID, function() {
     var idx = inPalette.indexOf(this.color);
     inPalette.splice(idx, 1);
     tbl.select("tbody").selectAll("tr").each(function(d,i) {

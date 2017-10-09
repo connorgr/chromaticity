@@ -1,4 +1,13 @@
-var colorpicker = function(container) {
+import {dispatch} from "../dispatch";
+import {rgb2hex} from "../util/rgb2hex";
+
+export function ColorPicker(container) {
+  this.colorpicker = makeColorPicker(container);
+}
+
+var makeColorPicker = function(container) {
+  var makeID = Date.now().toString();
+
   var CHECK_FOR_ND = false,
       COLORPICKER_SPACE = 'lab',
       START_COLOR_VALUES = [50,0,0],
@@ -100,8 +109,25 @@ var colorpicker = function(container) {
   thumb.attr('transform', 'translate(0,'+(sliderHeight/2-sliderMargin.top)+')');
   thumb.call(d3.drag().on("drag", dragColorpickerSlider));
 
+  var paletteColors = [];
+  dispatch.on("addSelectedColor.colorpicker"+makeID, function() {
+    var rgbstr = d3.rgb(this.selectedColor).toString();
+    if(paletteColors.indexOf(rgbstr) > -1) return;
+    paletteColors.push(rgbstr);
+  });
 
-  dispatch.on("updateSelectedColor.colorpicker", function () {
+
+  dispatch.on("clearPalette.colorpicker"+makeID, function() {
+    paletteColors = [];
+  });
+
+  dispatch.on("deletePaletteColor.colorpicker"+makeID, function() {
+    var idx = paletteColors.indexOf(d3.rgb(this.color).toString());
+    if(idx < 0) return;
+    paletteColors.splice(idx, 1);
+  });
+
+  dispatch.on("updateSelectedColor.colorpicker"+makeID, function () {
     var selectedColor = this.selectedColor,
         color = d3[COLORPICKER_SPACE](selectedColor),
         barValue;
@@ -155,8 +181,7 @@ var colorpicker = function(container) {
             .domain([0, width])
             .range([-45, 45]);
 
-    var paletteColors = colorDB.getRGBColors(),
-        nd;
+    var nd;
 
     var c,y,x,i=-1;
     for(y=height;y>0;y--) {
@@ -204,7 +229,7 @@ var colorpicker = function(container) {
         width = colorpicker_bar.width,
         img = context.createImageData(1, height);
 
-    var c, y, i=-1;
+    var c, x, y, i=-1;
     var barScale = d3.scaleLinear()
             .domain([0, height])
             .range(COLORPICKER_SPACE === "rgb" ? [0,255] : [0, 100]);

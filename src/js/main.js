@@ -1,17 +1,33 @@
-var cvd = colorVisionDeficiency(),
-    colorDB = colorStore(),
-    exprt = exportFunction(d3.select(".exportOptionsContainer")),
-    cp = colorpicker(d3.select(".colorpicker")),
-    ip = imageprocessor(d3.select(".imageProcessor")),
-    palette = colorPalette(d3.select(".paletteTable")),
-    gp = gradientpicker(d3.select(".gradientPicker")),
-    jnds = jndtable(d3.select(".jndTable")),
-    cvdTable = cvdtable(d3.select(".cvdTable")),
-    cvdGrads = cvdgradientpicker(d3.select(".cvdGradientPicker")),
-    palettePreview = palettepreview(d3.select(".palettePreview")),
-    visPreview = vispreview(d3.select(".visPreview")),
-    processUriPalette = uri(); // should be loaded last so that it can add colors correctly
+import {ColorPaletteTable} from "./colorPaletteTable/colorPaletteTable";
+import {ColorPicker} from "./colorPicker/colorPicker";
+import {CvdGradientPicker} from "./gradientPicker/cvdGradientPicker";
+import {CvdJndTable} from "./jndTable/cvdJndTable";
+import {GradientPicker} from "./gradientPicker/gradientPicker";
+import {ImageColorPicker} from "./imageColorPicker/imageColorPicker";
+import {JndTable} from "./jndTable/jndTable";
+import {PaletteExporter} from "./paletteExporter/paletteExporter";
+import {PalettePreview} from "./palettePreview/palettePreview";
+import {VisualizationPreview} from "./visualizationPreview/visualizationPreview";
 
+import {dispatch} from "./dispatch";
+import {initializeURISharing} from "./share/uri";
+
+var cvdGraientPicker = new CvdGradientPicker(d3.select(".cvdGradientPicker")),
+    cvdJndTable = new CvdJndTable(d3.select(".cvdTable")),
+    gradientPicker = new GradientPicker(d3.select(".gradientPicker")),
+    imageColorPicker = new ImageColorPicker(d3.select(".imageColorPicker")),
+    jndTable = new JndTable(d3.select(".jndTable")),
+    paletteExporter = new PaletteExporter(d3.select(".exportOptionsContainer")),
+    palettePreview = new PalettePreview(d3.select(".palettePreview")),
+    paletteTable = new ColorPaletteTable(d3.select(".paletteTable")),
+    picker = new ColorPicker(d3.select(".colorpicker")),
+    visPreview = new VisualizationPreview(d3.select(".visPreview"));
+
+// Must follow initialization of all interface components, as the URI color
+// palette parser will dispatch add color messages
+initializeURISharing();
+
+// Add hide/show for all hidden menues
 d3.selectAll(".hiddenMenu").each(function() {
   var menu = d3.select(this),
       title = menu.select(".hiddenMenuTitle"),
@@ -23,3 +39,18 @@ d3.selectAll(".hiddenMenu").each(function() {
 
   })
 });
+
+// var cvd = colorVisionDeficiency(),
+//     colorDB = colorStore(),
+//     exprt = exportFunction(d3.select(".exportOptionsContainer")),
+//     cp = colorpicker(d3.select(".colorpicker")),
+//     ip = imageprocessor(d3.select(".imageProcessor")),
+//     palette = colorPalette(d3.select(".paletteTable")),
+//     gp = gradientpicker(d3.select(".gradientPicker")),
+//     jnds = jndtable(d3.select(".jndTable")),
+//     cvdTable = cvdtable(d3.select(".cvdTable")),
+//     cvdGrads = cvdgradientpicker(d3.select(".cvdGradientPicker")),
+//     palettePreview = palettepreview(d3.select(".palettePreview")),
+//     visPreview = vispreview(d3.select(".visPreview")),
+//     processUriPalette = uri(); // should be loaded last so that it can add colors correctly
+//

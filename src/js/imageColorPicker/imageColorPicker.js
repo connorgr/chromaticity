@@ -1,4 +1,10 @@
-var imageprocessor = function(container) {
+import {dispatch} from "../dispatch";
+
+export function ImageColorPicker(container) {
+  this.imageColorPicker = makeImageColorPicker(container);
+}
+
+var makeImageColorPicker = function(container) {
   var canvas = container.select("canvas").node(),
       context = canvas.getContext("2d"),
       colorList = container.select(".uniqueColors"),

@@ -1,4 +1,10 @@
-var exportFunction = function(container) {
+import {dispatch} from "../dispatch";
+
+export function PaletteExporter(container) {
+  this.paletteExporter = makePaletteExporter(container);
+}
+
+var makePaletteExporter = function(container) {
   var inPalette = [],
       obj = {},
       paletteCanvas = container.select(".paletteCanvas"),

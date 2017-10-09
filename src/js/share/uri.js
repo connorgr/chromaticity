@@ -1,4 +1,6 @@
-var uri = function() {
+import {dispatch} from "../dispatch";
+
+export function initializeURISharing() {
   var inPalette = [];
 
   var params = document.location.search.split("&"),

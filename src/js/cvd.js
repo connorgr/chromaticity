@@ -52,7 +52,7 @@
   yi = blind[t].abv - blind[t].abu * blind[t].m; // "y-intercept" of axis (on the "v" axis at u=0)
 */
 
-var colorVisionDeficiency = function() {
+export var colorVisionDeficiency = function() {
   var colorProfile = 'sRGB',
       gammaCorrection = 2.2;
 
@@ -232,7 +232,7 @@ var colorVisionDeficiency = function() {
       rgb.G = rgb.G || 0;
       rgb.B = rgb.B || 0;
 
-      return d3.rgb(rgb.R, rgb.G, rgb.B);  
+      return d3.rgb(rgb.R, rgb.G, rgb.B);
     };
   };
 

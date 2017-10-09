@@ -1,4 +1,13 @@
-var cvdtable = function(table) {
+import {dispatch} from "../dispatch";
+import {colorVisionDeficiency} from "../cvd";
+
+export function CvdJndTable(table) {
+  this.cvdJndTable = makeCvdJndTable(table);
+}
+
+var makeCvdJndTable = function(table) {
+  var cvd = colorVisionDeficiency();
+
   var obj = {};
 
   var JND_PERCENT = 0.5,
