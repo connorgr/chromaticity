@@ -14,9 +14,8 @@
   },
   "scripts": {
     "build": "npm run css; npm run js",
-    "js": "uglifyjs src/js/dispatch.js src/js/cvd.js src/js/*/*.js src/js/main.js -o index.js --beautify; uglifyjs index.js --compress --mangle -o index.min.js",
     "css": "sass -t compressed src/css/main.scss src/css/main.css",
-    "rollup": "rollup -c"
+    "js": "rollup -c"
   },
   "files": [
     "index.js",

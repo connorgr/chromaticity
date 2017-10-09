@@ -1,6 +1,12 @@
-# app [![XO code style](https://img.shields.io/badge/code_style-XO-5ed9c7.svg)](https://github.com/sindresorhus/xo)
+# Chromaticity
 
-> My superb app
+Chromaticity is a visualization design assistance tool to make picking colors
+that are more readily accessible to a diversity of end-users.
+Written in Javascript, it uses a simple foundation of vanilla JS, ES6 modules,
+and D3. Styling is done in SASS.
+
+If have suggestions or would like to contribute, please get in touch or open an
+issue and I'll get in touch as soon as I can!
 
 
 ## Dev
@@ -19,11 +25,8 @@ $ npm start
 
 ```
 $ npm run build
+
+$ npm run css
+
+$ npm run js
 ```
-
-Builds the app for macOS, Linux, and Windows, using [electron-packager](https://github.com/electron-userland/electron-packager).
-
-
-## License
-
-MIT © [<%= name %>](<%= website %>)

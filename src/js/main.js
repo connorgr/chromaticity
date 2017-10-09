@@ -39,18 +39,3 @@ d3.selectAll(".hiddenMenu").each(function() {
 
   })
 });
-
-// var cvd = colorVisionDeficiency(),
-//     colorDB = colorStore(),
-//     exprt = exportFunction(d3.select(".exportOptionsContainer")),
-//     cp = colorpicker(d3.select(".colorpicker")),
-//     ip = imageprocessor(d3.select(".imageProcessor")),
-//     palette = colorPalette(d3.select(".paletteTable")),
-//     gp = gradientpicker(d3.select(".gradientPicker")),
-//     jnds = jndtable(d3.select(".jndTable")),
-//     cvdTable = cvdtable(d3.select(".cvdTable")),
-//     cvdGrads = cvdgradientpicker(d3.select(".cvdGradientPicker")),
-//     palettePreview = palettepreview(d3.select(".palettePreview")),
-//     visPreview = vispreview(d3.select(".visPreview")),
-//     processUriPalette = uri(); // should be loaded last so that it can add colors correctly
-//
