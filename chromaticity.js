@@ -1,18 +1,18 @@
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? factory() :
-	typeof define === 'function' && define.amd ? define(factory) :
-	(factory());
-}(this, (function () { 'use strict';
+	typeof exports === 'object' && typeof module !== 'undefined' ? factory(require('d3')) :
+	typeof define === 'function' && define.amd ? define(['d3'], factory) :
+	(factory(global.d3$1));
+}(this, (function (d3$1) { 'use strict';
 
 var dispatch = d3.dispatch("addSelectedColor", "clearPalette", "deletePaletteColor", "updateGradientColors", "updateJNDParameters", "updateSelectedColor");
 
 function rgb2hex(rgbstr){
-  var rgb = rgbstr.replace('rgb(','').replace(')','').split(',').map(d => +d),
-      r = rgb[0], g = rgb[1], b = rgb[2],
+  var rgb$$1 = rgbstr.replace("rgb(","").replace(")","").split(",").map(d => +d),
+      r = rgb$$1[0], g = rgb$$1[1], b = rgb$$1[2],
       bin = r << 16 | g << 8 | b;
   return (function(h){
-      return new Array(7-h.length).join("0")+h
-  })(bin.toString(16).toUpperCase())
+      return new Array(7-h.length).join("0")+h;
+  })(bin.toString(16).toUpperCase());
 }
 
 function ColorPaletteTable(container) {
@@ -22,13 +22,12 @@ function ColorPaletteTable(container) {
 var makeColorPaletteTable = function(tbl) {
   var makeID = Date.now().toString();
 
-  var inPalette = [],
-      palettePreview = tbl.select(".palettePreview");
+  var inPalette = [];
 
   var obj = {};
 
   dispatch.on("addSelectedColor.colorPalette"+makeID, function() {
-    var rgbstr = d3.rgb(this.selectedColor).toString();
+    var rgbstr = d3$1.rgb(this.selectedColor).toString();
     if(inPalette.indexOf(rgbstr) > -1) return;
     obj.addColorToPalette(this.selectedColor);
   });
@@ -43,38 +42,42 @@ var makeColorPaletteTable = function(tbl) {
     inPalette.splice(idx, 1);
     tbl.select("tbody").selectAll("tr").each(function(d,i) {
       if(i !== idx) return;
-      d3.select(this).remove();
+      d3$1.select(this).remove();
     });
   });
 
   obj.addColorToPalette = function(newColor) {
-    var jab = d3.jab(newColor),
-        lab = d3.lab(newColor),
-        rgb = d3.rgb(newColor);
+    var jab$$1 = d3$1.jab(newColor),
+        lab$$1 = d3$1.lab(newColor),
+        rgb$$1 = d3$1.rgb(newColor);
 
-    inPalette.push(rgb.toString());
+    inPalette.push(rgb$$1.toString());
 
-    var jabstr = "Jab("+[jab.J, jab.a, jab.b].map(Math.round).join(',')+")",
-        labstr = "Lab("+[lab.l, lab.a, lab.b].map(Math.round).join(',')+")";
+    var jabstr = "Jab("+[jab$$1.J, jab$$1.a, jab$$1.b].map(Math.round).join(",")+")",
+        labstr = "Lab("+[lab$$1.l, lab$$1.a, lab$$1.b].map(Math.round).join(",")+")";
 
     var newRow = tbl.select("tbody").append("tr");
-    newRow.append("td").append("span").classed("deletePaletteTableColor", true).text("×")//"✖")
+    newRow.append("td").append("span").classed("deletePaletteTableColor", true)
+        .text("×")
         .on("click", function() {
-          var swatch = d3.select(this.parentNode.parentNode).select(".swatch"),
+          var swatch = d3$1.select(this.parentNode.parentNode).select(".swatch"),
               color = swatch.style("background-color");
-          dispatch.call("deletePaletteColor", {color: d3.rgb(color).toString()});
+          dispatch.call("deletePaletteColor", {
+            color: d3$1.rgb(color).toString()
+          });
         });
-    tbl.selectAll('tbody input[type="radio"]')
+    tbl.selectAll("tbody input[type=\"radio\"]")
         .property("checked", false);
     newRow.append("td").append("input").attr("type", "radio")
         .property("checked", true).on("click", function() {
-          d3.selectAll('.paletteTable tbody input[type="radio"]').property("checked", false);
-          d3.select(this).property("checked", true);
-          dispatch.call("updateSelectedColor", {selectedColor: rgb});
+          d3$1.selectAll(".paletteTable tbody input[type=\"radio\"]")
+              .property("checked", false);
+          d3$1.select(this).property("checked", true);
+          dispatch.call("updateSelectedColor", {selectedColor: rgb$$1});
         });
     newRow.append("td").classed("swatch", true).style("background", newColor);
     newRow.append("td").text(rgb2hex(newColor));
-    newRow.append("td").text(rgb.toString().replace(/\s/g, ""));
+    newRow.append("td").text(rgb$$1.toString().replace(/\s/g, ""));
     newRow.append("td").text(labstr);
     newRow.append("td").text(jabstr);
   };
@@ -90,20 +93,24 @@ var makeColorPicker = function(container) {
   var makeID = Date.now().toString();
 
   var CHECK_FOR_ND = false,
-      COLORPICKER_SPACE = 'lab',
+      COLORPICKER_SPACE = "lab",
       START_COLOR_VALUES = [50,0,0],
       START_COLOR = {
         space: COLORPICKER_SPACE,
         value: START_COLOR_VALUES,
-        color: d3[COLORPICKER_SPACE].apply(this, START_COLOR_VALUES)
+        color: d3$1[COLORPICKER_SPACE].apply(this, START_COLOR_VALUES)
       };
 
-  var CLEAR_COLOR = d3.rgb('#282c34');
+  var CLEAR_COLOR = d3$1.rgb("#282c34");
 
   var startBarValue;
-  if(COLORPICKER_SPACE === "jab") startBarValue = START_COLOR.color.J;
-  else if(COLORPICKER_SPACE === "lab" || COLORPICKER_SPACE === "hcl") startBarValue = START_COLOR.color.l;
-  else startBarValue = START_COLOR.color.r;
+  if(COLORPICKER_SPACE === "jab") {
+    startBarValue = START_COLOR.color.J;
+  } else if(COLORPICKER_SPACE === "lab" || COLORPICKER_SPACE === "hcl") {
+    startBarValue = START_COLOR.color.l;
+  } else {
+    startBarValue = START_COLOR.color.r;
+  }
 
   container.select(".selectedColor")
       .style("background", START_COLOR.color.toString());
@@ -115,26 +122,31 @@ var makeColorPicker = function(container) {
   container.select("#addColorToPaletteBtn")
       .on("click", function() {
         dispatch.call("addSelectedColor", {
-          selectedColor: container.select(".selectedColor").style("background-color")
+          selectedColor: container.select(".selectedColor")
+              .style("background-color")
         });
       });
 
   container.selectAll("#colorspaceSwitcherMenu li").on("click", function() {
     container.selectAll("#colorspaceSwitcherMenu li").classed("active", false);
-    d3.select(this).classed("active", true);
+    d3$1.select(this).classed("active", true);
 
-    var newSpace = d3.select(this).attr('data-space');
+    var newSpace = d3$1.select(this).attr("data-space");
     if(newSpace !== COLORPICKER_SPACE) {
       COLORPICKER_SPACE = newSpace;
 
       var selectedColor = container.select(".selectedColor")
-              .style('background-color'),
-          color = d3[COLORPICKER_SPACE](selectedColor),
+              .style("background-color"),
+          color = d3$1[COLORPICKER_SPACE](selectedColor),
           barValue;
 
-      if(COLORPICKER_SPACE === "jab") barValue = color.J;
-      else if(COLORPICKER_SPACE === "lab" || COLORPICKER_SPACE === "hcl") barValue = color.l;
-      else barValue = color.r;
+      if(COLORPICKER_SPACE === "jab") {
+        barValue = color.J;
+      } else if(COLORPICKER_SPACE === "lab" || COLORPICKER_SPACE === "hcl") {
+        barValue = color.l;
+      } else {
+        barValue = color.r;
+      }
 
       renderColorpicker(barValue);
       renderColorpicker_bar();
@@ -142,56 +154,66 @@ var makeColorPicker = function(container) {
     }
   });
 
-  container.selectAll('.colorChannelInput')
-      .on('focus', storeColorChannelValue)
-      .on('blur', triggerColorChannelUpdate);
-  container.selectAll('.colorChannelInput[type="color"]').on("change", triggerColorChannelUpdate);
-  container.select('.freetextColorInput').on('blur', function() {
-    var colorInput = d3.rgb(this.value.replace(/\'/g, '').replace(/\"/g,''));
-    this.value = '';
+  container.selectAll(".colorChannelInput")
+      .on("focus", storeColorChannelValue)
+      .on("blur", triggerColorChannelUpdate);
+  container.selectAll(".colorChannelInput[type=\"color\"]")
+      .on("change", triggerColorChannelUpdate);
+  container.select(".freetextColorInput").on("blur", function() {
+    /*eslint-disable*/
+    var colorInput = d3$1.rgb(this.value.replace(/\'/g, '').replace(/\"/g,""));
+    /*eslint-enable*/
+    this.value = "";
 
-    if(colorInput.opacity !== NaN) colorInput.opacity = 1;
+    if(Math.isNaN(colorInput.opacity) === false) colorInput.opacity = 1;
     if(colorInput.displayable()) updateColorChannelInput(colorInput.toString());
     else return;
 
-    container.select(".selectedColor").style('background-color', colorInput);
+    container.select(".selectedColor").style("background-color", colorInput);
 
     var barValue;
-    if(COLORPICKER_SPACE === "jab") barValue = d3.jab(colorInput).J;
-    else if(COLORPICKER_SPACE === "lab" || COLORPICKER_SPACE === "hcl") barValue = d3.lab(colorInput).l;
-    else barValue = colorInput.r;
+    if(COLORPICKER_SPACE === "jab") {
+      barValue = d3$1.jab(colorInput).J;
+    } else if(COLORPICKER_SPACE === "lab" || COLORPICKER_SPACE === "hcl") {
+      barValue = d3$1.lab(colorInput).l;
+    } else {
+      barValue = colorInput.r;
+    }
+
     relocateColorpickerBarThumb(barValue);
   });
 
 
-  container.select('#colorpicker_square')
+  container.select("#colorpicker_square")
       .on("click", function () {
-        var context = this.getContext('2d'),
-            px = context.getImageData(d3.mouse(this)[0], d3.mouse(this)[1], 1, 1).data, // remove alpha
-            rgb = "rgba("+px.slice(0,4).join(',')+")";
-        d3.select(".selectedColor").style('background', rgb);
-        updateColorChannelInput(rgb);
+        var mouse$$1 = d3$1.mouse(this),
+            context = this.getContext("2d"),
+            px = context.getImageData(mouse$$1[0], mouse$$1[1], 1, 1).data,
+            rgb$$1 = "rgba("+px.slice(0,4).join(",")+")";
+        d3$1.select(".selectedColor").style("background", rgb$$1);
+        updateColorChannelInput(rgb$$1);
       })
       .on("mousemove", function() {
-        var context = this.getContext('2d'),
-            px = context.getImageData(d3.mouse(this)[0], d3.mouse(this)[1], 1, 1).data, // remove alpha
-            rgb = "rgba("+px.slice(0,4).join(',')+")";
-        container.select(".hoverColor").style("background", rgb);
-        updateColorChannelInputHover(rgb);
+        var mouse$$1 = d3$1.mouse(this),
+            context = this.getContext("2d"),
+            px = context.getImageData(mouse$$1[0], mouse$$1[1], 1, 1).data,
+            rgb$$1 = "rgba("+px.slice(0,4).join(",")+")";
+        container.select(".hoverColor").style("background", rgb$$1);
+        updateColorChannelInputHover(rgb$$1);
       });
 
   var slider = container.select("#colorpicker_slider"),
       sliderMargin = { top: 10, right: 0, bottom: 10, left: 0 },
       thumb = slider.select(".thumb"),
       sliderHeight = +slider.style("height").replace("px", ""),
-      sliderScale = d3.scaleLinear().domain([0, sliderHeight-sliderMargin.top]);
+      sliderScale = d3$1.scaleLinear().domain([0, sliderHeight-sliderMargin.top]);
 
-  thumb.attr('transform', 'translate(0,'+(sliderHeight/2-sliderMargin.top)+')');
-  thumb.call(d3.drag().on("drag", dragColorpickerSlider));
+  thumb.attr("transform", "translate(0,"+(sliderHeight/2-sliderMargin.top)+")");
+  thumb.call(d3$1.drag().on("drag", dragColorpickerSlider));
 
   var paletteColors = [];
   dispatch.on("addSelectedColor.colorpicker"+makeID, function() {
-    var rgbstr = d3.rgb(this.selectedColor).toString();
+    var rgbstr = d3$1.rgb(this.selectedColor).toString();
     if(paletteColors.indexOf(rgbstr) > -1) return;
     paletteColors.push(rgbstr);
   });
@@ -202,19 +224,23 @@ var makeColorPicker = function(container) {
   });
 
   dispatch.on("deletePaletteColor.colorpicker"+makeID, function() {
-    var idx = paletteColors.indexOf(d3.rgb(this.color).toString());
+    var idx = paletteColors.indexOf(d3$1.rgb(this.color).toString());
     if(idx < 0) return;
     paletteColors.splice(idx, 1);
   });
 
   dispatch.on("updateSelectedColor.colorpicker"+makeID, function () {
     var selectedColor = this.selectedColor,
-        color = d3[COLORPICKER_SPACE](selectedColor),
+        color = d3$1[COLORPICKER_SPACE](selectedColor),
         barValue;
 
-    if(COLORPICKER_SPACE === "jab") barValue = color.J;
-    else if(COLORPICKER_SPACE === "lab" || COLORPICKER_SPACE === "hcl") barValue = color.l;
-    else if(COLORPICKER_SPACE === "rgb") barValue = color.r;
+    if(COLORPICKER_SPACE === "jab") {
+      barValue = color.J;
+    } else if(COLORPICKER_SPACE === "lab" || COLORPICKER_SPACE === "hcl") {
+      barValue = color.l;
+    } else if(COLORPICKER_SPACE === "rgb") {
+      barValue = color.r;
+    }
 
     container.select(".selectedColor")
         .style("background", color.toString());
@@ -231,33 +257,33 @@ var makeColorPicker = function(container) {
     if(COLORPICKER_SPACE === "rgb") sliderScale.range([255,0]);
     else sliderScale.range([100,0]);
 
-    var newThumbLoc = d3.scaleLinear()
+    var newLoc = d3$1.scaleLinear()
             .domain(sliderScale.range())
-            .range(sliderScale.domain());
-    container.select(".thumb").attr("transform", "translate(0,"+newThumbLoc(barValue)+")");
+            .range(sliderScale.domain())(barValue);
+    container.select(".thumb").attr("transform", "translate(0,"+newLoc+")");
   }
 
 
   function renderColorpicker(barValue) {
-    var colorpicker = d3.select('#colorpicker_square').node(),
+    var colorpicker = d3$1.select("#colorpicker_square").node(),
         context = colorpicker.getContext("2d");
 
     var height = colorpicker.height,
         width = colorpicker.width,
         img = context.createImageData(width, height);
 
-    var hclScale_hue = d3.scaleLinear()
+    var hclScale_hue = d3$1.scaleLinear()
             .domain([0, width])
             .range([359, 0]),
-        hclScale_chroma =  d3.scaleLinear()
+        hclScale_chroma =  d3$1.scaleLinear()
             .domain([height, 0])
             .range([0, 135]);
 
-    var labScale = d3.scaleLinear()
+    var labScale = d3$1.scaleLinear()
             .domain([0, width])
             .range([-115, 115]);
 
-    var jabScale = d3.scaleLinear()
+    var jabScale = d3$1.scaleLinear()
             .domain([0, width])
             .range([-45, 45]);
 
@@ -268,29 +294,31 @@ var makeColorPicker = function(container) {
       for(x=width;x>0;x--) {
         nd = true;
         if(CHECK_FOR_ND) {
-          nd = paletteColors.reduce(function(nd, rgb) {
-                return nd && d3.noticeablyDifferent(rgb,c, 0.3);
+          nd = paletteColors.reduce(function(nd, rgb$$1) {
+                return nd && d3$1.noticeablyDifferent(rgb$$1,c, 0.3);
               }, true);
         }
         if(nd === false) {
           c = CLEAR_COLOR;
-        } else if(COLORPICKER_SPACE === 'rgb') c = d3.rgb(barValue, x, y);
+        } else if(COLORPICKER_SPACE === "rgb") c = d3$1.rgb(barValue, x, y);
         else {
-          if(COLORPICKER_SPACE === 'lab') {
-            c = d3.lab(barValue, -labScale(x), labScale(y));
+          if(COLORPICKER_SPACE === "lab") {
+            c = d3$1.lab(barValue, -labScale(x), labScale(y));
           } else if(COLORPICKER_SPACE === "hcl") {
-            c = d3.hcl(hclScale_hue(x), hclScale_chroma(y), barValue);
+            c = d3$1.hcl(hclScale_hue(x), hclScale_chroma(y), barValue);
           } else {
-            c = d3.jab(barValue, -jabScale(x), jabScale(y));
+            c = d3$1.jab(barValue, -jabScale(x), jabScale(y));
             // Hack around CIECAM02 out-of-gamut irregularities
             if(  (c.J < 42 && c.b > 25)
               || (c.J < 10 && c.b > 12)
-              || (c.J < 4 && c.b > 7)
-              || (c.J < 2 && (c.b > 3 || c.a < -8 || c.a > 8)) ) c = CLEAR_COLOR;
+              || (c.J < 4  && c.b > 7)
+              || (c.J < 2  && (c.b > 3 || c.a < -8 || c.a > 8)) ) {
+                c = CLEAR_COLOR;
+            }
           }
 
           if(c.displayable() === false) c = CLEAR_COLOR;
-          else c = d3.rgb(c);
+          else c = d3$1.rgb(c);
         }
         img.data[++i] = c.r;
         img.data[++i] = c.g;
@@ -303,26 +331,26 @@ var makeColorPicker = function(container) {
 
 
   function renderColorpicker_bar() {
-    var colorpicker_bar = d3.select("#colorpicker_bar").node(),
+    var colorpicker_bar = d3$1.select("#colorpicker_bar").node(),
         context = colorpicker_bar.getContext("2d"),
         height = colorpicker_bar.height,
         width = colorpicker_bar.width,
         img = context.createImageData(1, height);
 
     var c, x, y, i=-1;
-    var barScale = d3.scaleLinear()
+    var barScale = d3$1.scaleLinear()
             .domain([0, height])
             .range(COLORPICKER_SPACE === "rgb" ? [0,255] : [0, 100]);
 
     for(y=height;y>0;y--) {
-      if(COLORPICKER_SPACE === 'rgb') c = d3.rgb(barScale(y), 0, 0);
-      else if(COLORPICKER_SPACE === 'hcl') {
-        c = d3.rgb(d3.hcl(0,0,barScale(y)));
+      if(COLORPICKER_SPACE === "rgb") c = d3$1.rgb(barScale(y), 0, 0);
+      else if(COLORPICKER_SPACE === "hcl") {
+        c = d3$1.rgb(d3$1.hcl(0,0,barScale(y)));
       }
-      else if(COLORPICKER_SPACE === 'lab') {
-        c = d3.rgb(d3.lab(barScale(y), 0, 0));
-      } else if(COLORPICKER_SPACE === 'jab') {
-        c = d3.rgb(d3.jab(barScale(y), 0, 0));
+      else if(COLORPICKER_SPACE === "lab") {
+        c = d3$1.rgb(d3$1.lab(barScale(y), 0, 0));
+      } else if(COLORPICKER_SPACE === "jab") {
+        c = d3$1.rgb(d3$1.jab(barScale(y), 0, 0));
       }
 
       img.data[++i] = c.r;
@@ -341,16 +369,16 @@ var makeColorPicker = function(container) {
 
     var sliderH = sliderHeight - sliderMargin.bottom,
         y;
-    if(d3.event.y < 0) y = 0;
-    else if(d3.event.y > sliderH) y = sliderH;
-    else y = d3.event.y;
-    d3.select(this).attr("transform", "translate(0,"+y+")");
+    if(d3$1.event.y < 0) y = 0;
+    else if(d3$1.event.y > sliderH) y = sliderH;
+    else y = d3$1.event.y;
+    d3$1.select(this).attr("transform", "translate(0,"+y+")");
     renderColorpicker(sliderScale(y));
 
     var channels = [sliderScale(y)];
-    d3.selectAll('.colorChannelInput')
+    d3$1.selectAll(".colorChannelInput")
         .filter(function() {
-          return d3.select(this).attr('data-colorType') === COLORPICKER_SPACE;
+          return d3$1.select(this).attr("data-colorType") === COLORPICKER_SPACE;
         }).each(function(d,i) {
           if(i !== 0) channels.push(+this.value);
           else this.value = sliderScale(y);
@@ -358,38 +386,41 @@ var makeColorPicker = function(container) {
 
     var newColor;
     if(COLORPICKER_SPACE !== "hcl"){
-      newColor = d3[COLORPICKER_SPACE](channels[0], channels[1], channels[2]);
+      newColor = d3$1[COLORPICKER_SPACE](channels[0], channels[1], channels[2]);
     } else {
-      newColor = d3[COLORPICKER_SPACE](channels[2], channels[1], channels[0]);
+      newColor = d3$1[COLORPICKER_SPACE](channels[2], channels[1], channels[0]);
     }
     updateColorChannelInput(newColor);
-    d3.select('.selectedColor').style('background-color', newColor.toString());
+    d3$1.select(".selectedColor").style("background-color", newColor.toString());
   }
+
+
   function updateColorChannelInput(rgbstr) {
-    updateColorChannelInput_abstract(rgbstr, '.colorChannelInput');
+    updateColorChannelInput_abstract(rgbstr, ".colorChannelInput");
   }
+
   function updateColorChannelInputHover(rgbstr) {
-    updateColorChannelInput_abstract(rgbstr, '.colorChannelInputHover');
+    updateColorChannelInput_abstract(rgbstr, ".colorChannelInputHover");
   }
 
   function updateColorChannelInput_abstract(rgbstr, inputClass) {
     var colors = {
-      rgb: d3.rgb(rgbstr),
-      jab: d3.jab(rgbstr),
-      lab: d3.lab(rgbstr),
-      hcl: d3.hcl(rgbstr)
+      rgb: d3$1.rgb(rgbstr),
+      jab: d3$1.jab(rgbstr),
+      lab: d3$1.lab(rgbstr),
+      hcl: d3$1.hcl(rgbstr)
     };
-    colors.hex = '#'+rgb2hex(colors.rgb.toString());
+    colors.hex = "#"+rgb2hex(colors.rgb.toString());
 
-    d3.selectAll(inputClass).each(function() {
-      var input = d3.select(this),
-          colorType = input.attr('data-colorType');
+    d3$1.selectAll(inputClass).each(function() {
+      var input = d3$1.select(this),
+          colorType = input.attr("data-colorType");
 
-      if(colorType === 'hex') {
+      if(colorType === "hex") {
         input.property("value", colors.hex);
       } else {
         var color = colors[colorType],
-            channelValue = Math.round(color[input.attr('data-channel')]);
+            channelValue = Math.round(color[input.attr("data-channel")]);
         if(isNaN(channelValue) === false) input.node().value = channelValue;
         else input.node().value = null;
       }
@@ -399,33 +430,36 @@ var makeColorPicker = function(container) {
   var TMP_COLOR_CHANNEL_VALUE;
   function storeColorChannelValue() { TMP_COLOR_CHANNEL_VALUE = this.value; }
   function triggerColorChannelUpdate() {
-    if(this.value === '') {
+    if(this.value === "") {
       this.value = TMP_COLOR_CHANNEL_VALUE;
     } else {
-      var thisEl = d3.select(this),
-          colorType = thisEl.attr('data-colorType'),
+      var thisEl = d3$1.select(this),
+          colorType = thisEl.attr("data-colorType"),
           rgbstr;
-      if(colorType === 'hex') rgbstr = d3.rgb(this.value).toString();
+      if(colorType === "hex") rgbstr = d3$1.rgb(this.value).toString();
       else {
-        var selector = '.colorChannelInput[data-colorType="'+colorType+'"]',
+        var selector = ".colorChannelInput[data-colorType=\""+colorType+"\"]",
             values = [];
-        d3.selectAll(selector).each(function() { values.push(this.value); });
+        d3$1.selectAll(selector).each(function() { values.push(this.value); });
         if(colorType !== "hcl") {
-          rgbstr = d3[colorType](values[0], values[1], values[2]).toString();
+          rgbstr = d3$1[colorType](values[0], values[1], values[2]).toString();
         } else {
-          rgbstr = d3[colorType](values[2], values[1], values[0]).toString();
+          rgbstr = d3$1[colorType](values[2], values[1], values[0]).toString();
         }
       }
 
       updateColorChannelInput(rgbstr);
 
-      d3.select(".selectedColor").style('background', rgbstr);
-      var selectedColor = d3.select(".selectedColor"),
-          color = d3[COLORPICKER_SPACE](rgbstr),
+      d3$1.select(".selectedColor").style("background", rgbstr);
+      var color = d3$1[COLORPICKER_SPACE](rgbstr),
           barValue;
-      if(COLORPICKER_SPACE === 'jab') barValue = color.J;
-      else if(COLORPICKER_SPACE === 'lab' || COLORPICKER_SPACE === 'hcl') barValue = color.l;
-      else barValue = color.r;
+      if(COLORPICKER_SPACE === "jab") {
+        barValue = color.J;
+      } else if(COLORPICKER_SPACE === "lab" || COLORPICKER_SPACE === "hcl") {
+        barValue = color.l;
+      } else {
+        barValue = color.r;
+      }
 
       renderColorpicker(barValue);
       renderColorpicker_bar();
@@ -562,7 +596,7 @@ var colorVisionDeficiency = function() {
     return {x: o.X / n, y: o.Y / n, Y: o.Y};
   };
 
-  var Blind = function (rgb, type, anomalize) {
+  var Blind = function (rgb$$1, type, anomalize) {
     var z, v, n,
         line, c, slope,
         yi, dx, dy,
@@ -573,20 +607,20 @@ var colorVisionDeficiency = function() {
         adjust;
 
     if (type === "achroma") { // D65 in sRGB
-      z = rgb.R * 0.212656 + rgb.G * 0.715158 + rgb.B * 0.072186;
+      z = rgb$$1.R * 0.212656 + rgb$$1.G * 0.715158 + rgb$$1.B * 0.072186;
       z = {R: z, G: z, B: z};
       if (anomalize) {
         v = 1.75;
         n = v + 1;
-        z.R = (v * z.R + rgb.R) / n;
-        z.G = (v * z.G + rgb.G) / n;
-        z.B = (v * z.B + rgb.B) / n;
+        z.R = (v * z.R + rgb$$1.R) / n;
+        z.G = (v * z.G + rgb$$1.G) / n;
+        z.B = (v * z.B + rgb$$1.B) / n;
       }
       return z;
     }
 
     line = blinder[type];
-    c = convertXyzToXyy(convertRgbToXyz(rgb));
+    c = convertXyzToXyy(convertRgbToXyz(rgb$$1));
     // The confusion line is between the source color and the confusion point
     slope = (c.y - line.y) / (c.x - line.x);
     yi = c.y - c.x * slope; // slope, and y-intercept (at x=0)
@@ -635,9 +669,9 @@ var colorVisionDeficiency = function() {
     if (anomalize) {
       v = 1.75;
       n = v + 1;
-      z.R = (v * z.R + rgb.R) / n;
-      z.G = (v * z.G + rgb.G) / n;
-      z.B = (v * z.B + rgb.B) / n;
+      z.R = (v * z.R + rgb$$1.R) / n;
+      z.G = (v * z.G + rgb$$1.G) / n;
+      z.B = (v * z.B + rgb$$1.B) / n;
     }
 
     return z;
@@ -658,17 +692,17 @@ var colorVisionDeficiency = function() {
     return function (colorString) {
       var color = d3.rgb(colorString);
       if (!color) { return undefined; }
-      var rgb = new Blind({
+      var rgb$$1 = new Blind({
         R: color.r,
         G: color.g,
         B: color.b
       }, colorVisionData[key].type, colorVisionData[key].anomalize);
       // blinder.tritanomaly('#000000') causes NaN / null
-      rgb.R = rgb.R || 0;
-      rgb.G = rgb.G || 0;
-      rgb.B = rgb.B || 0;
+      rgb$$1.R = rgb$$1.R || 0;
+      rgb$$1.G = rgb$$1.G || 0;
+      rgb$$1.B = rgb$$1.B || 0;
 
-      return d3.rgb(rgb.R, rgb.G, rgb.B);
+      return d3.rgb(rgb$$1.R, rgb$$1.G, rgb$$1.B);
     };
   };
 
@@ -702,12 +736,12 @@ var makeCvdGradientPicker = function(container) {
   function renderGradients(start, stop) {
     var rows = container.selectAll("tbody tr");
     rows.each(function() {
-      var row = d3.select(this),
+      var row = d3$1.select(this),
           cvdType = row.attr("data-cvdType"),
           cvdFn = cvd.colorTransforms[cvdType];
       row.selectAll("td").filter((d,i) => i > 0)
           .each(function(d,i) {
-            var td = d3.select(this),
+            var td = d3$1.select(this),
                 canvas = td.select("canvas");
             renderGradient(canvas, start, stop, COLOR_SPACES[i], cvdFn);
           });
@@ -719,15 +753,16 @@ var makeCvdGradientPicker = function(container) {
         context = canvas.node().getContext("2d"),
         image = context.createImageData(width, 1),
         i = -1,
-        interpolator = d3["interpolate" + space[0].toUpperCase() + space.slice(1)],
-        scale = d3.scaleLinear()
+        spaceName = space[0].toUpperCase() + space.slice(1),
+        interpolator = d3$1["interpolate" + spaceName],
+        scale = d3$1.scaleLinear()
             .domain([0, width-1])
             .interpolate(interpolator)
             .range([start, stop]);
 
     var c;
     for(var x = 0; x < width; ++x) {
-      c = d3.rgb(scale(x));
+      c = d3$1.rgb(scale(x));
       if(cvdFn !== undefined) c = cvdFn(c);
 
       if(c.displayable()) {
@@ -760,14 +795,14 @@ var makeCvdJndTable = function(table) {
       JND_SIZE = 0.1;
 
   obj.addColorToTable = function(newColor) {
-    var c = d3.rgb(newColor),
+    var c = d3$1.rgb(newColor),
         rgbstr = c.toString(),
         curPalette = getCurrentColors();
 
     if(curPalette.indexOf(rgbstr) > -1) return;
 
     table.selectAll("tbody tr").each(function() {
-      var tr = d3.select(this),
+      var tr = d3$1.select(this),
           cvdType = tr.attr("class"),
           color;
 
@@ -785,19 +820,18 @@ var makeCvdJndTable = function(table) {
   });
 
   dispatch.on("clearPalette.cvdtable", function() {
-    curPalette = [];
     table.selectAll("tr").each(function() {
-      var row = d3.select(this);
+      var row = d3$1.select(this);
       row.selectAll("td").filter((d,i) => i > 0).remove();
     });
   });
 
   dispatch.on("deletePaletteColor.cvdtable", function() {
     var curPalette = getCurrentColors(),
-        cIdx = curPalette.indexOf(d3.rgb(this.color).toString());
+        cIdx = curPalette.indexOf(d3$1.rgb(this.color).toString());
 
     table.selectAll("tr").each(function() {
-      var row = d3.select(this),
+      var row = d3$1.select(this),
           tds = row.selectAll("td").filter((d,i) => i > 0);
       tds.filter((d,i) => i === cIdx).remove();
     });
@@ -815,7 +849,7 @@ var makeCvdJndTable = function(table) {
   function getCurrentColors() {
     var colors = [];
     table.select(".palette").selectAll("td").each(function(d,i) {
-      if(i !== 0) colors.push(d3.select(this).style("background-color"));
+      if(i !== 0) colors.push(d3$1.select(this).style("background-color"));
     });
     return colors;
   }
@@ -823,29 +857,29 @@ var makeCvdJndTable = function(table) {
 
   function updateJNDs() {
     table.selectAll("tbody tr").each(function() {
-      var tr = d3.select(this),
-          cvdType = tr.attr("class");
+      var tr = d3$1.select(this);
 
       var rowColors = [];
       tr.selectAll("td").each(function(d,i) {
         if (i === 0) return;
-        rowColors.push(d3.select(this).style("background-color"));
+        rowColors.push(d3$1.select(this).style("background-color"));
       });
 
       tr.selectAll("td").each(function(d,i) {
         if(i === 0) return;
-        var td = d3.select(this),
+        var td = d3$1.select(this),
             tdBG = td.style("background-color"),
             tdBGIdx = rowColors.indexOf(tdBG),
             isND = rowColors.reduce(function(acc, d, i) {
               if(i === tdBGIdx) return acc;
-              var ndResult = d3.noticeablyDifferent(d, tdBG, JND_SIZE, JND_PERCENT);
+              var ndResult = d3$1.noticeablyDifferent(d, tdBG, JND_SIZE,
+                                                    JND_PERCENT);
               return acc && ndResult;
             }, true);
 
         td.classed("notDifferent", isND === false)
             .text(isND === false ? "⚠" : "");
-        if(d3.lab(tdBG).l < 30) td.style("color", "rgba(255,255,255,0.25)");
+        if(d3$1.lab(tdBG).l < 30) td.style("color", "rgba(255,255,255,0.25)");
       });
     });
   }
@@ -858,9 +892,7 @@ function GradientPicker(container) {
 }
 
 var makeGradientPicker = function(container) {
-  var TMP_START_COLOR_VALUE,
-      TMP_STOP_COLOR_VALUE,
-      NUM_COLOR_STEPS = 5;
+  var NUM_COLOR_STEPS = 5;
 
   var inPalette = [];
 
@@ -875,10 +907,8 @@ var makeGradientPicker = function(container) {
 
   renderGradients();
 
-  container.selectAll(".gradientPickerInput")
-      .on('focus', storeColorValue);
-  startInput.on('blur', triggerTextInputColorChange(startInput));
-  stopInput.on('blur', triggerTextInputColorChange(stopInput));
+  startInput.on("blur", triggerTextInputColorChange(startInput));
+  stopInput.on("blur", triggerTextInputColorChange(stopInput));
 
   container.select(".gradientStepCount")
       .on("blur", function() {
@@ -887,22 +917,22 @@ var makeGradientPicker = function(container) {
       });
 
   dispatch.on("addSelectedColor.gradientpicker", function() {
-    var rgbstr = d3.rgb(this.selectedColor).toString();
+    var rgbstr = d3$1.rgb(this.selectedColor).toString();
     if(inPalette.indexOf(rgbstr) > -1) return;
     inPalette.push(rgbstr);
 
-    var newStart = startColorSwatchList.append("li")
-            .style("background-color", this.selectedColor)
-            .on("click", function() {
-              startColor = rgbstr;
-              renderGradients();
-            }),
-        newStop = stopColorSwatchList.append("li")
-            .style("background-color", this.selectedColor)
-            .on("click", function() {
-              stopColor = rgbstr;
-              renderGradients();
-            });
+    startColorSwatchList.append("li")
+        .style("background-color", this.selectedColor)
+        .on("click", function() {
+          startColor = rgbstr;
+          renderGradients();
+        });
+    stopColorSwatchList.append("li")
+        .style("background-color", this.selectedColor)
+        .on("click", function() {
+          stopColor = rgbstr;
+          renderGradients();
+        });
   });
 
   dispatch.on("clearPalette.gradientpicker", function() {
@@ -911,11 +941,11 @@ var makeGradientPicker = function(container) {
   });
 
   dispatch.on("deletePaletteColor.gradientpicker", function() {
-    var rgb = d3.rgb(this.color);
+    var rgb$$1 = d3$1.rgb(this.color);
     gradientMenu.selectAll("li").filter(function() {
-      return d3.select(this).style("background-color") === rgb.toString();
+      return d3$1.select(this).style("background-color") === rgb$$1.toString();
     }).remove();
-    inPalette.splice(inPalette.indexOf(rgb.toString()), 1);
+    inPalette.splice(inPalette.indexOf(rgb$$1.toString()), 1);
   });
 
   function renderGradients() {
@@ -932,10 +962,10 @@ var makeGradientPicker = function(container) {
         {startColor: startColor, stopColor: stopColor});
 
     container.selectAll("canvas").each(function () {
-      renderSingleGradient(d3.select(this), startColor, stopColor);
+      renderSingleGradient(d3$1.select(this), startColor, stopColor);
     });
     container.selectAll(".gradientOutputText").each(function() {
-      renderSingleGradientText(d3.select(this), startColor, stopColor);
+      renderSingleGradientText(d3$1.select(this), startColor, stopColor);
     });
   }
 
@@ -945,12 +975,13 @@ var makeGradientPicker = function(container) {
         image = context.createImageData(width, 1),
         i = -1,
         space = canvas.attr("data-colorType"),
-        interpolator = d3["interpolate" + space[0].toUpperCase() + space.slice(1)],
-        continuousScale = d3.scaleLinear()
+        spaceName = space[0].toUpperCase() + space.slice(1),
+        interpolator = d3$1["interpolate" + spaceName],
+        continuousScale = d3$1.scaleLinear()
             .domain([0, width-1])
             .interpolate(interpolator)
             .range([start, stop]),
-        discreteScale = d3.scaleLinear()
+        discreteScale = d3$1.scaleLinear()
             .domain([0, NUM_COLOR_STEPS-1])
             .interpolate(interpolator)
             .range([start, stop]);
@@ -960,11 +991,11 @@ var makeGradientPicker = function(container) {
     var pxPerColor = Math.floor(width / NUM_COLOR_STEPS),
         colorIdx = 0;
 
-    var c = d3.rgb(continuousScale(0));
+    var c = d3$1.rgb(continuousScale(0));
     for(var x = 0; x < width; ++x) {
-      if(isContinuous) c = d3.rgb(continuousScale(x));
+      if(isContinuous) c = d3$1.rgb(continuousScale(x));
       else if(x % pxPerColor === 0 && colorIdx !== NUM_COLOR_STEPS) {
-        c = d3.rgb(discreteScale(colorIdx));
+        c = d3$1.rgb(discreteScale(colorIdx));
         colorIdx++;
       }
       // For continuous rendering
@@ -988,8 +1019,9 @@ var makeGradientPicker = function(container) {
 
   function renderSingleGradientText(input, start, stop) {
     var space = input.attr("data-colorType"),
-        interpolator = d3["interpolate" + space[0].toUpperCase() + space.slice(1)],
-        scale = d3.scaleLinear()
+        spaceName = space[0].toUpperCase() + space.slice(1),
+        interpolator = d3$1["interpolate" + spaceName],
+        scale = d3$1.scaleLinear()
             .domain([0, input.classed("sequential") ? NUM_COLOR_STEPS-1 : 1])
             .interpolate(interpolator)
             .range([start, stop]),
@@ -998,13 +1030,9 @@ var makeGradientPicker = function(container) {
     input.property("value", JSON.stringify(colors));
   }
 
-
-  function storeColorValue() {
-    
-  }
   function triggerTextInputColorChange(inputSelection) {
     return function() {
-      var input = d3.rgb(inputSelection.property("value"));
+      var input = d3$1.rgb(inputSelection.property("value"));
       if(input.displayable()) {
         if(inputSelection.classed("gradientStartColor")) startColor = input;
         else stopColor = input;
@@ -1026,11 +1054,11 @@ var makeImageColorPicker = function(container) {
       dropImg = container.select(".dropImg"),
       uploadBtn = container.select(".uploadBtn");
 
-  dropArea.on('dragover', dragOverArea);
-  dropArea.on('drop', selectFile);
+  dropArea.on("dragover", dragOverArea);
+  dropArea.on("drop", selectFile);
   dropImg.on("load", buildCanvas);
   uploadBtn.on("click", function() {
-    var localFile = container.select('.uploadForm input[type="file"]');
+    var localFile = container.select(".uploadForm input[type=\"file\"]");
     if(localFile.property("files").length > 0) {
       var reader = new FileReader();
       reader.onload = function(e) { dropImg.node().src=e.target.result; };
@@ -1048,19 +1076,21 @@ var makeImageColorPicker = function(container) {
     // quickly iterate over all pixels
     var i = -1;
     for(var x = 0; x < canvas.width*canvas.height; ++x) {
-      pxs[x] = d3.hcl(d3.rgb(image.data[++i], image.data[++i], image.data[++i]).toString());
+      pxs[x] = d3$1.hcl(d3$1.rgb(image.data[++i],
+                             image.data[++i],
+                             image.data[++i]).toString());
       ++i;
     }
 
     var uniqueColors = pxs.filter(function(d, i, self) {
               return self.indexOf(d) === i;
             })
-            .reduce(function(acc, d, i) {
+            .reduce(function(acc, d) {
               if(acc.length === 0) return [d];
 
               var i = 0, isND;
-              for(var i = 0; i<acc.length; i++) {
-                isND = d3.noticeablyDifferent(acc[i], d, 1.0, 0.5);
+              for(i = 0; i<acc.length; i++) {
+                isND = d3$1.noticeablyDifferent(acc[i], d, 1.0, 0.5);
                 if(isND === false) return acc;
               }
               acc.push(d);
@@ -1084,21 +1114,21 @@ var makeImageColorPicker = function(container) {
             });
   }
 
-  function dragOverArea(e) {
-    d3.event.stopPropagation();
-    d3.event.preventDefault();
-    d3.event.dataTransfer.dropEffect = 'copy';
+  function dragOverArea() {
+    d3$1.event.stopPropagation();
+    d3$1.event.preventDefault();
+    d3$1.event.dataTransfer.dropEffect = "copy";
   }
 
   function selectFile() {
-    d3.event.stopPropagation();
-    d3.event.preventDefault();
+    d3$1.event.stopPropagation();
+    d3$1.event.preventDefault();
 
-    var files = d3.event.dataTransfer.files;
+    var files = d3$1.event.dataTransfer.files;
     if(files.length < 1) return;
 
     var file = files[0];
-    if (!file.type.match('image.*')) {
+    if (!file.type.match("image.*")) {
         return;
     }
 
@@ -1125,7 +1155,7 @@ var makeJndTable = function(table) {
       paramMenu = table.select(".jndParameters");
 
   obj.addColorToTable = function(newColor) {
-    var c = d3.rgb(newColor),
+    var c = d3$1.rgb(newColor),
         rgbstr = c.toString(),
         curPalette = getCurrentColors(),
         palette = table.select(".palette");
@@ -1135,9 +1165,10 @@ var makeJndTable = function(table) {
     palette.append("td").style("background-color", rgbstr);
     table.selectAll(".ndRow").each(function(d,i) {
       var rowColor = curPalette[i],
-          td = d3.select(this).append("td");
+          td = d3$1.select(this).append("td");
 
-      if(d3.noticeablyDifferent(rgbstr, rowColor, JND_SIZE, JND_PERCENT) === false) {
+      var nd = d3$1.noticeablyDifferent(rgbstr, rowColor, JND_SIZE, JND_PERCENT);
+      if(nd === false) {
         td.classed("notDifferent", true).text("⚠");
       }
     });
@@ -1148,7 +1179,7 @@ var makeJndTable = function(table) {
     curPalette.forEach(function(c) {
       var td = newRow.append("td");
 
-      if(d3.noticeablyDifferent(rgbstr, c, JND_SIZE, JND_PERCENT) === false) {
+      if(d3$1.noticeablyDifferent(rgbstr, c, JND_SIZE, JND_PERCENT) === false) {
         td.classed("notDifferent", true).text("⚠");
       }
     });
@@ -1159,12 +1190,12 @@ var makeJndTable = function(table) {
     var curPalette = getCurrentColors();
     table.selectAll(".ndRow").each(function(d,i) {
       var rowColor = curPalette[i],
-          tr = d3.select(this);
+          tr = d3$1.select(this);
       tr.selectAll("td").filter((d,i) => i > 0).each(function(td,j) {
         var c = curPalette[j];
         if(c === rowColor) return;
-        var isND = d3.noticeablyDifferent(c, rowColor, JND_SIZE, JND_PERCENT);
-        d3.select(this).classed("notDifferent", !isND)
+        var isND = d3$1.noticeablyDifferent(c, rowColor, JND_SIZE, JND_PERCENT);
+        d3$1.select(this).classed("notDifferent", !isND)
             .text(isND ? "" : "⚠");
       });
     });
@@ -1175,8 +1206,6 @@ var makeJndTable = function(table) {
   });
 
   dispatch.on("clearPalette.jndtable", function() {
-    curPalette = [];
-
     var colorCells = table.selectAll(".palette td").filter((d,i) => i > 0),
         rows = table.selectAll(".ndRow");
     colorCells.remove();
@@ -1186,7 +1215,7 @@ var makeJndTable = function(table) {
 
   dispatch.on("deletePaletteColor.jndtable", function() {
     var curPalette = getCurrentColors(),
-        cIdx = curPalette.indexOf(d3.rgb(this.color).toString()),
+        cIdx = curPalette.indexOf(d3$1.rgb(this.color).toString()),
         colorCells = table.selectAll(".palette td").filter((d,i) => i > 0),
         rows = table.selectAll(".ndRow");
 
@@ -1194,10 +1223,10 @@ var makeJndTable = function(table) {
 
     colorCells.filter((d,i) => i === cIdx).remove();
 
-    colorCells.each(function(d,i) { if(i === cIdx) d3.select(this).remove(); });
+    colorCells.each(function(d,i) { if(i === cIdx) d3$1.select(this).remove(); });
 
     rows.each(function(d,i) {
-      var row = d3.select(this);
+      var row = d3$1.select(this);
       if(i === cIdx) { row.remove(); return; }
 
       var rowColor = row.style("background-color");
@@ -1205,12 +1234,12 @@ var makeJndTable = function(table) {
       var cmps = row.selectAll("td").filter((d,i) => i > 0);
       cmps.filter((d,i) => i === cIdx).remove();
 
-      cmps.each(function(d,j) {
-        var td = d3.select(this),
+      cmps.each(function() {
+        var td = d3$1.select(this),
             bg = td.style("background-color");
         if(bg === rowColor) return;
 
-        var notDiff = !d3.noticeablyDifferent(bg, rowColor);
+        var notDiff = !d3$1.noticeablyDifferent(bg, rowColor);
         td.classed("notDifferent", notDiff).text(notDiff ? "⚠" : "");
       });
     });
@@ -1218,12 +1247,12 @@ var makeJndTable = function(table) {
 
 
   paramMenu.selectAll("li").each(function() {
-    var li = d3.select(this),
+    var li = d3$1.select(this),
         parameter = li.attr("data-parameter"),
         valText = li.select(".value");
 
     li.select("input").on("input", function() {
-      var val = +d3.select(this).property("value");
+      var val = +d3$1.select(this).property("value");
       if(parameter === "percent") {
         JND_PERCENT = val;
         // HACK TODO remove Javascript imprecision rounding.
@@ -1235,7 +1264,10 @@ var makeJndTable = function(table) {
       valText.text(val);
 
       obj.updateColorTable();
-      dispatch.call("updateJNDParameters", {percent: JND_PERCENT, size: JND_SIZE});
+      dispatch.call("updateJNDParameters", {
+        percent: JND_PERCENT,
+        size: JND_SIZE
+      });
     });
   });
 
@@ -1254,14 +1286,14 @@ var makeJndTable = function(table) {
         s = +size.property("value"),
         va = 2*Math.atan( (s/2) / d );
     va = va * 180 / Math.PI; // radian to degrees
-    va_text.text(d3.format(".3f")(va));
+    va_text.text(d3$1.format(".3f")(va));
   }
 
 
   function getCurrentColors() {
     var colors = [];
     table.select(".palette").selectAll("td").each(function(d,i) {
-      if(i !== 0) colors.push(d3.select(this).style("background-color"));
+      if(i !== 0) colors.push(d3$1.select(this).style("background-color"));
     });
     return colors;
   }
@@ -1281,7 +1313,7 @@ var makePaletteExporter = function(container) {
       paletteShareField = container.select(".paletteShareField");
 
   dispatch.on("addSelectedColor.export", function() {
-    var rgbstr = d3.rgb(this.selectedColor).toString();
+    var rgbstr = d3$1.rgb(this.selectedColor).toString();
     if(inPalette.indexOf(rgbstr) > -1) return;
     obj.addColorToPalette(this.selectedColor);
     obj.updatePaletteCanvas();
@@ -1305,19 +1337,19 @@ var makePaletteExporter = function(container) {
         context = paletteCanvas.node().getContext("2d"),
         image = context.createImageData(width, 1),
         i = -1,
-        rgb;
+        rgb$$1;
 
     var pxForColor = Math.floor(width / inPalette.length),
         palIdx = -1;
 
     for(var x = 0; x < width; ++x) {
       if(x % pxForColor === 0 && palIdx !== inPalette.length-1) palIdx++;
-      rgb = d3.rgb(inPalette[palIdx]);
+      rgb$$1 = d3$1.rgb(inPalette[palIdx]);
 
-      if(rgb.displayable()) {
-        image.data[++i] = rgb.r;
-        image.data[++i] = rgb.g;
-        image.data[++i] = rgb.b;
+      if(rgb$$1.displayable()) {
+        image.data[++i] = rgb$$1.r;
+        image.data[++i] = rgb$$1.g;
+        image.data[++i] = rgb$$1.b;
         image.data[++i] = 255;
       } else {
         image.data[++i] = 0;
@@ -1330,36 +1362,45 @@ var makePaletteExporter = function(container) {
   };
 
   obj.updatePaletteInputField = function() {
-    paletteInputField.property("value", '"'+inPalette.join('","')+'"');
+    paletteInputField.property("value", "\""+inPalette.join("\",\"")+"\"");
   };
 
   obj.updatePaletteShareField = function() {
     var txt;
     if(inPalette.length === 0) txt = "";
-    else txt = "?palette="+inPalette.map(d => d.toString().replace(/\s/g,"")).join(";");
+    else {
+      var palStr = inPalette.map(d => d.toString().replace(/\s/g,"")).join(";");
+      txt = "?palette=" + palStr;
+    }
 
-    paletteShareField.property("value", document.location.host+document.location.pathname+txt);
+    paletteShareField.property("value",
+        document.location.host+document.location.pathname + txt);
   };
 
 
   obj.addColorToPalette = function(newColor) {
-    inPalette.push(d3.rgb(newColor).toString());
+    inPalette.push(d3$1.rgb(newColor).toString());
   };
 
   paletteInputField.on("blur", function() {
     if(this.value === "") return;
     var colors = this.value.replace(/\s/g, "")
             .replace("[","").replace("]","")
-            .split('",');
+            .split("\",");
     if(colors.length < 1) return;
 
     dispatch.call("clearPalette");
 
     inPalette = [];
 
-    colors = colors.map(d => d.replace(/\"/g, "")).filter(d => d3.rgb(d).displayable());
+    /* eslint-disable */
+    colors = colors.map(d => d.replace(/\"/g, ""))
+        .filter(d => d3$1.rgb(d).displayable());
+    /* eslint-enable */
     colors.forEach(obj.addColorToPalette);
-    colors.forEach(d => dispatch.call("addSelectedColor", { selectedColor: d }));
+    colors.forEach(d => dispatch.call("addSelectedColor", {
+      selectedColor: d
+    }));
     obj.updatePaletteCanvas();
 
     paletteInputField.property("value", "\""+colors.join("\",\"")+"\"");
@@ -1379,15 +1420,15 @@ var makePalettePreview = function(container) {
     colorList.append("li")
         .style("background-color", newColor)
         .on("click", function() {
-          var rgb = d3.select(this).style("background-color");
-          dispatch.call("deletePaletteColor", {color: rgb});
+          var rgb$$1 = d3$1.select(this).style("background-color");
+          dispatch.call("deletePaletteColor", {color: rgb$$1});
         });
-    inPalette.push(d3.rgb(newColor).toString());
+    inPalette.push(d3$1.rgb(newColor).toString());
     updatePreview();
   };
 
   dispatch.on("addSelectedColor.palettePreview", function() {
-    var rgbstr = d3.rgb(this.selectedColor).toString();
+    var rgbstr = d3$1.rgb(this.selectedColor).toString();
     if(inPalette.indexOf(rgbstr) > -1) return;
     obj.addColorToPreview(this.selectedColor);
   });
@@ -1404,7 +1445,7 @@ var makePalettePreview = function(container) {
 
     colorList.selectAll("li").each(function(d,i) {
       if(i !== idx) return;
-      d3.select(this).remove();
+      d3$1.select(this).remove();
     });
 
     inPalette.splice(idx, 1);
@@ -1441,7 +1482,7 @@ var makeVisPreview = function(container) {
 
   var MAP_OPTIONS = {
     SHOW_STROKE : true,
-    STROKE_COLOR : 'white',
+    STROKE_COLOR : "#fff",
     STROKE_WIDTH : 1
   };
 
@@ -1449,13 +1490,13 @@ var makeVisPreview = function(container) {
       mapSvgPolyData = new Array(numMapPoly);
 
   for(var i = 0; i < numMapPoly; i++) mapSvgPolyData[i] = i;
-  mapSvgPolyData = d3.shuffle(mapSvgPolyData);
+  mapSvgPolyData = d3$1.shuffle(mapSvgPolyData);
 
   drawBar();
   drawScatter();
 
   container.select(".scatterOptions_radius").on("input", function() {
-    SCATTER_OPTIONS.RADIUS = +d3.select(this).property("value");
+    SCATTER_OPTIONS.RADIUS = +d3$1.select(this).property("value");
     updateScatter();
   });
   container.select(".scatterOptions_showStroke").on("change", function() {
@@ -1467,7 +1508,7 @@ var makeVisPreview = function(container) {
     updateScatter();
   });
   container.select(".scatterOptions_stroke_width").on("input", function() {
-    SCATTER_OPTIONS.STROKE_WIDTH = +d3.select(this).property("value");
+    SCATTER_OPTIONS.STROKE_WIDTH = +d3$1.select(this).property("value");
     updateScatter();
   });
 
@@ -1476,16 +1517,16 @@ var makeVisPreview = function(container) {
     updateMap();
   });
   container.select(".mapOptions_stroke_color").on("blur", function() {
-    MAP_OPTIONS.STROKE_COLOR = d3.select(this).property("value");
+    MAP_OPTIONS.STROKE_COLOR = d3$1.select(this).property("value");
     updateMap();
   });
   container.select(".mapOptions_stroke_width").on("input", function() {
-    MAP_OPTIONS.STROKE_WIDTH = +d3.select(this).property("value");
+    MAP_OPTIONS.STROKE_WIDTH = +d3$1.select(this).property("value");
     updateMap();
   });
 
   dispatch.on("addSelectedColor.visPreview", function() {
-    var rgbstr = d3.rgb(this.selectedColor).toString();
+    var rgbstr = d3$1.rgb(this.selectedColor).toString();
     if(inPalette.indexOf(rgbstr) > -1) return;
     obj.addColorToPalette(rgbstr);
   });
@@ -1498,7 +1539,7 @@ var makeVisPreview = function(container) {
   });
 
   dispatch.on("deletePaletteColor.visPreview", function() {
-    var rgbstr = d3.rgb(this.color).toString(),
+    var rgbstr = d3$1.rgb(this.color).toString(),
         idx = inPalette.indexOf(rgbstr);
     if(idx < 0) return;
 
@@ -1520,8 +1561,8 @@ var makeVisPreview = function(container) {
     var width = barSvg.attr("width") - margin.left - margin.right,
         height = barSvg.attr("height") - margin.top - margin.bottom;
 
-    var x = d3.scaleBand().domain(inPalette).range([0, width]).padding(0.1),
-        y = d3.scaleLinear().domain([0,1]).range([height, 0]),
+    var x = d3$1.scaleBand().domain(inPalette).range([0, width]).padding(0.1),
+        y = d3$1.scaleLinear().domain([0,1]).range([height, 0]),
         g = barSvg.select(".bars");
 
     var bars = g.selectAll("rect").data(inPalette);
@@ -1529,7 +1570,7 @@ var makeVisPreview = function(container) {
     bars.enter()
         .append("rect")
             .each(function() {
-              var bar = d3.select(this),
+              var bar = d3$1.select(this),
                   yVal = 0;
               while(yVal < 0.25) yVal = y(Math.random());
               bar.attr("y", yVal).attr("height", height -yVal);
@@ -1546,23 +1587,25 @@ var makeVisPreview = function(container) {
 
   function updateMap() {
     mapSvg.selectAll("polygon")
-        .style("fill", (d,i) => inPalette[mapSvgPolyData[i]  % inPalette.length])
-        .style("stroke",(d,i) => MAP_OPTIONS.SHOW_STROKE ? MAP_OPTIONS.STROKE_COLOR : "none")
-        .style("stroke-width",(d,i) => MAP_OPTIONS.STROKE_WIDTH);
+        .style("fill", (d,i) => inPalette[mapSvgPolyData[i] % inPalette.length])
+        .style("stroke", MAP_OPTIONS.SHOW_STROKE ?
+            MAP_OPTIONS.STROKE_COLOR : "none")
+        .style("stroke-width", MAP_OPTIONS.STROKE_WIDTH);
   }
 
 
   function updateScatter() {
     scatterSvg.select(".circles").selectAll("circle")
         .attr("r", SCATTER_OPTIONS.RADIUS)
-        .style("fill",(d,i) => SCATTER_OPTIONS.SHOW_FILL ? inPalette[i % inPalette.length] : "none")
-        .style("stroke",(d,i) => SCATTER_OPTIONS.SHOW_STROKE ? inPalette[i % inPalette.length] : "none")
-        .style("stroke-width",(d,i) => SCATTER_OPTIONS.STROKE_WIDTH);
+        .style("fill",(d,i) => SCATTER_OPTIONS.SHOW_FILL ?
+            inPalette[i % inPalette.length] : "none")
+        .style("stroke",(d,i) => SCATTER_OPTIONS.SHOW_STROKE ?
+            inPalette[i % inPalette.length] : "none")
+        .style("stroke-width", SCATTER_OPTIONS.STROKE_WIDTH);
   }
 
   function drawBar() {
     var outline = generateChartBasics(barSvg, true),
-        margin = outline.margin, width = outline.width, height = outline.height,
         svg = outline.svg;
 
     svg.append("g").classed("bars", true);
@@ -1570,7 +1613,6 @@ var makeVisPreview = function(container) {
 
   function drawScatter() {
     var outline = generateChartBasics(scatterSvg, true),
-        margin = outline.margin, width = outline.width, height = outline.height,
         svg = outline.svg, x = outline.x, y = outline.y;
 
     var circles = svg.append("g").classed("circles", true);
@@ -1579,7 +1621,7 @@ var makeVisPreview = function(container) {
           .attr("cx", x(Math.random()))
           .attr("cy", y(Math.random()))
           .attr("r", SCATTER_OPTIONS.RADIUS)
-          .style("stroke-width",(d,i) => SCATTER_OPTIONS.STROKE_WIDTH);
+          .style("stroke-width", SCATTER_OPTIONS.STROKE_WIDTH);
     }
   }
 
@@ -1590,15 +1632,15 @@ var makeVisPreview = function(container) {
     var svg = svgObj.append("g")
             .attr("transform", "translate("+margin.left+","+margin.top+")");
 
-    var x = d3.scaleLinear().domain([0,1]).range([0, width]),
-        y = d3.scaleLinear().domain([0,1]).range([height, 0]);
+    var x = d3$1.scaleLinear().domain([0,1]).range([0, width]),
+        y = d3$1.scaleLinear().domain([0,1]).range([height, 0]);
 
     if(makeAxis) {
       svg.append("g")
         .attr("transform", "translate(0," + height + ")")
-        .call(d3.axisBottom(x).ticks(0));
+        .call(d3$1.axisBottom(x).ticks(0));
       svg.append("g")
-        .call(d3.axisLeft(y).ticks(0));
+        .call(d3$1.axisLeft(y).ticks(0));
     }
 
     return {
@@ -1606,6 +1648,20 @@ var makeVisPreview = function(container) {
     };
   }
 };
+
+function initializeHiddenMenus() {
+  d3$1.selectAll(".hiddenMenu").each(function() {
+    var menu = d3$1.select(this),
+        title = menu.select(".hiddenMenuTitle"),
+        content = menu.select(".hiddenMenuContent");
+    title.on("click", function() {
+      var isHidden = content.style("visibility") === "hidden";
+      content.style("visibility", isHidden ? "visible" : "hidden")
+          .style("display", isHidden ? "inline-block" : "none");
+
+    });
+  });
+}
 
 function initializeURISharing() {
   var inPalette = [];
@@ -1615,56 +1671,35 @@ function initializeURISharing() {
 
   if (palette.length === 0) return;
   palette = palette[0].replace("?","").replace("palette=","").split(";");
-  var colors = palette.map(d => d3.rgb(d)).filter(d => d.displayable());
+  var colors = palette.map(d => d3$1.rgb(d)).filter(d => d.displayable());
   inPalette = colors.map(d => d.toString());
   inPalette = inPalette.filter((d,i) => inPalette.indexOf(d) === i);
 
   if(inPalette.length > 0) {
-    inPalette.forEach(d => dispatch.call("addSelectedColor", {selectedColor: d}));
+    inPalette.forEach(d => dispatch.call("addSelectedColor", {
+      selectedColor: d
+    }));
   }
 }
 
-var cvdGraientPicker = new CvdGradientPicker(d3.select(".cvdGradientPicker"));
-var cvdJndTable = new CvdJndTable(d3.select(".cvdTable"));
-var gradientPicker = new GradientPicker(d3.select(".gradientPicker"));
-var imageColorPicker = new ImageColorPicker(d3.select(".imageColorPicker"));
-var jndTable = new JndTable(d3.select(".jndTable"));
-var paletteExporter = new PaletteExporter(d3.select(".exportOptionsContainer"));
-var palettePreview = new PalettePreview(d3.select(".palettePreview"));
-var paletteTable = new ColorPaletteTable(d3.select(".paletteTable"));
-var picker = new ColorPicker(d3.select(".colorpicker"));
-var visPreview = new VisualizationPreview(d3.select(".visPreview"));
+/* eslint-disable no-unused-vars */
+var cvdGraientPicker = new CvdGradientPicker(d3$1.select(".cvdGradientPicker"));
+var cvdJndTable = new CvdJndTable(d3$1.select(".cvdTable"));
+var gradientPicker = new GradientPicker(d3$1.select(".gradientPicker"));
+var imageColorPicker = new ImageColorPicker(d3$1.select(".imageColorPicker"));
+var jndTable = new JndTable(d3$1.select(".jndTable"));
+var paletteExporter = new PaletteExporter(d3$1.select(".exportOptionsContainer"));
+var palettePreview = new PalettePreview(d3$1.select(".palettePreview"));
+var paletteTable = new ColorPaletteTable(d3$1.select(".paletteTable"));
+var picker = new ColorPicker(d3$1.select(".colorpicker"));
+var visPreview = new VisualizationPreview(d3$1.select(".visPreview"));
+/* eslint-enable no-unused-vars */
 
 // Must follow initialization of all interface components, as the URI color
 // palette parser will dispatch add color messages
 initializeURISharing();
 
 // Add hide/show for all hidden menues
-d3.selectAll(".hiddenMenu").each(function() {
-  var menu = d3.select(this),
-      title = menu.select(".hiddenMenuTitle"),
-      content = menu.select(".hiddenMenuContent");
-  title.on("click", function() {
-    var isHidden = content.style("visibility") === "hidden";
-    content.style("visibility", isHidden ? "visible" : "hidden")
-        .style("display", isHidden ? "inline-block" : "none");
-
-  });
-});
-
-// var cvd = colorVisionDeficiency(),
-//     colorDB = colorStore(),
-//     exprt = exportFunction(d3.select(".exportOptionsContainer")),
-//     cp = colorpicker(d3.select(".colorpicker")),
-//     ip = imageprocessor(d3.select(".imageProcessor")),
-//     palette = colorPalette(d3.select(".paletteTable")),
-//     gp = gradientpicker(d3.select(".gradientPicker")),
-//     jnds = jndtable(d3.select(".jndTable")),
-//     cvdTable = cvdtable(d3.select(".cvdTable")),
-//     cvdGrads = cvdgradientpicker(d3.select(".cvdGradientPicker")),
-//     palettePreview = palettepreview(d3.select(".palettePreview")),
-//     visPreview = vispreview(d3.select(".visPreview")),
-//     processUriPalette = uri(); // should be loaded last so that it can add colors correctly
-//
+initializeHiddenMenus();
 
 })));
