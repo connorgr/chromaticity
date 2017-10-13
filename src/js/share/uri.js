@@ -1,3 +1,4 @@
+import * as d3 from "d3";
 import {dispatch} from "../dispatch";
 
 export function initializeURISharing() {
@@ -13,6 +14,8 @@ export function initializeURISharing() {
   inPalette = inPalette.filter((d,i) => inPalette.indexOf(d) === i);
 
   if(inPalette.length > 0) {
-    inPalette.forEach(d => dispatch.call("addSelectedColor", {selectedColor: d}));
+    inPalette.forEach(d => dispatch.call("addSelectedColor", {
+      selectedColor: d
+    }));
   }
 }

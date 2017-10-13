@@ -1,3 +1,4 @@
+import * as d3 from "d3";
 import {dispatch} from "../dispatch";
 
 export function PalettePreview(container) {
@@ -18,7 +19,7 @@ var makePalettePreview = function(container) {
         });
     inPalette.push(d3.rgb(newColor).toString());
     updatePreview();
-  }
+  };
 
   dispatch.on("addSelectedColor.palettePreview", function() {
     var rgbstr = d3.rgb(this.selectedColor).toString();

@@ -1,15 +1,15 @@
+import * as d3 from "d3";
 import {dispatch} from "../dispatch";
 import {rgb2hex} from "../util/rgb2hex";
 
 export function ColorPaletteTable(container) {
-  this.colorpalettetable = makeColorPaletteTable(container)
+  this.colorpalettetable = makeColorPaletteTable(container);
 }
 
 var makeColorPaletteTable = function(tbl) {
   var makeID = Date.now().toString();
 
-  var inPalette = [],
-      palettePreview = tbl.select(".palettePreview");
+  var inPalette = [];
 
   var obj = {};
 
@@ -40,21 +40,25 @@ var makeColorPaletteTable = function(tbl) {
 
     inPalette.push(rgb.toString());
 
-    var jabstr = "Jab("+[jab.J, jab.a, jab.b].map(Math.round).join(',')+")",
-        labstr = "Lab("+[lab.l, lab.a, lab.b].map(Math.round).join(',')+")"
+    var jabstr = "Jab("+[jab.J, jab.a, jab.b].map(Math.round).join(",")+")",
+        labstr = "Lab("+[lab.l, lab.a, lab.b].map(Math.round).join(",")+")";
 
     var newRow = tbl.select("tbody").append("tr");
-    newRow.append("td").append("span").classed("deletePaletteTableColor", true).text("×")//"✖")
+    newRow.append("td").append("span").classed("deletePaletteTableColor", true)
+        .text("×")
         .on("click", function() {
           var swatch = d3.select(this.parentNode.parentNode).select(".swatch"),
               color = swatch.style("background-color");
-          dispatch.call("deletePaletteColor", {color: d3.rgb(color).toString()});
+          dispatch.call("deletePaletteColor", {
+            color: d3.rgb(color).toString()
+          });
         });
-    tbl.selectAll('tbody input[type="radio"]')
+    tbl.selectAll("tbody input[type=\"radio\"]")
         .property("checked", false);
     newRow.append("td").append("input").attr("type", "radio")
         .property("checked", true).on("click", function() {
-          d3.selectAll('.paletteTable tbody input[type="radio"]').property("checked", false);
+          d3.selectAll(".paletteTable tbody input[type=\"radio\"]")
+              .property("checked", false);
           d3.select(this).property("checked", true);
           dispatch.call("updateSelectedColor", {selectedColor: rgb});
         });
@@ -66,4 +70,4 @@ var makeColorPaletteTable = function(tbl) {
   };
 
   return obj;
-}
+};

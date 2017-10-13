@@ -1,3 +1,4 @@
+import * as d3 from "d3";
 import {dispatch} from "../dispatch";
 
 export function GradientPicker(container) {
@@ -5,9 +6,7 @@ export function GradientPicker(container) {
 }
 
 var makeGradientPicker = function(container) {
-  var TMP_START_COLOR_VALUE,
-      TMP_STOP_COLOR_VALUE,
-      NUM_COLOR_STEPS = 5;
+  var NUM_COLOR_STEPS = 5;
 
   var inPalette = [];
 
@@ -22,10 +21,8 @@ var makeGradientPicker = function(container) {
 
   renderGradients();
 
-  container.selectAll(".gradientPickerInput")
-      .on('focus', storeColorValue);
-  startInput.on('blur', triggerTextInputColorChange(startInput));
-  stopInput.on('blur', triggerTextInputColorChange(stopInput));
+  startInput.on("blur", triggerTextInputColorChange(startInput));
+  stopInput.on("blur", triggerTextInputColorChange(stopInput));
 
   container.select(".gradientStepCount")
       .on("blur", function() {
@@ -38,18 +35,18 @@ var makeGradientPicker = function(container) {
     if(inPalette.indexOf(rgbstr) > -1) return;
     inPalette.push(rgbstr);
 
-    var newStart = startColorSwatchList.append("li")
-            .style("background-color", this.selectedColor)
-            .on("click", function() {
-              startColor = rgbstr;
-              renderGradients();
-            }),
-        newStop = stopColorSwatchList.append("li")
-            .style("background-color", this.selectedColor)
-            .on("click", function() {
-              stopColor = rgbstr;
-              renderGradients();
-            });
+    startColorSwatchList.append("li")
+        .style("background-color", this.selectedColor)
+        .on("click", function() {
+          startColor = rgbstr;
+          renderGradients();
+        });
+    stopColorSwatchList.append("li")
+        .style("background-color", this.selectedColor)
+        .on("click", function() {
+          stopColor = rgbstr;
+          renderGradients();
+        });
   });
 
   dispatch.on("clearPalette.gradientpicker", function() {
@@ -92,7 +89,8 @@ var makeGradientPicker = function(container) {
         image = context.createImageData(width, 1),
         i = -1,
         space = canvas.attr("data-colorType"),
-        interpolator = d3["interpolate" + space[0].toUpperCase() + space.slice(1)],
+        spaceName = space[0].toUpperCase() + space.slice(1),
+        interpolator = d3["interpolate" + spaceName],
         continuousScale = d3.scaleLinear()
             .domain([0, width-1])
             .interpolate(interpolator)
@@ -135,7 +133,8 @@ var makeGradientPicker = function(container) {
 
   function renderSingleGradientText(input, start, stop) {
     var space = input.attr("data-colorType"),
-        interpolator = d3["interpolate" + space[0].toUpperCase() + space.slice(1)],
+        spaceName = space[0].toUpperCase() + space.slice(1),
+        interpolator = d3["interpolate" + spaceName],
         scale = d3.scaleLinear()
             .domain([0, input.classed("sequential") ? NUM_COLOR_STEPS-1 : 1])
             .interpolate(interpolator)
@@ -145,11 +144,6 @@ var makeGradientPicker = function(container) {
     input.property("value", JSON.stringify(colors));
   }
 
-
-  function storeColorValue() {
-    TMP_START_COLOR_VALUE = startColor;
-    TMP_STOP_COLOR_VALUE = stopColor;
-  }
   function triggerTextInputColorChange(inputSelection) {
     return function() {
       var input = d3.rgb(inputSelection.property("value"));
@@ -160,4 +154,4 @@ var makeGradientPicker = function(container) {
       }
     };
   }
-}
+};

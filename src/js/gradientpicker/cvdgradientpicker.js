@@ -1,3 +1,4 @@
+import * as d3 from "d3";
 import {dispatch} from "../dispatch";
 import {colorVisionDeficiency} from "../cvd";
 
@@ -39,7 +40,8 @@ var makeCvdGradientPicker = function(container) {
         context = canvas.node().getContext("2d"),
         image = context.createImageData(width, 1),
         i = -1,
-        interpolator = d3["interpolate" + space[0].toUpperCase() + space.slice(1)],
+        spaceName = space[0].toUpperCase() + space.slice(1),
+        interpolator = d3["interpolate" + spaceName],
         scale = d3.scaleLinear()
             .domain([0, width-1])
             .interpolate(interpolator)

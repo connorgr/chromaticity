@@ -1,3 +1,4 @@
+import * as d3 from "d3";
 import {dispatch} from "../dispatch";
 
 export function ImageColorPicker(container) {
@@ -12,17 +13,17 @@ var makeImageColorPicker = function(container) {
       dropImg = container.select(".dropImg"),
       uploadBtn = container.select(".uploadBtn");
 
-  dropArea.on('dragover', dragOverArea);
-  dropArea.on('drop', selectFile);
+  dropArea.on("dragover", dragOverArea);
+  dropArea.on("drop", selectFile);
   dropImg.on("load", buildCanvas);
   uploadBtn.on("click", function() {
-    var localFile = container.select('.uploadForm input[type="file"]');
+    var localFile = container.select(".uploadForm input[type=\"file\"]");
     if(localFile.property("files").length > 0) {
       var reader = new FileReader();
       reader.onload = function(e) { dropImg.node().src=e.target.result; };
       reader.readAsDataURL(localFile.property("files")[0]);
     }
-  })
+  });
 
   function buildCanvas() {
     context.clearRect(0, 0, canvas.width, canvas.height);
@@ -34,18 +35,20 @@ var makeImageColorPicker = function(container) {
     // quickly iterate over all pixels
     var i = -1;
     for(var x = 0; x < canvas.width*canvas.height; ++x) {
-      pxs[x] = d3.hcl(d3.rgb(image.data[++i], image.data[++i], image.data[++i]).toString());
+      pxs[x] = d3.hcl(d3.rgb(image.data[++i],
+                             image.data[++i],
+                             image.data[++i]).toString());
       ++i;
     }
 
     var uniqueColors = pxs.filter(function(d, i, self) {
               return self.indexOf(d) === i;
             })
-            .reduce(function(acc, d, i) {
+            .reduce(function(acc, d) {
               if(acc.length === 0) return [d];
 
               var i = 0, isND;
-              for(var i = 0; i<acc.length; i++) {
+              for(i = 0; i<acc.length; i++) {
                 isND = d3.noticeablyDifferent(acc[i], d, 1.0, 0.5);
                 if(isND === false) return acc;
               }
@@ -70,10 +73,10 @@ var makeImageColorPicker = function(container) {
             });
   }
 
-  function dragOverArea(e) {
+  function dragOverArea() {
     d3.event.stopPropagation();
     d3.event.preventDefault();
-    d3.event.dataTransfer.dropEffect = 'copy';
+    d3.event.dataTransfer.dropEffect = "copy";
   }
 
   function selectFile() {
@@ -84,7 +87,7 @@ var makeImageColorPicker = function(container) {
     if(files.length < 1) return;
 
     var file = files[0];
-    if (!file.type.match('image.*')) {
+    if (!file.type.match("image.*")) {
         return;
     }
 

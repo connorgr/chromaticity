@@ -1,3 +1,4 @@
+import * as d3 from "d3";
 import {dispatch} from "../dispatch";
 
 export function JndTable(table) {
@@ -23,7 +24,8 @@ var makeJndTable = function(table) {
       var rowColor = curPalette[i],
           td = d3.select(this).append("td");
 
-      if(d3.noticeablyDifferent(rgbstr, rowColor, JND_SIZE, JND_PERCENT) === false) {
+      var nd = d3.noticeablyDifferent(rgbstr, rowColor, JND_SIZE, JND_PERCENT);
+      if(nd === false) {
         td.classed("notDifferent", true).text("⚠");
       }
     });
@@ -61,8 +63,6 @@ var makeJndTable = function(table) {
   });
 
   dispatch.on("clearPalette.jndtable", function() {
-    curPalette = [];
-
     var colorCells = table.selectAll(".palette td").filter((d,i) => i > 0),
         rows = table.selectAll(".ndRow");
     colorCells.remove();
@@ -91,7 +91,7 @@ var makeJndTable = function(table) {
       var cmps = row.selectAll("td").filter((d,i) => i > 0);
       cmps.filter((d,i) => i === cIdx).remove();
 
-      cmps.each(function(d,j) {
+      cmps.each(function() {
         var td = d3.select(this),
             bg = td.style("background-color");
         if(bg === rowColor) return;
@@ -121,7 +121,10 @@ var makeJndTable = function(table) {
       valText.text(val);
 
       obj.updateColorTable();
-      dispatch.call("updateJNDParameters", {percent: JND_PERCENT, size: JND_SIZE});
+      dispatch.call("updateJNDParameters", {
+        percent: JND_PERCENT,
+        size: JND_SIZE
+      });
     });
   });
 

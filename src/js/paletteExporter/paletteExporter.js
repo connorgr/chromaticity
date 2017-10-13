@@ -1,3 +1,4 @@
+import * as d3 from "d3";
 import {dispatch} from "../dispatch";
 
 export function PaletteExporter(container) {
@@ -36,7 +37,7 @@ var makePaletteExporter = function(container) {
         context = paletteCanvas.node().getContext("2d"),
         image = context.createImageData(width, 1),
         i = -1,
-        rgb, idx;
+        rgb;
 
     var pxForColor = Math.floor(width / inPalette.length),
         palIdx = -1;
@@ -61,16 +62,20 @@ var makePaletteExporter = function(container) {
   };
 
   obj.updatePaletteInputField = function() {
-    paletteInputField.property("value", '"'+inPalette.join('","')+'"');
+    paletteInputField.property("value", "\""+inPalette.join("\",\"")+"\"");
   };
 
   obj.updatePaletteShareField = function() {
     var txt;
     if(inPalette.length === 0) txt = "";
-    else txt = "?palette="+inPalette.map(d => d.toString().replace(/\s/g,"")).join(";");
+    else {
+      var palStr = inPalette.map(d => d.toString().replace(/\s/g,"")).join(";");
+      txt = "?palette=" + palStr;
+    }
 
-    paletteShareField.property("value", document.location.host+document.location.pathname+txt);
-  }
+    paletteShareField.property("value",
+        document.location.host+document.location.pathname + txt);
+  };
 
 
   obj.addColorToPalette = function(newColor) {
@@ -81,16 +86,21 @@ var makePaletteExporter = function(container) {
     if(this.value === "") return;
     var colors = this.value.replace(/\s/g, "")
             .replace("[","").replace("]","")
-            .split('",');
+            .split("\",");
     if(colors.length < 1) return;
 
     dispatch.call("clearPalette");
 
     inPalette = [];
 
-    colors = colors.map(d => d.replace(/\"/g, "")).filter(d => d3.rgb(d).displayable());
+    /* eslint-disable */
+    colors = colors.map(d => d.replace(/\"/g, ""))
+        .filter(d => d3.rgb(d).displayable());
+    /* eslint-enable */
     colors.forEach(obj.addColorToPalette);
-    colors.forEach(d => dispatch.call("addSelectedColor", { selectedColor: d }));
+    colors.forEach(d => dispatch.call("addSelectedColor", {
+      selectedColor: d
+    }));
     obj.updatePaletteCanvas();
 
     paletteInputField.property("value", "\""+colors.join("\",\"")+"\"");

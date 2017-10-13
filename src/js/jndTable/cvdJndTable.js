@@ -1,3 +1,4 @@
+import * as d3 from "d3";
 import {dispatch} from "../dispatch";
 import {colorVisionDeficiency} from "../cvd";
 
@@ -39,7 +40,6 @@ var makeCvdJndTable = function(table) {
   });
 
   dispatch.on("clearPalette.cvdtable", function() {
-    curPalette = [];
     table.selectAll("tr").each(function() {
       var row = d3.select(this);
       row.selectAll("td").filter((d,i) => i > 0).remove();
@@ -77,8 +77,7 @@ var makeCvdJndTable = function(table) {
 
   function updateJNDs() {
     table.selectAll("tbody tr").each(function() {
-      var tr = d3.select(this),
-          cvdType = tr.attr("class");
+      var tr = d3.select(this);
 
       var rowColors = [];
       tr.selectAll("td").each(function(d,i) {
@@ -93,16 +92,17 @@ var makeCvdJndTable = function(table) {
             tdBGIdx = rowColors.indexOf(tdBG),
             isND = rowColors.reduce(function(acc, d, i) {
               if(i === tdBGIdx) return acc;
-              var ndResult = d3.noticeablyDifferent(d, tdBG, JND_SIZE, JND_PERCENT);
+              var ndResult = d3.noticeablyDifferent(d, tdBG, JND_SIZE,
+                                                    JND_PERCENT);
               return acc && ndResult;
             }, true);
 
         td.classed("notDifferent", isND === false)
             .text(isND === false ? "⚠" : "");
-        if(d3.lab(tdBG).l < 30) td.style("color", "rgba(255,255,255,0.25)")
+        if(d3.lab(tdBG).l < 30) td.style("color", "rgba(255,255,255,0.25)");
       });
     });
   }
 
   return obj;
-}
+};

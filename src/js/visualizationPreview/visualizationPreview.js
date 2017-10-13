@@ -1,4 +1,6 @@
+import * as d3 from "d3";
 import {dispatch} from "../dispatch";
+
 export function VisualizationPreview(container) {
   this.visPreview = makeVisPreview(container);
 }
@@ -20,9 +22,9 @@ var makeVisPreview = function(container) {
 
   var MAP_OPTIONS = {
     SHOW_STROKE : true,
-    STROKE_COLOR : 'white',
+    STROKE_COLOR : "#fff",
     STROKE_WIDTH : 1
-  }
+  };
 
   var numMapPoly = mapSvg.selectAll("polygon").size(),
       mapSvgPolyData = new Array(numMapPoly);
@@ -125,23 +127,25 @@ var makeVisPreview = function(container) {
 
   function updateMap() {
     mapSvg.selectAll("polygon")
-        .style("fill", (d,i) => inPalette[mapSvgPolyData[i]  % inPalette.length])
-        .style("stroke",(d,i) => MAP_OPTIONS.SHOW_STROKE ? MAP_OPTIONS.STROKE_COLOR : "none")
-        .style("stroke-width",(d,i) => MAP_OPTIONS.STROKE_WIDTH);
+        .style("fill", (d,i) => inPalette[mapSvgPolyData[i] % inPalette.length])
+        .style("stroke", MAP_OPTIONS.SHOW_STROKE ?
+            MAP_OPTIONS.STROKE_COLOR : "none")
+        .style("stroke-width", MAP_OPTIONS.STROKE_WIDTH);
   }
 
 
   function updateScatter() {
     scatterSvg.select(".circles").selectAll("circle")
         .attr("r", SCATTER_OPTIONS.RADIUS)
-        .style("fill",(d,i) => SCATTER_OPTIONS.SHOW_FILL ? inPalette[i % inPalette.length] : "none")
-        .style("stroke",(d,i) => SCATTER_OPTIONS.SHOW_STROKE ? inPalette[i % inPalette.length] : "none")
-        .style("stroke-width",(d,i) => SCATTER_OPTIONS.STROKE_WIDTH);
+        .style("fill",(d,i) => SCATTER_OPTIONS.SHOW_FILL ?
+            inPalette[i % inPalette.length] : "none")
+        .style("stroke",(d,i) => SCATTER_OPTIONS.SHOW_STROKE ?
+            inPalette[i % inPalette.length] : "none")
+        .style("stroke-width", SCATTER_OPTIONS.STROKE_WIDTH);
   }
 
   function drawBar() {
     var outline = generateChartBasics(barSvg, true),
-        margin = outline.margin, width = outline.width, height = outline.height,
         svg = outline.svg;
 
     svg.append("g").classed("bars", true);
@@ -149,7 +153,6 @@ var makeVisPreview = function(container) {
 
   function drawScatter() {
     var outline = generateChartBasics(scatterSvg, true),
-        margin = outline.margin, width = outline.width, height = outline.height,
         svg = outline.svg, x = outline.x, y = outline.y;
 
     var circles = svg.append("g").classed("circles", true);
@@ -158,7 +161,7 @@ var makeVisPreview = function(container) {
           .attr("cx", x(Math.random()))
           .attr("cy", y(Math.random()))
           .attr("r", SCATTER_OPTIONS.RADIUS)
-          .style("stroke-width",(d,i) => SCATTER_OPTIONS.STROKE_WIDTH);
+          .style("stroke-width", SCATTER_OPTIONS.STROKE_WIDTH);
     }
   }
 

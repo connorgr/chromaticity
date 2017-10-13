@@ -15,12 +15,6 @@ issue and I'll get in touch as soon as I can!
 $ npm install
 ```
 
-### Run
-
-```
-$ npm start
-```
-
 ### Build
 
 ```

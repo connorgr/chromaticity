@@ -1,3 +1,4 @@
+import * as d3 from "d3";
 import {dispatch} from "../dispatch";
 import {rgb2hex} from "../util/rgb2hex";
 
@@ -9,7 +10,7 @@ var makeColorPicker = function(container) {
   var makeID = Date.now().toString();
 
   var CHECK_FOR_ND = false,
-      COLORPICKER_SPACE = 'lab',
+      COLORPICKER_SPACE = "lab",
       START_COLOR_VALUES = [50,0,0],
       START_COLOR = {
         space: COLORPICKER_SPACE,
@@ -17,13 +18,16 @@ var makeColorPicker = function(container) {
         color: d3[COLORPICKER_SPACE].apply(this, START_COLOR_VALUES)
       };
 
-  var CLEAR_COLOR = d3.rgb('#282c34'),
-      CLEAR_COLOR_RGB = [40, 44, 52];
+  var CLEAR_COLOR = d3.rgb("#282c34");
 
   var startBarValue;
-  if(COLORPICKER_SPACE === "jab") startBarValue = START_COLOR.color.J;
-  else if(COLORPICKER_SPACE === "lab" || COLORPICKER_SPACE === "hcl") startBarValue = START_COLOR.color.l;
-  else startBarValue = START_COLOR.color.r;
+  if(COLORPICKER_SPACE === "jab") {
+    startBarValue = START_COLOR.color.J;
+  } else if(COLORPICKER_SPACE === "lab" || COLORPICKER_SPACE === "hcl") {
+    startBarValue = START_COLOR.color.l;
+  } else {
+    startBarValue = START_COLOR.color.r;
+  }
 
   container.select(".selectedColor")
       .style("background", START_COLOR.color.toString());
@@ -35,7 +39,8 @@ var makeColorPicker = function(container) {
   container.select("#addColorToPaletteBtn")
       .on("click", function() {
         dispatch.call("addSelectedColor", {
-          selectedColor: container.select(".selectedColor").style("background-color")
+          selectedColor: container.select(".selectedColor")
+              .style("background-color")
         });
       });
 
@@ -43,18 +48,22 @@ var makeColorPicker = function(container) {
     container.selectAll("#colorspaceSwitcherMenu li").classed("active", false);
     d3.select(this).classed("active", true);
 
-    var newSpace = d3.select(this).attr('data-space');
+    var newSpace = d3.select(this).attr("data-space");
     if(newSpace !== COLORPICKER_SPACE) {
       COLORPICKER_SPACE = newSpace;
 
       var selectedColor = container.select(".selectedColor")
-              .style('background-color'),
+              .style("background-color"),
           color = d3[COLORPICKER_SPACE](selectedColor),
           barValue;
 
-      if(COLORPICKER_SPACE === "jab") barValue = color.J;
-      else if(COLORPICKER_SPACE === "lab" || COLORPICKER_SPACE === "hcl") barValue = color.l;
-      else barValue = color.r;
+      if(COLORPICKER_SPACE === "jab") {
+        barValue = color.J;
+      } else if(COLORPICKER_SPACE === "lab" || COLORPICKER_SPACE === "hcl") {
+        barValue = color.l;
+      } else {
+        barValue = color.r;
+      }
 
       renderColorpicker(barValue);
       renderColorpicker_bar();
@@ -62,40 +71,50 @@ var makeColorPicker = function(container) {
     }
   });
 
-  container.selectAll('.colorChannelInput')
-      .on('focus', storeColorChannelValue)
-      .on('blur', triggerColorChannelUpdate);
-  container.selectAll('.colorChannelInput[type="color"]').on("change", triggerColorChannelUpdate);
-  container.select('.freetextColorInput').on('blur', function() {
-    var colorInput = d3.rgb(this.value.replace(/\'/g, '').replace(/\"/g,''));
-    this.value = '';
+  container.selectAll(".colorChannelInput")
+      .on("focus", storeColorChannelValue)
+      .on("blur", triggerColorChannelUpdate);
+  container.selectAll(".colorChannelInput[type=\"color\"]")
+      .on("change", triggerColorChannelUpdate);
+  container.select(".freetextColorInput").on("blur", function() {
+    /*eslint-disable*/
+    var colorInput = d3.rgb(this.value.replace(/\'/g, '').replace(/\"/g,""));
+    /*eslint-enable*/
+    this.value = "";
 
-    if(colorInput.opacity !== NaN) colorInput.opacity = 1;
+    if(Math.isNaN(colorInput.opacity) === false) colorInput.opacity = 1;
     if(colorInput.displayable()) updateColorChannelInput(colorInput.toString());
     else return;
 
-    container.select(".selectedColor").style('background-color', colorInput);
+    container.select(".selectedColor").style("background-color", colorInput);
 
     var barValue;
-    if(COLORPICKER_SPACE === "jab") barValue = d3.jab(colorInput).J;
-    else if(COLORPICKER_SPACE === "lab" || COLORPICKER_SPACE === "hcl") barValue = d3.lab(colorInput).l;
-    else barValue = colorInput.r;
+    if(COLORPICKER_SPACE === "jab") {
+      barValue = d3.jab(colorInput).J;
+    } else if(COLORPICKER_SPACE === "lab" || COLORPICKER_SPACE === "hcl") {
+      barValue = d3.lab(colorInput).l;
+    } else {
+      barValue = colorInput.r;
+    }
+
     relocateColorpickerBarThumb(barValue);
   });
 
 
-  container.select('#colorpicker_square')
+  container.select("#colorpicker_square")
       .on("click", function () {
-        var context = this.getContext('2d'),
-            px = context.getImageData(d3.mouse(this)[0], d3.mouse(this)[1], 1, 1).data, // remove alpha
-            rgb = "rgba("+px.slice(0,4).join(',')+")";
-        d3.select(".selectedColor").style('background', rgb);
+        var mouse = d3.mouse(this),
+            context = this.getContext("2d"),
+            px = context.getImageData(mouse[0], mouse[1], 1, 1).data,
+            rgb = "rgba("+px.slice(0,4).join(",")+")";
+        d3.select(".selectedColor").style("background", rgb);
         updateColorChannelInput(rgb);
       })
       .on("mousemove", function() {
-        var context = this.getContext('2d'),
-            px = context.getImageData(d3.mouse(this)[0], d3.mouse(this)[1], 1, 1).data, // remove alpha
-            rgb = "rgba("+px.slice(0,4).join(',')+")";
+        var mouse = d3.mouse(this),
+            context = this.getContext("2d"),
+            px = context.getImageData(mouse[0], mouse[1], 1, 1).data,
+            rgb = "rgba("+px.slice(0,4).join(",")+")";
         container.select(".hoverColor").style("background", rgb);
         updateColorChannelInputHover(rgb);
       });
@@ -106,7 +125,7 @@ var makeColorPicker = function(container) {
       sliderHeight = +slider.style("height").replace("px", ""),
       sliderScale = d3.scaleLinear().domain([0, sliderHeight-sliderMargin.top]);
 
-  thumb.attr('transform', 'translate(0,'+(sliderHeight/2-sliderMargin.top)+')');
+  thumb.attr("transform", "translate(0,"+(sliderHeight/2-sliderMargin.top)+")");
   thumb.call(d3.drag().on("drag", dragColorpickerSlider));
 
   var paletteColors = [];
@@ -132,9 +151,13 @@ var makeColorPicker = function(container) {
         color = d3[COLORPICKER_SPACE](selectedColor),
         barValue;
 
-    if(COLORPICKER_SPACE === "jab") barValue = color.J;
-    else if(COLORPICKER_SPACE === "lab" || COLORPICKER_SPACE === "hcl") barValue = color.l;
-    else if(COLORPICKER_SPACE === "rgb") barValue = color.r;
+    if(COLORPICKER_SPACE === "jab") {
+      barValue = color.J;
+    } else if(COLORPICKER_SPACE === "lab" || COLORPICKER_SPACE === "hcl") {
+      barValue = color.l;
+    } else if(COLORPICKER_SPACE === "rgb") {
+      barValue = color.r;
+    }
 
     container.select(".selectedColor")
         .style("background", color.toString());
@@ -151,15 +174,15 @@ var makeColorPicker = function(container) {
     if(COLORPICKER_SPACE === "rgb") sliderScale.range([255,0]);
     else sliderScale.range([100,0]);
 
-    var newThumbLoc = d3.scaleLinear()
+    var newLoc = d3.scaleLinear()
             .domain(sliderScale.range())
-            .range(sliderScale.domain());
-    container.select(".thumb").attr("transform", "translate(0,"+newThumbLoc(barValue)+")");
+            .range(sliderScale.domain())(barValue);
+    container.select(".thumb").attr("transform", "translate(0,"+newLoc+")");
   }
 
 
   function renderColorpicker(barValue) {
-    var colorpicker = d3.select('#colorpicker_square').node(),
+    var colorpicker = d3.select("#colorpicker_square").node(),
         context = colorpicker.getContext("2d");
 
     var height = colorpicker.height,
@@ -194,9 +217,9 @@ var makeColorPicker = function(container) {
         }
         if(nd === false) {
           c = CLEAR_COLOR;
-        } else if(COLORPICKER_SPACE === 'rgb') c = d3.rgb(barValue, x, y);
+        } else if(COLORPICKER_SPACE === "rgb") c = d3.rgb(barValue, x, y);
         else {
-          if(COLORPICKER_SPACE === 'lab') {
+          if(COLORPICKER_SPACE === "lab") {
             c = d3.lab(barValue, -labScale(x), labScale(y));
           } else if(COLORPICKER_SPACE === "hcl") {
             c = d3.hcl(hclScale_hue(x), hclScale_chroma(y), barValue);
@@ -205,8 +228,10 @@ var makeColorPicker = function(container) {
             // Hack around CIECAM02 out-of-gamut irregularities
             if(  (c.J < 42 && c.b > 25)
               || (c.J < 10 && c.b > 12)
-              || (c.J < 4 && c.b > 7)
-              || (c.J < 2 && (c.b > 3 || c.a < -8 || c.a > 8)) ) c = CLEAR_COLOR;
+              || (c.J < 4  && c.b > 7)
+              || (c.J < 2  && (c.b > 3 || c.a < -8 || c.a > 8)) ) {
+                c = CLEAR_COLOR;
+            }
           }
 
           if(c.displayable() === false) c = CLEAR_COLOR;
@@ -235,13 +260,13 @@ var makeColorPicker = function(container) {
             .range(COLORPICKER_SPACE === "rgb" ? [0,255] : [0, 100]);
 
     for(y=height;y>0;y--) {
-      if(COLORPICKER_SPACE === 'rgb') c = d3.rgb(barScale(y), 0, 0);
-      else if(COLORPICKER_SPACE === 'hcl') {
+      if(COLORPICKER_SPACE === "rgb") c = d3.rgb(barScale(y), 0, 0);
+      else if(COLORPICKER_SPACE === "hcl") {
         c = d3.rgb(d3.hcl(0,0,barScale(y)));
       }
-      else if(COLORPICKER_SPACE === 'lab') {
+      else if(COLORPICKER_SPACE === "lab") {
         c = d3.rgb(d3.lab(barScale(y), 0, 0));
-      } else if(COLORPICKER_SPACE === 'jab') {
+      } else if(COLORPICKER_SPACE === "jab") {
         c = d3.rgb(d3.jab(barScale(y), 0, 0));
       }
 
@@ -268,9 +293,9 @@ var makeColorPicker = function(container) {
     renderColorpicker(sliderScale(y));
 
     var channels = [sliderScale(y)];
-    d3.selectAll('.colorChannelInput')
+    d3.selectAll(".colorChannelInput")
         .filter(function() {
-          return d3.select(this).attr('data-colorType') === COLORPICKER_SPACE;
+          return d3.select(this).attr("data-colorType") === COLORPICKER_SPACE;
         }).each(function(d,i) {
           if(i !== 0) channels.push(+this.value);
           else this.value = sliderScale(y);
@@ -283,19 +308,16 @@ var makeColorPicker = function(container) {
       newColor = d3[COLORPICKER_SPACE](channels[2], channels[1], channels[0]);
     }
     updateColorChannelInput(newColor);
-    d3.select('.selectedColor').style('background-color', newColor.toString());
-  }
-  function toggleThumbVisibility() {
-    var isHidden = d3.select(this).classed(".thumbHidden");
-    d3.select(this).classed("thumbHidden", !isHidden);
+    d3.select(".selectedColor").style("background-color", newColor.toString());
   }
 
 
   function updateColorChannelInput(rgbstr) {
-    updateColorChannelInput_abstract(rgbstr, '.colorChannelInput');
+    updateColorChannelInput_abstract(rgbstr, ".colorChannelInput");
   }
+
   function updateColorChannelInputHover(rgbstr) {
-    updateColorChannelInput_abstract(rgbstr, '.colorChannelInputHover');
+    updateColorChannelInput_abstract(rgbstr, ".colorChannelInputHover");
   }
 
   function updateColorChannelInput_abstract(rgbstr, inputClass) {
@@ -305,17 +327,17 @@ var makeColorPicker = function(container) {
       lab: d3.lab(rgbstr),
       hcl: d3.hcl(rgbstr)
     };
-    colors.hex = '#'+rgb2hex(colors.rgb.toString());
+    colors.hex = "#"+rgb2hex(colors.rgb.toString());
 
     d3.selectAll(inputClass).each(function() {
       var input = d3.select(this),
-          colorType = input.attr('data-colorType');
+          colorType = input.attr("data-colorType");
 
-      if(colorType === 'hex') {
+      if(colorType === "hex") {
         input.property("value", colors.hex);
       } else {
         var color = colors[colorType],
-            channelValue = Math.round(color[input.attr('data-channel')]);
+            channelValue = Math.round(color[input.attr("data-channel")]);
         if(isNaN(channelValue) === false) input.node().value = channelValue;
         else input.node().value = null;
       }
@@ -325,17 +347,17 @@ var makeColorPicker = function(container) {
   var TMP_COLOR_CHANNEL_VALUE;
   function storeColorChannelValue() { TMP_COLOR_CHANNEL_VALUE = this.value; }
   function triggerColorChannelUpdate() {
-    if(this.value === '') {
+    if(this.value === "") {
       this.value = TMP_COLOR_CHANNEL_VALUE;
     } else {
       var thisEl = d3.select(this),
-          colorType = thisEl.attr('data-colorType'),
+          colorType = thisEl.attr("data-colorType"),
           rgbstr;
-      if(colorType === 'hex') rgbstr = d3.rgb(this.value).toString();
+      if(colorType === "hex") rgbstr = d3.rgb(this.value).toString();
       else {
-        var selector = '.colorChannelInput[data-colorType="'+colorType+'"]',
+        var selector = ".colorChannelInput[data-colorType=\""+colorType+"\"]",
             values = [];
-        d3.selectAll(selector).each(function() { values.push(this.value) });
+        d3.selectAll(selector).each(function() { values.push(this.value); });
         if(colorType !== "hcl") {
           rgbstr = d3[colorType](values[0], values[1], values[2]).toString();
         } else {
@@ -345,17 +367,20 @@ var makeColorPicker = function(container) {
 
       updateColorChannelInput(rgbstr);
 
-      d3.select(".selectedColor").style('background', rgbstr);
-      var selectedColor = d3.select(".selectedColor"),
-          color = d3[COLORPICKER_SPACE](rgbstr),
+      d3.select(".selectedColor").style("background", rgbstr);
+      var color = d3[COLORPICKER_SPACE](rgbstr),
           barValue;
-      if(COLORPICKER_SPACE === 'jab') barValue = color.J;
-      else if(COLORPICKER_SPACE === 'lab' || COLORPICKER_SPACE === 'hcl') barValue = color.l;
-      else barValue = color.r;
+      if(COLORPICKER_SPACE === "jab") {
+        barValue = color.J;
+      } else if(COLORPICKER_SPACE === "lab" || COLORPICKER_SPACE === "hcl") {
+        barValue = color.l;
+      } else {
+        barValue = color.r;
+      }
 
       renderColorpicker(barValue);
       renderColorpicker_bar();
       relocateColorpickerBarThumb(barValue);
     }
   }
-}
+};
