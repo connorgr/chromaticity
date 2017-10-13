@@ -8,7 +8,9 @@ export function initializeURISharing() {
       palette = params.filter(d => d.indexOf("palette=") > -1);
 
   if (palette.length === 0) return;
+
   palette = palette[0].replace("?","").replace("palette=","").split(";");
+
   var colors = palette.map(d => d3.rgb(d)).filter(d => d.displayable());
   inPalette = colors.map(d => d.toString());
   inPalette = inPalette.filter((d,i) => inPalette.indexOf(d) === i);

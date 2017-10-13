@@ -1,7 +1,7 @@
 (function (global, factory) {
 	typeof exports === 'object' && typeof module !== 'undefined' ? factory(require('d3')) :
 	typeof define === 'function' && define.amd ? define(['d3'], factory) :
-	(factory(global.d3$1));
+	(factory(global.d3));
 }(this, (function (d3$1) { 'use strict';
 
 var dispatch = d3.dispatch("addSelectedColor", "clearPalette", "deletePaletteColor", "updateGradientColors", "updateJNDParameters", "updateSelectedColor");
@@ -1669,12 +1669,17 @@ function initializeURISharing() {
   var params = document.location.search.split("&"),
       palette = params.filter(d => d.indexOf("palette=") > -1);
 
+  console.log(palette);
+
   if (palette.length === 0) return;
+
   palette = palette[0].replace("?","").replace("palette=","").split(";");
+  console.log(palette);
+
   var colors = palette.map(d => d3$1.rgb(d)).filter(d => d.displayable());
   inPalette = colors.map(d => d.toString());
   inPalette = inPalette.filter((d,i) => inPalette.indexOf(d) === i);
-
+  console.log(inPalette);
   if(inPalette.length > 0) {
     inPalette.forEach(d => dispatch.call("addSelectedColor", {
       selectedColor: d
