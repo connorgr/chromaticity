@@ -209,7 +209,10 @@ var makeColorPicker = function(container) {
       sliderScale = d3$1.scaleLinear().domain([0, sliderHeight-sliderMargin.top]);
 
   thumb.attr("transform", "translate(0,"+(sliderHeight/2-sliderMargin.top)+")");
-  thumb.call(d3$1.drag().on("drag", dragColorpickerSlider));
+  thumb.call(d3$1.drag().on("drag.thumb", dragColorpickerSlider));
+
+  d3$1.select("#colorpicker_bar").on("click", mouseMoveColorPickerSlider);
+  d3$1.select("#colorpicker_bar").call(d3$1.drag().on("drag.bar", mouseMoveColorPickerSlider));
 
   var paletteColors = [];
   dispatch.on("addSelectedColor.colorpicker"+makeID, function() {
@@ -362,16 +365,26 @@ var makeColorPicker = function(container) {
     for(x=0;x<width;x++) context.putImageData(img, x, 0);
   }
 
+  function mouseMoveColorPickerSlider() {
+    var mouseY = d3$1.mouse(this)[1];
+    if(mouseY < 0) mouseY = 0;
+    var maxHeight = d3$1.select(this).attr("height");
+    if(mouseY > maxHeight) mouseY = maxHeight;
 
-  function dragColorpickerSlider() {
+    dragColorpickerSlider(mouseY);
+    relocateColorpickerBarThumb(sliderScale(mouseY));
+  }
+  function dragColorpickerSlider(y) {
     if(COLORPICKER_SPACE === "rgb") sliderScale.range([255,0]);
     else sliderScale.range([100,0]);
 
-    var sliderH = sliderHeight - sliderMargin.bottom,
-        y;
-    if(d3$1.event.y < 0) y = 0;
-    else if(d3$1.event.y > sliderH) y = sliderH;
-    else y = d3$1.event.y;
+    var sliderH = sliderHeight - sliderMargin.bottom;
+
+    if(y === undefined) y = d3$1.event.y;
+
+    if(y < 0) y = 0;
+    else if(y > sliderH) y = sliderH;
+
     d3$1.select(this).attr("transform", "translate(0,"+y+")");
     renderColorpicker(sliderScale(y));
 
@@ -1669,17 +1682,14 @@ function initializeURISharing() {
   var params = document.location.search.split("&"),
       palette = params.filter(d => d.indexOf("palette=") > -1);
 
-  console.log(palette);
-
   if (palette.length === 0) return;
 
   palette = palette[0].replace("?","").replace("palette=","").split(";");
-  console.log(palette);
 
   var colors = palette.map(d => d3$1.rgb(d)).filter(d => d.displayable());
   inPalette = colors.map(d => d.toString());
   inPalette = inPalette.filter((d,i) => inPalette.indexOf(d) === i);
-  console.log(inPalette);
+
   if(inPalette.length > 0) {
     inPalette.forEach(d => dispatch.call("addSelectedColor", {
       selectedColor: d
