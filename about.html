@@ -1,0 +1,56 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Chromaticity</title>
+    <link rel="stylesheet" href="src/css/main.css">
+  </head>
+  <body>
+    <section class="banner">
+      <img src="src/img/logo_raw3.svg" height="60px"/>
+      <p><strong>Chromaticity</strong>: guidance for accessible visualization color design</p>
+      <p class="authorInfo">Made by <a href="https://gramaz.io">Connor Gramazio</a>.
+        Open sourced
+        <a href="https://github.com/connorgr/chromaticity">here</a>. Got an idea? Get in touch!</p>
+      <p class="navigation"><a href="index.html">Use the tool</a> | [Read about the tool]</p>
+    </section>
+
+    <div class="container aboutPage">
+      <h1>About</h1>
+      <p>Chromaticity is a color design assistance tool that makes it easier to manually create color palettes for visualization while minding discriminability and accessibility.</p>
+      <p>In Chromaticity, you can pick your own colors from four color spaces (Lab, LCh, Jab, and RGB) or pick them from an image of your choice. Then, Chromaticity automatically provides information about your palette’s discriminability, color vision deficiency accessibility, and also provides reconfigurable visualization previews. Chromaticity supports both categorical and sequential palette design.</p>
+    </div>
+
+    <div class="container aboutPage">
+      <h1>Picking colors</h1>
+      <p>Chromaticity supports color picking in three perceptual color spaces as well as in RGB.</p>
+      <p>Two of the perceptual color spaces are CIELAB color spaces, which position colors based on how the human brain processes color: Lab and LCh. Lab colors are defined by how light they are (L), their redness-to-greenness (a) and blueness-to-yellowness (b). LCh colors are also defined by lightness, but then are defined by chroma (colorfulness, radius) and hue (angle). In both CIELAB color spaces the farther apart any two colors are the more discriminable the two colors are.</p>
+      <p>The third perceptual color space is Jab, which is similar to Lab; however, Jab uses an updated color appearance model that in theory provides greater precision for discriminability measurements. This space still hasn’t yet been tested within the context of visualization design and is provided mostly for providing designers another representation of color that may be easier color palette creation.</p>
+      <p>If you’d like to know more about CIELAB and Jab, there is a high level overview of each <a href="https://gramaz.io/d3-cam02/">here</a>.</p>
+    </div>
+
+    <div class="container aboutPage">
+      <h1>Estimating discriminability</h1>
+      <p>Chromaticity provides discriminability estimates in several ways: a customizable visualization preview, a discriminability table that shows warning signs for poorly discriminable colors, and by eyeballing the palette preview immediately below the color selection area.</p>
+    </div>
+
+    <div class="container aboutPage">
+      <h1>Accessibility</h1>
+      <p>In the color discriminability table warning signs are also displayed for estimated discriminability for a variety of color vision deficiencies. Note that, like the Jab color space, these estimates have not been empirically tested and should be viewed as guidelines opposed to being fully accurate warnings.</p>
+    </div>
+
+    <div class="container aboutPage">
+      <h1>Origins of Chromaticity</h1>
+      <p>Chromaticity was born as an idea from two sources. The first source of inspiration, while developing Colorgorical as an automated way to create color palettes, I noticed how difficult it is to create perceptually-grounded color palettes by hand. The second source was from an IEEE VIS panel a few years ago with George Grinstein and a few others that talked about the near complete lack of accessibility research in the information visualization community. More recently, I think that it also riffs on trends that have been appearing across a variety of OpenVisConf talks.</p>
+      <p>While Chromaticity is not empirically-tested, nonetheless I hope it helps designers become more mindful of how their color selections will appear to their entire audience.</p>
+    </div>
+
+    <footer>
+      <p>Made by <a href="https://gramaz.io">Connor Gramazio</a>.
+        Open sourced
+        <a href="https://github.com/connorgr/chromaticity">here</a>.
+       Got an idea? Get in touch!</p>
+    </footer>
+
+  </body>
+</html>
