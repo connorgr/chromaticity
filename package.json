@@ -13,10 +13,10 @@
     "url": "https://gramaz.io"
   },
   "scripts": {
-    "build": "npm run css; npm run js",
+    "build": "npm run css; npm run lint; npm run js",
     "css": "sass -t compressed src/css/main.scss src/css/main.css",
     "js": "rollup -c",
-    "lint": "eslint src/js/main.js src/js/*/**"
+    "lint": "eslint src/js/main.js src/js/*/**",
   },
   "files": [
     "index.js",
@@ -31,8 +31,7 @@
   ],
   "dependencies": {
     "clipboard": "^1.7.1",
-    "rollup": "^0.50.0",
-    "uglify-es": "^3.0.21"
+    "rollup": "^0.50.0"
   },
   "devDependencies": {
     "eslint": "^4.8.0",

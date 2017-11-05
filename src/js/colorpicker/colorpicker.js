@@ -129,7 +129,8 @@ var makeColorPicker = function(container) {
   thumb.call(d3.drag().on("drag.thumb", dragColorpickerSlider));
 
   d3.select("#colorpicker_bar").on("click", mouseMoveColorPickerSlider);
-  d3.select("#colorpicker_bar").call(d3.drag().on("drag.bar", mouseMoveColorPickerSlider));
+  d3.select("#colorpicker_bar").call(d3.drag()
+      .on("drag.bar", mouseMoveColorPickerSlider));
 
   var paletteColors = [];
   dispatch.on("addSelectedColor.colorpicker"+makeID, function() {
